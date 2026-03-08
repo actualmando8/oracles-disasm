@@ -35,7 +35,7 @@ cutscene02:
 	ld b,$10
 	call clearMemory
 	ld a,(wDisabledObjects)
-	ld ($cbb7),a
+	ld (wTmpcbb7),a
 	ld a,$ff
 	ld (wDisabledObjects),a
 	ld (wDisableLinkCollisionsAndMenu),a
@@ -62,7 +62,7 @@ cutscene02:
 	xor a
 	ld (wCutsceneState),a
 	ld (wDisableLinkCollisionsAndMenu),a
-	ld a,($cbb7)
+	ld a,(wTmpcbb7)
 	ld (wDisabledObjects),a
 	ld a,CUTSCENE_INGAME
 	ld (wCutsceneIndex),a

@@ -53,13 +53,13 @@ interactionCode6e:
 	inc (hl)
 	ld l,$4d
 	ld a,(hl)
-	ld ($cfc1),a
-	ld hl,$cfc0
+	ld (wTmpcfc0.genericCutscene.cfc1),a
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 2,(hl)
 	xor a
 	call interactionSetAnimation
 @@state2:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	bit 7,(hl)
 	jp nz,interactionDelete
 	ld a,(wFrameCounter)
@@ -131,7 +131,7 @@ interactionCode6e:
 	jr nc,@@func_6c22
 	call @@func_6c22
 	ld a,$02
-	ld ($cc6b),a
+	ld (wcc50),a
 	jp interactionDelete
 @@func_6c19:
 	ld hl,$d008

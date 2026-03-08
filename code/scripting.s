@@ -709,7 +709,7 @@ scriptCmd_checkCFC0Bit:
 	ld c,a
 	ld a,(bc)
 	ld b,a
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	and b
 	ret z
 	inc hl
@@ -724,9 +724,9 @@ scriptCmd_xorCFC0Bit:
 	ld c,a
 	ld a,(bc)
 	ld b,a
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	xor b
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	inc hl
 	ret
 
@@ -932,7 +932,7 @@ scriptCmd_df:
 	inc hl
 	ldi a,(hl)
 	call checkTreasureObtained
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	jr nc,+
 	jp scriptFunc_jump
 +

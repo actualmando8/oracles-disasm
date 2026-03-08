@@ -28,9 +28,9 @@ interactionCode5a:
 	ld l,Interaction.state
 	ld (hl),$02
 	ld a,$02
-	ld ($cced),a
+	ld (wShopHaveEnoughRupees+1),a
 	xor a
-	ld ($ccec),a
+	ld (wShopHaveEnoughRupees),a
 	inc a
 	ld (wInBoxingMatch),a
 	ret
@@ -43,7 +43,7 @@ interactionCode5a:
 	ld l,Interaction.state
 	ld (hl),$03
 	ld a,$03
-	ld ($cced),a
+	ld (wShopHaveEnoughRupees+1),a
 	xor a
 	ld (wLinkPlayingInstrument),a
 	call resetLinkInvincibility
@@ -75,7 +75,7 @@ interactionCode5a:
 	jr nc,+
 	xor a
 +
-	ld ($ccec),a
+	ld (wShopHaveEnoughRupees),a
 	or a
 	ret
 

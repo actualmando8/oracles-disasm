@@ -490,7 +490,7 @@ nextToOverworldKeyhole:
 	set 7,(hl)
 
 	; Trigger the associated cutscene
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 0,(hl)
 
 	; Create the key sprite

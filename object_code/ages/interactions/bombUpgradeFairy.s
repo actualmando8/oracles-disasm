@@ -47,7 +47,7 @@ bombUpgradeFairy_subid00:
 	xor a
 	ld (hl),a
 	ld (wTmpcfc0.bombUpgradeCutscene.state),a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ret
 
 @state1:
@@ -201,7 +201,7 @@ bombUpgradeFairy_subid01:
 	jp objectSetVisible82
 
 @state2:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	inc a
 	jp z,interactionDelete
 
@@ -270,7 +270,7 @@ bombUpgradeFairy_subid02:
 	jp objectSetVisible82
 
 @state2:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	call objectCreatePuff

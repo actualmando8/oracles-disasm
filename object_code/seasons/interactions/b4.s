@@ -142,19 +142,19 @@ twinrovaWitches_state1:
 	ld l,$47
 	ld (hl),$28
 @@func_7126:
-	ld hl,$cfc6
+	ld hl,wTmpcfc0.genericCutscene.cfc6
 	inc (hl)
 	ld a,(hl)
 	cp $02
 	ret nz
 	ld (hl),$00
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 0,(hl)
 	ret
 @@substate2:
 	call seasonsFunc_0a_71ce
 	call @animate
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 0,a
 	ret nz
 	call interactionDecCounter2
@@ -214,7 +214,7 @@ twinrovaWitches_state1:
 @@substate0:
 	call seasonsFunc_0a_71ce
 	call @animate
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 0,a
 	ret z
 	call interactionIncSubstate

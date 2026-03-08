@@ -258,7 +258,7 @@ forestFairy_subid01:
 	or a
 	jr z,@stateZero
 
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	jp z,interactionDelete
 
@@ -270,11 +270,11 @@ forestFairy_subid01:
 @stateZero:
 	ld e,Interaction.var03
 	ld a,(de)
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.genericCutscene.cfd1
 	call checkFlag
 	jp z,interactionDelete
 
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	call getNumSetBits
 	dec a
 	ld hl,forestFairyDiscoveredScriptTable

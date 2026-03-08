@@ -3,7 +3,7 @@
 ;;
 ; CUTSCENE_S_DIN_CRYSTAL_DESCENDING
 endgameCutsceneHandler_09:
-	ld de,$cbc1
+	ld de,wTmpcbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_09_stage0
@@ -16,7 +16,7 @@ endgameCutsceneHandler_09_stage0:
 	jp checkEnemyAndPartCollisionsIfTextInactive
 
 endgameCutsceneHandler_09_stage0_body:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -65,7 +65,7 @@ endgameCutsceneHandler_09_stage0_body:
 	or a
 	ret nz
 	ld b,$20
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	call clearMemory
 	call incCbc2
 	xor a
@@ -124,7 +124,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld a,($cfdf)
+	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
 	call incCbc2
@@ -141,7 +141,7 @@ endgameCutsceneHandler_09_stage0_body:
 	or a
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	inc l
 	ld (hl),$00
@@ -162,7 +162,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call incCbc2
 	ld a,$00
 	call seasonsFunc_03_644c
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp fadeinFromWhite
 
@@ -178,7 +178,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ret nz
 @state7Func0:
 	call clearDynamicInteractions
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	inc l
 	ld a,(hl)
@@ -190,7 +190,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ld a,$03
 	call disableLcdAndLoadRoom_body
 	call fastFadeinFromWhite
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	ld a,(hl)
 	ld b,a
 	inc (hl)
@@ -204,7 +204,7 @@ endgameCutsceneHandler_09_stage0_body:
 	pop bc
 	jr ++
 +
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	push bc
 	ld c,$01
@@ -216,7 +216,7 @@ endgameCutsceneHandler_09_stage0_body:
 	jr z,++
 	ld c,$0d
 ++
-	ld hl,$cbc2
+	ld hl,wTmpcbc2
 	ld (hl),c
 	jp seasonsFunc_03_6405
 @state7Table0:
@@ -242,7 +242,7 @@ endgameCutsceneHandler_09_stage0_body:
 	or a
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,$ff
 	ld (wTilesetAnimation),a
@@ -264,7 +264,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call incCbc2
 	ld hl,wMenuDisabled
 	ld (hl),$01
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld bc,TX_3d02
 @stateBFunc0:
@@ -278,7 +278,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$01
-	ld ($cbc1),a
+	ld (wTmpcbc1),a
 	call disableActiveRing
 	jp fadeoutToWhite
 
@@ -290,16 +290,16 @@ endgameCutsceneHandler_09_stage0_body:
 	ret nz
 	call incCbc2
 	ld a,e
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	jp showText
 
 @stateE:
 	call seasonsFunc_03_645a
 	ret nz
 	xor a
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	dec a
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	ld a,SND_LIGHTNING
 	call playSound
 	ld a,SNDCTRL_STOPMUSIC
@@ -307,7 +307,7 @@ endgameCutsceneHandler_09_stage0_body:
 	jp incCbc2
 
 @stateF:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$02
 	call flashScreen
 	ret z
@@ -329,7 +329,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ld (hl),b
 	jr nz,-
 +
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	ld a,$13
 	call loadGfxRegisterStateIndex
@@ -346,7 +346,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$28
 	ld a,$04
 	ld (wTextboxFlags),a
@@ -358,7 +358,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ret nz
 	call incCbc2
 	ld a,$20
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ldi (hl),a
 	xor a
 	ld (hl),a
@@ -367,7 +367,7 @@ endgameCutsceneHandler_09_stage0_body:
 @state12:
 	call seasonsFunc_03_6462
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$20
 	inc hl
 	ld a,(hl)
@@ -391,7 +391,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ld a,$01
 	ld (wDirtyFadeSprPalettes),a
 	ld (wFadeSprPaletteSources),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,MUS_DISASTER
 	call playSound
@@ -429,7 +429,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call seasonsFunc_03_645a
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),e
 	call @state13Func0
 	jp showText
@@ -445,7 +445,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call seasonsFunc_03_645a
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),e
 	ret
 
@@ -464,7 +464,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call decCbb3
 	ret nz
 	dec a
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	ld a,SND_LIGHTNING
 	call playSound
 	ld a,SNDCTRL_STOPMUSIC
@@ -477,12 +477,12 @@ endgameCutsceneHandler_09_stage0_body:
 	.db $ff $00
 
 @state18:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$01
 	call flashScreen
 	ret z
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	call clearDynamicInteractions
 	call clearOam
@@ -497,7 +497,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	ld bc,TX_3d17
 	jp showText
@@ -506,7 +506,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call seasonsFunc_03_645a
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	ld bc,TX_4f09
 	jp showText
@@ -522,7 +522,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call setLinkIDOverride
 	ld l,<w1Link.subid
 	ld (hl),$07
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$5a
 	ld a,MUS_PRECREDITS
 	jp playSound
@@ -531,7 +531,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$b4
 	ld bc,$90bd
 	ld a,$ff
@@ -541,7 +541,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp fadeoutToWhite
 
@@ -581,7 +581,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call seasonsFunc_03_7a6b
 	ld a,$02
 	call seasonsFunc_03_7a88
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	ld a,$04
 	call loadGfxRegisterStateIndex
@@ -608,7 +608,7 @@ endgameCutsceneHandler_09_stage0_body:
 	xor a
 	ld (wDirtyFadeBgPalettes),a
 	ld (wFadeBgPaletteSources),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ret
 
@@ -637,7 +637,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$f0
 	ld a,$ff
 	ld bc,$4850
@@ -646,7 +646,7 @@ endgameCutsceneHandler_09_stage0_body:
 @state25:
 	call decCbb3
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$5a
 	call fadeoutToWhite
 	ld a,$fc
@@ -661,7 +661,7 @@ endgameCutsceneHandler_09_stage0_body:
 	call clearDynamicInteractions
 	call clearParts
 	call clearOam
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld bc,TX_4f08
 	jp showTextNonExitable
@@ -696,7 +696,7 @@ endgameCutsceneHandler_09_stage1:
 	jp updateAllObjects
 
 endgameCutsceneHandler_09_stage1_body:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -716,7 +716,7 @@ endgameCutsceneHandler_09_stage1_body:
 	or a
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	call disableLcd
 	call clearOam
@@ -741,13 +741,13 @@ endgameCutsceneHandler_09_stage1_body:
 	call seasonsFunc_03_645a
 	ret nz
 	call incCbc2
-	ld hl,$cbb5
+	ld hl,wTmpcbb5
 	ld (hl),$d0
 --
 	ld hl,seasonsOamData_03_6472
 -
 	ld b,$30
-	ld de,$cbb5
+	ld de,wTmpcbb5
 	ld a,(de)
 	ld c,a
 	jr +
@@ -769,13 +769,13 @@ endgameCutsceneHandler_09_stage1_body:
 	jp addSpritesToOam_withOffset
 
 @state3:
-	ld hl,$cbb5
+	ld hl,wTmpcbb5
 	inc (hl)
 	jr nz,--
 	call clearOam
 	ld a,UNCMP_GFXH_0a
 	call loadUncompressedGfxHeader
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	jp incCbc2
 
@@ -783,7 +783,7 @@ endgameCutsceneHandler_09_stage1_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb5
+	ld hl,wTmpcbb5
 	ld (hl),$d0
 @state4Func0:
 	ld hl,seasonsOamData_03_650b
@@ -791,7 +791,7 @@ endgameCutsceneHandler_09_stage1_body:
 
 @state5:
 	call @state4Func0
-	ld hl,$cbb5
+	ld hl,wTmpcbb5
 	dec (hl)
 	ld a,(hl)
 	sub $a0
@@ -799,7 +799,7 @@ endgameCutsceneHandler_09_stage1_body:
 	ld (wScreenOffsetY),a
 	ld (wScreenOffsetX),a
 	ld a,$1e
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	ld (wOpenedMenuType),a
 	jp incCbc2
 
@@ -807,7 +807,7 @@ endgameCutsceneHandler_09_stage1_body:
 	call @state4Func0
 	call decCbb3
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$14
 	ld bc,TX_3d04
 	call endgameCutsceneHandler_09_stage0_body@stateBFunc0
@@ -820,19 +820,19 @@ endgameCutsceneHandler_09_stage1_body:
 	xor a
 	ld (wOpenedMenuType),a
 	dec a
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	ld a,SND_LIGHTNING
 	call playSound
 	jp incCbc2
 
 @state8:
 	call @state4Func0
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$02
 	call flashScreen
 	ret z
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	call disableLcd
 	call clearOam
@@ -867,15 +867,15 @@ endgameCutsceneHandler_09_stage1_body:
 	ld a,CUTSCENE_S_CREDITS
 	ld (wCutsceneIndex),a
 	call seasonsFunc_03_646a
-	ld hl,$cf00
+	ld hl,wRoomLayout
 	ld bc,$00c0
 	call clearMemoryBc
-	ld hl,$ce00
+	ld hl,wRoomCollisions
 	ld bc,$00c0
 	call clearMemoryBc
 	ldh (<hCameraY),a
 	ldh (<hCameraX),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,$03
 	jp fadeoutToBlackWithDelay
@@ -883,7 +883,7 @@ endgameCutsceneHandler_09_stage1_body:
 ;;
 ; CUTSCENE_S_ROOM_OF_RITES_COLLAPSE
 endgameCutsceneHandler_0f:
-	ld de,$cbc1
+	ld de,wTmpcbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0f_stage0
@@ -895,7 +895,7 @@ endgameCutsceneHandler_0f_stage0:
 	jp updateAllObjects
 
 endgameCutsceneHandler_0f_stage0_body:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -920,7 +920,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	ld (hl),$ff
 	xor a
 	ldh (<hActiveObjectType),a
-	ld de,$d000
+	ld de,w1Link
 	ld bc,$f8f0
 	ld a,$28
 	call objectCreateExclamationMark
@@ -931,14 +931,14 @@ endgameCutsceneHandler_0f_stage0_body:
 	inc l
 	inc l
 	ld (hl),$78
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$0a
 	ret
 
 @state1:
 	call decCbb3
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
@@ -949,7 +949,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$96
 	jp seasonsFunc_03_5d0b
 
@@ -960,7 +960,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call incCbc2
 	ld a,SNDCTRL_STOPSFX
 	call playSound
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld bc,TX_3d0e
 	jp showText
@@ -971,7 +971,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call incCbc2
 	ld a,MUS_DISASTER
 	call playSound
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp seasonsFunc_03_5d0b
 
@@ -979,7 +979,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call seasonsFunc_03_5cfb
 	call decCbb3
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$5a
 	jp incCbc2
 
@@ -988,7 +988,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,SNDCTRL_STOPSFX
 	jp playSound
@@ -997,7 +997,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld bc,TX_3d0f
 	jp showText
@@ -1006,7 +1006,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call seasonsFunc_03_645a
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$2c
 	inc hl
 	ld (hl),$01
@@ -1014,11 +1014,11 @@ endgameCutsceneHandler_0f_stage0_body:
 	jp seasonsFunc_03_5d12
 
 @state9:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld bc,TX_3d10
 	jp showText
@@ -1034,7 +1034,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call incCbc2
 	call seasonsFunc_03_5d0b
 	ld a,$8c
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	ld a,$ff
 	ld bc,$4478
 	jp createEnergySwirlGoingOut
@@ -1044,7 +1044,7 @@ endgameCutsceneHandler_0f_stage0_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp seasonsFunc_03_5d0b
 
@@ -1092,7 +1092,7 @@ endgameCutsceneHandler_0f_stage1:
 	jp updateAllObjects
 
 endgameCutsceneHandler_0f_stage1_body:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1131,7 +1131,7 @@ endgameCutsceneHandler_0f_stage1_body:
 	call playSound
 	ld a,$02
 	call loadGfxRegisterStateIndex
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp fadeinFromWhiteToRoom
 
@@ -1140,7 +1140,7 @@ endgameCutsceneHandler_0f_stage1_body:
 	ret nz
 	call incCbc2
 	ld a,$3c
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	ld a,$64
 	ld bc,$5850
 	jp createEnergySwirlGoingIn
@@ -1149,21 +1149,21 @@ endgameCutsceneHandler_0f_stage1_body:
 	call decCbb3
 	ret nz
 	xor a
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	dec a
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	jp incCbc2
 
 @state3:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$01
 	call flashScreen
 	ret z
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ld a,$03
 	jp fadeinFromWhiteWithDelay
 
@@ -1174,7 +1174,7 @@ endgameCutsceneHandler_0f_stage1_body:
 	ld (wLoadedTreeGfxIndex),a
 	ld a,MUS_CREDITS_1
 	call playSound
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp incCbc2
 
@@ -1182,7 +1182,7 @@ endgameCutsceneHandler_0f_stage1_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$2c
 	inc hl
 	ld (hl),$01
@@ -1190,19 +1190,19 @@ endgameCutsceneHandler_0f_stage1_body:
 	jp seasonsFunc_03_5d12
 
 @state6:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	ret nz
 	ld a,$01
 	ld (wLoadedTreeGfxIndex),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	ld (hl),$02
 	jp incCbc2
 
 @state7:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $09
 	ret nz
 	call incCbc2
@@ -1221,7 +1221,7 @@ endgameCutsceneHandler_0f_stage1_body:
 	call loadGfxHeader
 	ld a,PALH_SEASONS_ad
 	call loadPaletteHeader
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$f0
 	ld a,$04
 	call loadGfxRegisterStateIndex
@@ -1234,7 +1234,7 @@ endgameCutsceneHandler_0f_stage1_body:
 	call seasonsFunc_03_6462
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$10
 	ld a,$03
 	jp fadeoutToBlackWithDelay
@@ -1246,16 +1246,16 @@ endgameCutsceneHandler_0f_stage1_body:
 	ld a,CUTSCENE_S_CREDITS
 	ld (wCutsceneIndex),a
 	call seasonsFunc_03_646a
-	ld hl,$cf00
+	ld hl,wRoomLayout
 	ld bc,$00c0
 	call clearMemoryBc
-	ld hl,$ce00
+	ld hl,wRoomCollisions
 	ld bc,$00c0
 	call clearMemoryBc
 	xor a
 	ldh (<hCameraY),a
 	ldh (<hCameraX),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,SNDCTRL_MEDIUM_FADEOUT
 	jp playSound
@@ -1267,7 +1267,7 @@ endgameCutsceneHandler_0a:
 	jp func_3539
 
 endgameCutsceneHandler_0a_body:
-	ld de,$cbc1
+	ld de,wTmpcbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0a_stage0
@@ -1276,7 +1276,7 @@ endgameCutsceneHandler_0a_body:
 	.dw endgameCutsceneHandler_0a_stage3
 
 endgameCutsceneHandler_0a_stage0:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1289,7 +1289,7 @@ endgameCutsceneHandler_0a_stage0:
 	call seasonsFunc_03_66dc
 	call incCbc2
 	call clearOam
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$b4
 	inc hl
 	ld (hl),$00
@@ -1299,11 +1299,11 @@ endgameCutsceneHandler_0a_stage0:
 	jp playSound
 
 @state1:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	ret nz
 	call incCbc2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$48
 	inc hl
 	ld (hl),$03
@@ -1313,7 +1313,7 @@ endgameCutsceneHandler_0a_stage0:
 	jp fadeinFromBlackWithDelay
 
 @state2:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	ret nz
 	call incCbc1
@@ -1324,12 +1324,12 @@ endgameCutsceneHandler_0a_stage0:
 	jr z,+
 	ld b,$08
 +
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	ld (hl),b
 	jp fadeoutToWhite
 
 endgameCutsceneHandler_0a_stage1:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1350,7 +1350,7 @@ endgameCutsceneHandler_0a_stage1:
 	call clearOam
 	ld a,$10
 	ldh (<hOamTail),a
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	sub $04
 	ld hl,@state0Table0
 	rst_addDoubleIndex
@@ -1363,7 +1363,7 @@ endgameCutsceneHandler_0a_stage1:
 	ld a,$00
 	call forceLoadRoom
 	ld b,$2d
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	cp $04
 	jr nz,+
 	ld b,UNCMP_GFXH_0f
@@ -1371,7 +1371,7 @@ endgameCutsceneHandler_0a_stage1:
 	ld a,b
 	call loadUncompressedGfxHeader
 ++
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	sub $04
 	add a
 	add GFXH_CREDITS_SCENE1
@@ -1381,7 +1381,7 @@ endgameCutsceneHandler_0a_stage1:
 	call reloadObjectGfx
 	call checkIsLinkedGame
 	jr nz,+
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	ld b,$10
 	ld c,$00
 	cp $05
@@ -1390,7 +1390,7 @@ endgameCutsceneHandler_0a_stage1:
 	ld c,$0e
 	jr ++
 +
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	ld b,$10
 	ld c,$00
 	cp $0b
@@ -1410,9 +1410,9 @@ endgameCutsceneHandler_0a_stage1:
 	xor a
 	ldh (<hCameraX),a
 	ld b,$20
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	call clearMemory
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$f0
 	inc l
 	ld b,(hl)
@@ -1435,7 +1435,7 @@ endgameCutsceneHandler_0a_stage1:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld a,($cfdf)
+	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
 	call incCbc2
@@ -1450,12 +1450,12 @@ endgameCutsceneHandler_0a_stage1:
 	call incCbc2
 	call disableLcd
 	call clearWramBank1
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	sub $04
 	add a
 	add GFXH_CREDITS_IMAGE1
 	call loadGfxHeader
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$5a
 	inc l
 	ld a,(hl)
@@ -1463,7 +1463,7 @@ endgameCutsceneHandler_0a_stage1:
 	call loadPaletteHeader
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	sub $04
 	ld hl,@state2Table0
 	rst_addAToHl
@@ -1489,7 +1489,7 @@ endgameCutsceneHandler_0a_stage1:
 	ret nz
 	ld (hl),INTERAC_CREDITS_TEXT_HORIZONTAL
 	inc l
-	ld a,($cbb4)
+	ld a,(wTmpcbb4)
 	sub $04
 	ldi (hl),a
 	ld (hl),$00
@@ -1501,7 +1501,7 @@ endgameCutsceneHandler_0a_stage1:
 	ret nz
 	xor a
 	ldh (<hOamTail),a
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	or a
 	ret z
 	ld b,$07
@@ -1509,19 +1509,19 @@ endgameCutsceneHandler_0a_stage1:
 	jr z,+
 	ld b,$0b
 +
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	ld a,(hl)
 	cp b
 	jr nc,+
 	inc (hl)
 	xor a
-	ld ($cbc2),a
+	ld (wTmpcbc2),a
 	jr ++
 +
 	call seasonsFunc_03_646a
 	call enableActiveRing
 	ld a,$02
-	ld ($cbc1),a
+	ld (wTmpcbc1),a
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 	ld (hl),a ; [wLinkHealth]
@@ -1537,7 +1537,7 @@ endgameCutsceneHandler_0a_stage1:
 endgameCutsceneHandler_0a_stage2:
 	xor a
 	ldh (<hOamTail),a
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1559,7 +1559,7 @@ endgameCutsceneHandler_0a_stage2:
 	call clearDynamicInteractions
 	call clearOam
 	xor a
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	ld a,GFXH_CREDITS_SCROLL
 	call loadGfxHeader
 	ld a,PALH_SEASONS_a0
@@ -1578,29 +1578,29 @@ endgameCutsceneHandler_0a_stage2:
 	ret
 
 @state1:
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	or a
 	ret z
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$e0
 	inc hl
 	ld (hl),$01
 	jp incCbc2
 
 @state2:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	ret nz
 	call checkIsLinkedGame
 	jr nz,+
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld ($cbc1),a
+	ld (wTmpcbc1),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 +
 	ld a,$04
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	ld a,(wGfxRegs1.SCY)
 	ldh (<hCameraY),a
 	ld a,UNCMP_GFXH_01
@@ -1626,7 +1626,7 @@ endgameCutsceneHandler_0a_stage2:
 	or a
 	jr nz,+
 	ld a,$78
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	jp incCbc2
 +
 	call decCbb3
@@ -1642,11 +1642,11 @@ endgameCutsceneHandler_0a_stage2:
 	call decCbb3
 	ret nz
 	ld a,$ff
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	jp incCbc2
 
 @state5:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$01
 	call flashScreen
 	ret z
@@ -1672,7 +1672,7 @@ endgameCutsceneHandler_0a_stage2:
 	call fadeinFromWhiteWithDelay
 	call incCbc2
 	ld a,$f0
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 
 @seasonsFunc_03_616f:
 	xor a
@@ -1712,7 +1712,7 @@ endgameCutsceneHandler_0a_stage2:
 	call seasonsFunc_03_6462
 	ret nz
 	ld a,$04
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	jp incCbc2
 
 @state7:
@@ -1720,7 +1720,7 @@ endgameCutsceneHandler_0a_stage2:
 	cp $98
 	jr nz,+
 	ld a,$f0
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	call incCbc2
 	jr ++
 +
@@ -1745,12 +1745,12 @@ endgameCutsceneHandler_0a_stage2:
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld ($cbc1),a
+	ld (wTmpcbc1),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 
 endgameCutsceneHandler_0a_stage3:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1800,7 +1800,7 @@ endgameCutsceneHandler_0a_stage3:
 	ldi (hl),a
 	ldi (hl),a
 	ld (hl),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$f0
 	ld (hl),a
 	ld a,SNDCTRL_MEDIUM_FADEOUT
@@ -1816,7 +1816,7 @@ endgameCutsceneHandler_0a_stage3:
 @state1Func0:
 	call checkIsLinkedGame
 	ret z
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	ld a,(hl)
 	or a
 	jr z,+
@@ -1830,7 +1830,7 @@ endgameCutsceneHandler_0a_stage3:
 	ld hl,@state1Table0
 	rst_addAToHl
 	ld a,(hl)
-	ld ($cbb4),a
+	ld (wTmpcbb4),a
 	ret
 @state1Table0:
 	.db $a0 $c8
@@ -1863,7 +1863,7 @@ endgameCutsceneHandler_0a_stage3:
 	call disableLcd
 	call bank3.generateGameTransferSecret
 	ld a,$ff
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	ld a,($ff00+R_SVBK)
 	push af
 	ld a,:w7d800
@@ -1891,7 +1891,7 @@ endgameCutsceneHandler_0a_stage3:
 	call clearOam
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	call fileSelect_redrawDecorations
 	jp fadeinFromWhite
@@ -1900,7 +1900,7 @@ endgameCutsceneHandler_0a_stage3:
 	call fileSelect_redrawDecorations
 	call seasonsFunc_03_6462
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$3c
 	call checkIsLinkedGame
 	jr z,+
@@ -1919,7 +1919,7 @@ endgameCutsceneHandler_0a_stage3:
 	jr nz,+
 	ld (hl),INTERAC_GAME_COMPLETE_DIALOG
 	xor a
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 +
 	jp incCbc2
 
@@ -1932,7 +1932,7 @@ endgameCutsceneHandler_0a_stage3:
 	jr nz,++
 	ret
 +
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	or a
 	ret z
 ++
@@ -1964,7 +1964,7 @@ endgameCutsceneHandler_0a_stage3:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$b4
 	jp incCbc2
 @state9Func0:
@@ -1977,7 +1977,7 @@ endgameCutsceneHandler_0a_stage3:
 
 @stateA:
 	call @state9Func0
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld a,(hl)
 	or a
 	jr z,+
@@ -2035,8 +2035,8 @@ seasonsFunc_03_6405:
 	ld e,l
 	call parseGivenObjectData
 	xor a
-	ld ($cfc0),a
-	ld a,($cbb4)
+	ld (wTmpcfc0.genericCutscene.state),a
+	ld a,(wTmpcbb4)
 	cp $05
 	jr z,+
 	cp $06
@@ -2091,7 +2091,7 @@ seasonsFunc_03_6462:
 	jp decCbb3
 
 seasonsFunc_03_646a:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$10
 	jp clearMemory
 

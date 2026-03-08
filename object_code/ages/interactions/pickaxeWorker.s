@@ -70,7 +70,7 @@ interactionCode57:
 
 
 @subid1And2Substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $01
 	jr nz,@label_09_221
 
@@ -156,7 +156,7 @@ interactionCode57:
 
 	call interactionIncSubstate
 	ld a,$06
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	call disableLcd
 	push de
 
@@ -212,7 +212,7 @@ interactionCode57:
 @subid2Substate2:
 	call interactionAnimateBasedOnSpeed
 	call objectApplySpeed
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $06
 	ret nz
 	call interactionIncSubstate

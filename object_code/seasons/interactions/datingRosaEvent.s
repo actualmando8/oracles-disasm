@@ -115,13 +115,13 @@ interactionCode31:
 	ld bc,$fe40
 	jp objectSetSpeedZ
 +
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret z
-	ld a,($cca4)
+	ld a,(wDisabledObjects)
 	and $81
 	ret nz
-	ld a,($cc02)
+	ld a,(wMenuDisabled)
 	or a
 	ret nz
 	ld (hl),$10
@@ -143,7 +143,7 @@ interactionCode31:
 	ld a,(de)
 	or a
 	jr nz,+
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $01
 	jr z,+
 	ld e,$44
@@ -208,7 +208,7 @@ interactionCode31:
 	ld a,GLOBALFLAG_DATING_ROSA
 	call unsetGlobalFlag
 	ld a,$01
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld a,$02
 	ld ($d008),a
 	ld a,$29
@@ -244,7 +244,7 @@ interactionCode31:
 	ld l,$40
 	ld (hl),$01
 	xor a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call objectGetTileAtPosition
 	ld (hl),$00
 	ld a,$28

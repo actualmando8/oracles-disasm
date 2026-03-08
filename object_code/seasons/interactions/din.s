@@ -126,7 +126,7 @@ dinState1_subid0:
 	xor a
 	ld (wDisabledObjects),a
 	inc a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	jp setCameraFocusedObjectToLink
 @func_6521:
 	call getFreeInteractionSlot
@@ -166,9 +166,9 @@ dinState1_subid0:
 	call interactionDecCounter1
 	jr nz,@func_6576
 	call interactionIncSubstate
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$00
-	ld hl,$cbba
+	ld hl,wTmpcbba
 	ld (hl),$ff
 	ret
 @func_6576:
@@ -182,7 +182,7 @@ dinState1_subid0:
 	ld (hl),a
 	jp interactionAnimate
 @substate3:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$01
 	call flashScreen
 	ret z
@@ -242,11 +242,11 @@ dinState1_subid0:
 	call interactionDecCounter1
 	ret nz
 	ld a,$01
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 dinState1_subid2:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	call interactionAnimate
@@ -260,7 +260,7 @@ dinState1_subid3:
 	.dw @substate1
 	.dw @substate2
 @substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	jr z,+
 	call interactionIncSubstate
@@ -290,7 +290,7 @@ dinState1_subid4:
 	.dw @substate1
 	.dw @substate2
 @substate0:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	call interactionAnimate
@@ -329,7 +329,7 @@ dinState1_subid7:
 	.dw interactionAnimate
 @substate0:
 	call interactionAnimate
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $04
 	ret nz
 	call interactionIncSubstate
@@ -359,13 +359,13 @@ dinState1_subid7:
 +
 	jp interactionAnimate
 @substate3:
-	ld a,($cba0)
+	ld a,(wTextIsActive)
 	or a
 	jr nz,+
 	call interactionDecCounter1
 	jr nz,+
 	call interactionIncSubstate
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	ld (hl),$05
 +
 	jp interactionAnimate

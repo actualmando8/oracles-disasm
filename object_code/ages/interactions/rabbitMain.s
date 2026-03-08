@@ -141,7 +141,7 @@ rabbitSubid0:
 	.dw @substate3
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	jp nz,interactionRunScript
 
@@ -150,7 +150,7 @@ rabbitSubid0:
 	jp interactionSetAnimation
 
 @substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $10
 	jp nz,interactionRunScript
 
@@ -288,7 +288,7 @@ rabbitSubid1:
 	call interactionDecCounter2
 	ret nz
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 
@@ -339,7 +339,7 @@ rabbitSubid3:
 	ret nz
 	ld (hl),$5a
 	ld a,$01
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld a,SND_RESTORE
 	call playSound
 	jp interactionIncSubstate
@@ -370,7 +370,7 @@ rabbitSubid4:
 	.dw rabbitSubid5@ret
 
 @substate0:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $01
 	jr nz,++
 
@@ -405,7 +405,7 @@ rabbitJump:
 
 
 rabbitSubid4Substate2:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $02
 	jp nz,interactionRunScript
 
@@ -449,7 +449,7 @@ rabbitSubid5:
 	ld a,SND_DAMAGE_ENEMY
 	call playSound
 	ld a,$02
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 
 @label_3f_367:
 	ld a,$08
@@ -496,7 +496,7 @@ rabbitSubid5:
 	ret nz
 
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 

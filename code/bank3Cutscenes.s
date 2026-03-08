@@ -705,7 +705,7 @@ introCinematic_ridingHorse:
 introCinematic_ridingHorse_state0:
 	call disableLcd
 	ld hl,wOamEnd
-	ld bc,$d000-wOamEnd
+	ld bc,w1Link-wOamEnd
 	call clearMemoryBc
 
 	ld a,:w4TileMap
@@ -736,7 +736,7 @@ introCinematic_ridingHorse_state0:
 	ld (hl),$01
 
 	ld a,$20
-	ld ($cbb8),a
+	ld (wTmpcbb8),a
 	ld a,$10
 	ld (wTmpcbb9),a
 	ld a,$22
@@ -993,7 +993,7 @@ introCinematic_ridingHorse:
 introCinematic_ridingHorse_state0:
 	call disableLcd
 	ld hl,wOamEnd
-	ld bc,$d000-wOamEnd
+	ld bc,w1Link-wOamEnd
 	call clearMemoryBc
 
 	ld a,$10
@@ -1004,13 +1004,13 @@ introCinematic_ridingHorse_state0:
 	call loadPaletteHeader
 
 	; Use cbb3-cbb4 as a 2-byte counter; wait for 0x37e=894 frames
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$7e
 	inc hl
 	ld (hl),$03
 
 	ld a,$20
-	ld ($cbb8),a
+	ld (wTmpcbb8),a
 	ld a,$10
 	ld (wTmpcbb9),a
 	ld a,$22
@@ -1979,18 +1979,18 @@ seasonsFunc_03_5367:
 ;;
 ; @param[out]	zflag
 @func:
-	ld a,($cbb6)
+	ld a,(wTmpcbb6)
 	dec a
 	jr nz,++
-	ld a,($cbba)
+	ld a,(wTmpcbba)
 	xor $01
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	ld a,$05
 	jr z,++
 	ld a,$22
 ++
-	ld ($cbb6),a
-	ld a,($cbba)
+	ld (wTmpcbb6),a
+	ld a,(wTmpcbba)
 	or a
 	ret
 

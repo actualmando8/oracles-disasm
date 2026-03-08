@@ -40,7 +40,7 @@ interactionCode9e:
 	ld a,$81
 	ld (wDisabledObjects),a
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,mainScripts.script7556
 	jp interactionSetScript
 @substate1:
@@ -80,7 +80,7 @@ interactionCode9e:
 	call func_5f87
 	ret nz
 	xor a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld (wDisabledObjects),a
 	ld a,$4d
 	call playSound
@@ -97,14 +97,14 @@ func_5f8c:
 	jr z,++
 	call checkLinkID0AndControlNormal
 	ret nc
-	ld a,($cc46)
+	ld a,(wGameKeysJustPressed)
 	bit 6,a
 	jr z,func_5fa3
 	ld c,$01
 	ld b,$b0
 	jp func_5fba
 func_5fa3:
-	ld a,($cc45)
+	ld a,(wGameKeysPressed)
 	bit 6,a
 	ret nz
 ++

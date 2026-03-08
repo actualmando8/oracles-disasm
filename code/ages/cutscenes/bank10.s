@@ -54,7 +54,7 @@ blackTowerEscape_simulatedInput4:
 agesFunc_10_70f6:
 	xor a
 	ldh (<hOamTail),a
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @substate0
@@ -75,7 +75,7 @@ agesFunc_10_70f6:
 	call clearDynamicInteractions
 	call clearOam
 	xor a
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	ld a,GFXH_CREDITS_SCROLL
 	call loadGfxHeader
 	ld a,PALH_a0
@@ -93,7 +93,7 @@ agesFunc_10_70f6:
 	ld (hl),$50
 	ret
 @substate1:
-	ld a,($cfdf)
+	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
 	ld hl,wTmpcbb3
@@ -109,7 +109,7 @@ agesFunc_10_70f6:
 	jr nz,@func_7174
 	callab bank3Cutscenes.cutscene_clearTmpCBB3
 	ld a,$03
-	ld ($cbc1),a
+	ld (wTmpcbc1),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 @func_7174:
@@ -258,13 +258,13 @@ agesFunc_10_70f6:
 	ret nz
 	callab bank3Cutscenes.cutscene_clearTmpCBB3
 	ld a,$03
-	ld ($cbc1),a
+	ld (wTmpcbc1),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 
 
 agesFunc_10_7298:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @substate0
@@ -445,7 +445,7 @@ agesFunc_10_7298:
 	jr nz,+
 	ld (hl),$d1
 	xor a
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 +
 	jp incCbc2
 @substate7:
@@ -457,7 +457,7 @@ agesFunc_10_7298:
 	jr nz,++
 	ret
 @func_7407:
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	or a
 	ret z
 ++

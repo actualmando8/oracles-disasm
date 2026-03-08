@@ -892,7 +892,7 @@ itemDropSetTable:
 
 
 ; Each row corresponds to an item drop (see constants/common/itemDrops.s).
-;   Byte 0: Variable in $c600 block to check
+;   Byte 0: Variable in wc600Block to check
 ;   Byte 1: Value to AND with that variable to check availability; if nonzero, the item
 ;           can drop.
 itemDropAvailabilityTable:

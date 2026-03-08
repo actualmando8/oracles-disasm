@@ -35,14 +35,14 @@ zelda_state0:
 
 @subid0:
 	ld a,$b0
-	ld ($cc1d),a
+	ld (wInteractionIDToLoadExtraGfx),a
 	ld (wLoadedTreeGfxIndex),a
 	
 	call getThisRoomFlags
 	bit 7,a
 	jr z,+
 	ld a,$01
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ld a,(wActiveMusic)
 	or a
 	jr z,+
@@ -51,7 +51,7 @@ zelda_state0:
 	ld a,$38
 	call playSound
 +
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$10
 	call clearMemory
 	jr @setVisibleInitGraphicsIncState

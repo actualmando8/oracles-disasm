@@ -19,8 +19,8 @@ initTextbox:
 ++
 	ld a,$07
 	ld ($ff00+R_SVBK),a
-	ld hl,$d000
-	ld bc,w7TextVariablesEnd - $d000
+	ld hl,w7TextboxMap
+	ld bc,w7TextVariablesEnd - w7TextboxMap
 	call clearMemoryBc
 	jp initTextboxStuff
 
@@ -3009,9 +3009,9 @@ textControlCodeC_ret:
 ;;
 ; Unused?
 textControlCodeC_6:
-	ld a,($cbab)
+	ld a,(wcbaa+1)
 	ld (wTextNumberSubstitution+1),a
-	ld a,($cbaa)
+	ld a,(wcbaa)
 	ld (wTextNumberSubstitution),a
 
 ;;
@@ -3091,7 +3091,7 @@ nameAddressTable:
 	.dw w7SecretText1 w7SecretText2
 
 ; This data structure works with text command $08. When buying something from
-; a shop, it checks the given variable ($cbad) and displays one of these pieces
+; a shop, it checks the given variable (wcbad) and displays one of these pieces
 ; of text depending on the value.
 ;
 .ifdef ROM_AGES
@@ -3117,22 +3117,22 @@ extraTextIndices:
 
 ; Potion in Syrup's hut
 @index0d:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d02, <TX_0d08, <TX_0d04, <TX_0d03
 
 ; Gasha seed in Syrup's hut
 @index0e:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d06, <TX_0d08, <TX_0d07, <TX_0d03
 
 ; Ring box upgrade in upstairs Lynna shop
 @index0f:
-	.dw $cbad
+	.dw wcbad
 	.db $ff, <TX_0e06, <TX_0e05, $ff
 
 ; Bombchus in Syrup's hut
 @index11:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d0c, <TX_0d08, <TX_0d07, <TX_0d03
 .else
 extraTextIndices:
@@ -3156,67 +3156,67 @@ extraTextIndices:
 	.dw @index11
 ; TODO: get the correct text id for these
 @index00:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $02 $03
 @index01:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $09 $05
 @index02:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $14 $16
 @index03:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $1c $1e
 @index04:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $21 $25
 @index05:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $28 $2a
 @index06:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $2d $2f
 @index07:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $33 $37
 @index08:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $3b $3c
 @index09:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $40 $42
 @index0a:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $45 $47
 @index0b:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $4a $4c
 @index0c:
-	.dw $cba5
+	.dw wSelectedTextOption
 	.db $50 $ff
 
 ; Potion in Syrup's hut
 @index0d:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d02, <TX_0d08, <TX_0d04, <TX_0d03
 
 ; Gasha seed in Syrup's hut
 @index0e:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d06, <TX_0d08, <TX_0d07, <TX_0d03
 
 ; TODO: ???
 @index0f:
-	.dw $cbad
+	.dw wcbad
 	.db $ff, <TX_0e06, <TX_0e05, $ff
 
 @index10:
 	; corrupted version of index00?
-	.db <$cba5
+	.db <wSelectedTextOption
 	.db $02, $03
 
 ; Bombchus in Syrup's hut
 @index11:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d0c, <TX_0d08, <TX_0d07, <TX_0d03
 .endif

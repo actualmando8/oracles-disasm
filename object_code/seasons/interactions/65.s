@@ -68,15 +68,15 @@ interactionCode65:
 	ret
 @state1:
 	xor a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ld a,$3c
-	ld ($cd19),a
+	ld (wScreenShakeCounterX),a
 	call interactionDecCounter1
 	ret nz
 	ld (hl),$78
 	ld a,$01
-	ld ($ccab),a
-	ld hl,$cfd0
+	ld (wDisableScreenTransitions),a
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	inc (hl)
 	call func_5261
 	call func_545a
@@ -89,24 +89,24 @@ interactionCode65:
 	ld a,$70
 	call playSound
 	ld a,$0f
-	ld ($cd18),a
-	ld a,($cfd0)
+	ld (wScreenShakeCounterY),a
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	ret c
 	call func_5258
 	jp nz,interactionDelete
 	ld a,$11
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	ld a,$81
-	ld ($cc6b),a
+	ld (wcc50),a
 	jp interactionDelete
 @state2:
 	call func_5258
 	jp nz,interactionDelete
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	jr z,func_524d
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld c,$08
 	call multiplyAByC
 	ld a,l
@@ -118,7 +118,7 @@ interactionCode65:
 	jr nc,+
 	ld (hl),b
 +
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld b,a
 	ld a,$15
 	sub b
@@ -148,7 +148,7 @@ func_5258:
 func_5261:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld a,($cd09)
+	ld a,(wScreenOffsetX)
 	cpl
 	inc a
 	swap a
@@ -212,7 +212,7 @@ func_52c6:
 	ret
 func_52d9:
 	push de
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	add a
 	ld hl,table_5326
 	rst_addDoubleIndex
@@ -233,7 +233,7 @@ func_52d9:
 	ld b,$05
 	ld c,$02
 	call queueDmaTransfer
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	add a
 	ld hl,table_5352
 	rst_addDoubleIndex
@@ -281,7 +281,7 @@ table_5352:
 	.db $61 $99 $60 $99
 	.db $41 $99 $40 $99
 func_537e:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	bit 0,a
@@ -291,7 +291,7 @@ func_537e:
 	ld l,a
 	ld a,$0f
 	call func_53bb
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	srl a
 	ld b,a
 	ld a,$0a
@@ -307,7 +307,7 @@ func_53a1:
 	ld l,a
 	ld a,$0c
 	call func_53bb
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	inc a
 	srl a
 	ld b,a
@@ -328,7 +328,7 @@ func_53bb:
 	jr nz,-
 	ret
 func_53c7:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	bit 0,a
@@ -338,7 +338,7 @@ func_53c7:
 	ld l,a
 	ld a,$b0
 	call func_53e7
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	srl a
 	ld b,a
 	ld a,$0a
@@ -389,58 +389,58 @@ func_5440:
 	ld a,$03
 	ld ($ff00+R_SVBK),a
 	push de
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$20
 	call copyMemory
 	pop de
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$20
 	jp copyMemory
 
 func_545a:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	push de
 	push hl
 	ld hl,$d0c0
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5544
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a
 	ld hl,$d100
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5558
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a
 	ld hl,$d4c0
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5544
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -448,16 +448,16 @@ func_545a:
 	ld a,(hl)
 	add $04
 	ld d,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a
 	ld hl,$d500
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5558
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -465,7 +465,7 @@ func_545a:
 	ld a,(hl)
 	add $04
 	ld d,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a
@@ -477,7 +477,7 @@ func_545a:
 	ld hl,$dc00
 	ld a,$0b
 	call func_552a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld c,a
 	ld b,$00
 	ld a,$16
@@ -504,7 +504,7 @@ func_545a:
 	ret
 func_552a:
 	ld e,a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld c,a
 	ld a,e
 --

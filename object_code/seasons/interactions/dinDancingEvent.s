@@ -19,12 +19,12 @@ interactionCode4e:
 	jp nz,@seasonsFunc_08_754c
 	ld hl,objectData.objectData7e4e
 	call parseGivenObjectData
-	ld hl,$cc1d
+	ld hl,wInteractionIDToLoadExtraGfx
 	ld (hl),$4e
 	inc hl
 	ld (hl),$06
 	xor a
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ldi (hl),a
 	ldi (hl),a
 	ld (hl),a
@@ -76,7 +76,7 @@ interactionCode4e:
 	.dw @@subid9
 	.dw @@subidA
 @@subid5:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	jr nz,+
 	call interactionAnimate
@@ -100,7 +100,7 @@ interactionCode4e:
 	.dw @@@substate3
 
 @@@func75b5:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	call nz,interactionIncSubstate
 @@@animate:
@@ -115,7 +115,7 @@ interactionCode4e:
 	add l
 	ld l,a
 	ld b,(hl)
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	and b
 	jr z,+
 	call interactionIncSubstate
@@ -183,7 +183,7 @@ interactionCode4e:
 	.dw @@@substate5
 	.dw @@@substate6
 @@@substate0:
-	ld a,($cfd3)
+	ld a,(wTmpcfc0.genericCutscene.cfd3)
 	cp $3f
 	jp nz,@@subid9@func75b5
 	call interactionIncSubstate
@@ -191,19 +191,19 @@ interactionCode4e:
 	call interactionSetScript
 @@@substate1:
 	call @@subid9@func75b5
-	ld a,($cfd3)
+	ld a,(wTmpcfc0.genericCutscene.cfd3)
 	and $40
 	ret z
 	call fastFadeoutToWhite
 	jp interactionIncSubstate
 @@@substate2:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld a,$80
-	ld ($cfd3),a
+	ld (wTmpcfc0.genericCutscene.cfd3),a
 	ld a,CUTSCENE_S_DIN_DANCING
-	ld ($cc04),a
+	ld (wCutsceneTrigger),a
 	ld a,$08
 	call setLinkIDOverride
 	ld l,$02
@@ -212,20 +212,20 @@ interactionCode4e:
 	ld (hl),d
 	jp interactionIncSubstate
 @@@substate3:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret nz
 	call @@subid9@runScriptPushLinkAway
 	jp interactionIncSubstate
 @@@substate4:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $04
 	ret nz
 	call interactionIncSubstate
 	ld a,$0d
 	jp interactionSetAnimation
 @@@substate5:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $07
 	ret nz
 	call interactionIncSubstate
@@ -236,10 +236,10 @@ interactionCode4e:
 	ret
 @@@substate6:
 	call objectApplySpeed
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	rlca
 	ret nc
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$08
 	jp interactionDelete
 @@subid7:
@@ -253,12 +253,12 @@ interactionCode4e:
 	call interactionRunScript
 	jr nc,@@@func_76e9
 	call interactionIncSubstate
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$04
 	jr @@@func_76e9
 @@@substate1:
 	call @@@func_76e9
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $06
 	ret nz

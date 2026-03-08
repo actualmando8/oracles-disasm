@@ -12,14 +12,14 @@ cutsceneHandler_0c:
 
 cutsceneHandler_0c_stage0:
 	ld b,$10
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call clearMemory
 	call clearWramBank1
 	xor a
 	ld (wDisabledObjects),a
 	ld (wScrollMode),a
 	ld a,(wGfxRegs2.SCY)
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	ld a,$80
 	ld (wMenuDisabled),a
 	ld a,$01
@@ -31,7 +31,7 @@ cutsceneHandler_0c_stage1:
 	ld a,(wFrameCounter)
 	and $07
 	ret nz
-	ld a,($cbb3)
+	ld a,(wTmpcbb3)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -43,9 +43,9 @@ cutsceneHandler_0c_stage1:
 @state0:
 	call incCbb3
 	ld a,$08
-	ld ($cbb8),a
+	ld (wTmpcbb8),a
 	ld a,$04
-	ld ($cbb4),a
+	ld (wTmpcbb4),a
 	ld a,GFXH_PIRATE_SHIP_LEAVING_SUBROSIA_LAYOUT
 	call loadGfxHeader
 	ld a,GFXH_PIRATE_SHIP_MOVING_EXTRA_TILES
@@ -73,7 +73,7 @@ cutsceneHandler_0c_stage1:
 	.db $24 $25 $26 $27 $28
 
 @state1:
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	dec (hl)
 	ret nz
 	ld bc,TX_4e00
@@ -123,9 +123,9 @@ cutsceneHandler_0c_stage1:
 seasonsFunc_03_67e9:
 	ld (wCutsceneState),a
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ld b,$10
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	jp clearMemory
 
 seasonsFunc_03_67f8:
@@ -135,19 +135,19 @@ seasonsFunc_03_67f8:
 	ld (wGfxRegs2.WINX),a
 	ld a,$a5
 	ld (wGfxRegs1.WINX),a
-	ld a,($cbb8)
+	ld a,(wTmpcbb8)
 	ld (wGfxRegs2.WINY),a
 	ld (wGfxRegs1.WINY),a
-	ld ($cbbc),a
+	ld (wTmpcbbc),a
 	jr seasonsFunc_03_684c
 
 incCbb3:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	inc (hl)
 	ret
 
 seasonsFunc_03_681a:
-	ld a,($cbb7)
+	ld a,(wTmpcbb7)
 	ld hl,seasonsTable_03_6844
 	rst_addAToHl
 	ld a,(hl)
@@ -164,8 +164,8 @@ seasonsFunc_03_681a:
 	ld e,$01
 	call queueDmaTransfer
 	ld a,$08
-	ld ($cbb8),a
-	ld hl,$cbb7
+	ld (wTmpcbb8),a
+	ld hl,wTmpcbb7
 	inc (hl)
 	ret
 
@@ -176,16 +176,16 @@ seasonsTable_03_6844:
 seasonsFunc_03_684c:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld a,($cbb8)
+	ld a,(wTmpcbb8)
 	and $07
-	ld hl,$d800
+	ld hl,w2PirateShipBgTiles
 	rst_addDoubleIndex
 	ld de,$d9e0
 	ld b,$10
 	call copyMemory
-	ld a,($cbb8)
+	ld a,(wTmpcbb8)
 	and $07
-	ld hl,$d820
+	ld hl,w2PirateShipBgTiles+$20
 	rst_addDoubleIndex
 	ld de,$d9f0
 	ld b,$10
@@ -198,7 +198,7 @@ seasonsFunc_03_684c:
 	jp queueDmaTransfer
 
 cutsceneHandler_0c_stage2:
-	ld a,($cbb3)
+	ld a,(wTmpcbb3)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -243,7 +243,7 @@ cutsceneHandler_0c_stage2:
 	jp fadeoutToWhite
 
 cutsceneHandler_0c_stage3:
-	ld a,($cbb3)
+	ld a,(wTmpcbb3)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -259,10 +259,10 @@ cutsceneHandler_0c_stage3:
 	call clearScreenVariablesAndWramBank1
 	call incCbb3
 	ld a,$40
-	ld ($cbb8),a
-	ld ($cbbf),a
+	ld (wTmpcbb8),a
+	ld (wTmpcbbf),a
 	ld a,$1e
-	ld ($cbb4),a
+	ld (wTmpcbb4),a
 	ld a,$01
 	ld (wRoomStateModifier),a
 	ld bc,ROOM_SEASONS_0fe
@@ -318,7 +318,7 @@ cutsceneHandler_0c_stage3:
 	.db $ff
 
 @state1:
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	dec (hl)
 	ret nz
 	call incCbb3
@@ -331,7 +331,7 @@ cutsceneHandler_0c_stage3:
 @state2:
 	call retIfTextIsActive
 	ld a,$ff
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	jp incCbb3
 
 @state3:
@@ -362,20 +362,20 @@ cutsceneHandler_0c_stage3:
 	ld a,$04
 	ld (wCutsceneState),a
 	ld b,$10
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	jp clearMemory
 
 seasonsFunc_03_69d1:
 	ld a,$a5
 	ld (wGfxRegs1.WINX),a
-	ld a,($cbb8)
+	ld a,(wTmpcbb8)
 	ld (wGfxRegs2.WINY),a
 	ld (wGfxRegs1.WINY),a
-	ld ($cbbc),a
+	ld (wTmpcbbc),a
 	ret
 
 cutsceneHandler_0c_stage4:
-	ld a,($cbb3)
+	ld a,(wTmpcbb3)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -387,7 +387,7 @@ cutsceneHandler_0c_stage4:
 	ret nz
 	call cutsceneHandler_0c_stage2@seasonsFunc_03_688c
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ld hl,objectData.objectData_sickPiratiansInShip
 	jp parseGivenObjectData
 
@@ -401,7 +401,7 @@ cutsceneHandler_0c_stage4:
 
 cutsceneHandler_0c_stage5:
 	call seasonsFunc_03_6b6c
-	ld a,($cbb3)
+	ld a,(wTmpcbb3)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -415,16 +415,16 @@ cutsceneHandler_0c_stage5:
 	call clearScreenVariablesAndWramBank1
 	call incCbb3
 	ld a,$90
-	ld ($cbb8),a
-	ld ($cbbf),a
+	ld (wTmpcbb8),a
+	ld (wTmpcbbf),a
 	ld a,$10
-	ld ($cbbd),a
+	ld (wTmpcbbd),a
 	ld a,$03
 	ld (wRoomStateModifier),a
 	ld bc,ROOM_SEASONS_0f2
 	call cutsceneHandler_0c_stage3@loadNewRoom
 	ld a,$ff
-	ld ($cd25),a
+	ld (wTilesetAnimation),a
 	ld e,$00
 	call loadObjectGfxHeaderToSlot4
 	ld a,GFXH_PIRATE_SHIP_ARRIVING_LAYOUT
@@ -472,7 +472,7 @@ cutsceneHandler_0c_stage5:
 seasonsFunc_03_6a9d:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld a,($cbbe)
+	ld a,(wTmpcbbe)
 	dec a
 	and $03
 	ld hl,seasonsTable_03_6b1a
@@ -480,7 +480,7 @@ seasonsFunc_03_6a9d:
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
-	ld a,($cbb8)
+	ld a,(wTmpcbb8)
 	and $07
 	rst_addDoubleIndex
 	ld de,$d9e0
@@ -493,13 +493,13 @@ seasonsFunc_03_6a9d:
 	jp queueDmaTransfer
 
 seasonsFunc_03_6aca:
-	ld hl,$cbbd
+	ld hl,wTmpcbbd
 	dec (hl)
 	jr nz,seasonsFunc_03_6a9d
 	ld (hl),$10
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld a,($cbbe)
+	ld a,(wTmpcbbe)
 	ld hl,seasonsTable_03_6b1a
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -509,7 +509,7 @@ seasonsFunc_03_6aca:
 	push hl
 	call seasonsFunc_03_6b22
 	pop hl
-	ld a,($cbb8)
+	ld a,(wTmpcbb8)
 	and $07
 	rst_addDoubleIndex
 	ld de,$d9e0
@@ -524,10 +524,10 @@ seasonsFunc_03_6aca:
 	ld de,$8ce0
 	ld bc,$0102
 	call queueDmaTransfer
-	ld a,($cbbe)
+	ld a,(wTmpcbbe)
 	inc a
 	and $03
-	ld ($cbbe),a
+	ld (wTmpcbbe),a
 	ret
 
 seasonsTable_03_6b1a:
@@ -545,7 +545,7 @@ seasonsFunc_03_6b22:
 	jp copyMemory
 
 seasonsFunc_03_6b30:
-	ld a,($cbb7)
+	ld a,(wTmpcbb7)
 	ld hl,seasonsTable_03_6b59
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -563,8 +563,8 @@ label_03_196:
 	ld e,$01
 	call queueDmaTransfer
 	ld a,$10
-	ld ($cbb8),a
-	ld hl,$cbb7
+	ld (wTmpcbb8),a
+	ld hl,wTmpcbb7
 	inc (hl)
 	ret
 
@@ -589,15 +589,15 @@ oamData_03_6b72:
 	.db $10 $a6 $4c $09
 
 incCbbfAndCbb8:
-	ld hl,$cbbf
+	ld hl,wTmpcbbf
 	inc (hl)
-	ld hl,$cbb8
+	ld hl,wTmpcbb8
 	inc (hl)
 	ret
 
 decCbbfAndCbb8:
-	ld hl,$cbbf
+	ld hl,wTmpcbbf
 	dec (hl)
-	ld hl,$cbb8
+	ld hl,wTmpcbb8
 	dec (hl)
 	ret

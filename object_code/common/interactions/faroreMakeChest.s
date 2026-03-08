@@ -12,8 +12,8 @@ interactionCode11:
 
 ; Subid 0 is the "parent" which controls the cutscene and the "children" (subid 1).
 ; The parent uses 2 variables to control the children:
-;   * [$cfd8] is the distance away from the center of the circle the sparkles should be.
-;   * [$cfd9] is set to 1 when the sparkles should start moving off-screen.
+;   * [wTmpcfc0+$18] is the distance away from the center of the circle the sparkles should be.
+;   * [wTmpcfc0+$19] is set to 1 when the sparkles should start moving off-screen.
 interac11_subid00:
 	ld e,Interaction.state
 	ld a,(de)
@@ -32,9 +32,9 @@ interac11_subid00:
 
 @interac11_00_state0:
 	ld a,$30
-	ld ($cfd8),a
+	ld (wTmpcfc0+$18),a
 	xor a
-	ld ($cfd9),a
+	ld (wTmpcfc0+$19),a
 	call setCameraFocusedObject
 	ld e,Interaction.counter1
 	ld a,$5a
@@ -69,7 +69,7 @@ interac11_subid00:
 	ld a,(wFrameCounter)
 	rrca
 	jr c,+
-	ld hl,$cfd8
+	ld hl,wTmpcfc0+$18
 	dec (hl)
 +
 	call interactionDecCounter1
@@ -82,7 +82,7 @@ interac11_subid00:
 	ret nz
 	ld (hl),$08
 	ld a,$01
-	ld ($cfd9),a
+	ld (wTmpcfc0+$19),a
 
 	; Create a large, blue-and-red sparkle, and set its "related object" to this.
 .ifdef ROM_AGES
@@ -125,7 +125,7 @@ interac11_subid00:
 	or a
 	ret nz
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	xor a
 	ld (wPaletteThread_parameter),a
 	call setCameraFocusedObjectToLink
@@ -182,7 +182,7 @@ interac11_subid01:
 	call @interac11_updateSparkle
 
 	; Wait for signal from parent to start flying away
-	ld a,($cfd9)
+	ld a,(wTmpcfc0+$19)
 	or a
 	ret z
 
@@ -215,6 +215,6 @@ interac11_subid01:
 ++
 	ld e,Interaction.angle
 	ld bc,$7858
-	ld a,($cfd8)
+	ld a,(wTmpcfc0+$18)
 	call objectSetPositionInCircleArc
 	jp interactionAnimate

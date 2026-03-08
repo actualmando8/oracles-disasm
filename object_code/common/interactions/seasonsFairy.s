@@ -114,7 +114,7 @@ interactionCode50:
 
 	ld l,Interaction.state
 	ld (hl),$05
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 1,(hl)
 	call objectSetVisible
 	jr @updateAnimation
@@ -177,7 +177,7 @@ interactionCode50:
 ++
 	ld l,Interaction.state
 	inc (hl)
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 1,(hl)
 
 @updateAnimation:
@@ -185,14 +185,14 @@ interactionCode50:
 
 @state4:
 	call objectOscillateZ_body
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $07
 	jp z,interactionDelete
 	jr @updateAnimation
 
 @state5:
 	call objectOscillateZ_body
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $07
 	jr nz,@updateAnimation
 	call @createPuff

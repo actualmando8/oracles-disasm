@@ -78,7 +78,7 @@ nayruState0:
 	jp loadPaletteHeader
 
 @init02:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	jr z,++
 
@@ -96,7 +96,7 @@ nayruState0:
 
 @init04:
 	ld hl,mainScripts.nayruScript04_part1
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0b
 	jr nz,++
 
@@ -315,10 +315,10 @@ nayruSubid00:
 	.dw @substate7
 	.dw @substate8
 
-; Waiting for Link to approach (signal in $cfd0)
+; Waiting for Link to approach (signal in wTmpcfc0.genericCutscene.cfd0)
 @substate0:
 	call interactionAnimate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	jp nz,@createMusicNotes
 
@@ -352,7 +352,7 @@ nayruSubid00:
 @substate1:
 	call interactionAnimate
 	call interactionRunScript
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $16
 	ret nz
 
@@ -431,7 +431,7 @@ nayruSubid00:
 
 ; Waiting for some kind of signal?
 @substate3:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $1a
 	ret nz
 	call interactionIncSubstate
@@ -492,7 +492,7 @@ nayruSubid00:
 	ret nz
 
 	ld a,$1b
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 
 	; Start next script
 	ld hl,mainScripts.nayruScript00_part2
@@ -566,11 +566,11 @@ nayruSubid02:
 
 ;;
 nayruSubid02Substate0: ; This is also called by Ralph in the same cutscene
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $07
 	jr nz,@createNotes
 
-	; When signal is received from $cfd0, choose direction randomly (left/right) and
+	; When signal is received from wTmpcfc0.genericCutscene.cfd0, choose direction randomly (left/right) and
 	; go to substate 1
 	call getRandomNumber
 	and $02
@@ -591,7 +591,7 @@ nayruAnimateAndRunScript:
 
 ;;
 nayruSubid02Substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $08
 	jr nz,nayruFlipDirectionAtRandomIntervals
 
@@ -642,7 +642,7 @@ nayruSubid03:
 	.dw @substate2
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $01
 	ret nz
 	call startJump
@@ -666,7 +666,7 @@ nayruSubid04:
 	call checkIsLinkedGame
 	jp z,nayruAnimateAndRunScript
 
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0b
 	jr c,nayruAnimateAndRunScript
 	call interactionAnimate
@@ -677,7 +677,7 @@ nayruSubid04:
 nayruSubid05:
 	call nayruAnimateAndRunScript
 
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $03
 	ret c
 	cp $05
@@ -784,7 +784,7 @@ nayruSubid07:
 	ret
 ++
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	call interactionIncSubstate
 	call objectSetVisible82
 
@@ -799,7 +799,7 @@ nayruSubid07:
 	call interactionRunScript
 	jr c,@scriptDone
 
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	rrca
 	ret c
 	ld e,Interaction.direction

@@ -21,8 +21,8 @@ enemyCode02:
 	call checkLinkCollisionsEnabled
 	jr nc,@dead
 	ld a,$ff
-	ld ($cbca),a
-	ld ($cc02),a
+	ld (wDisableLinkCollisionsAndMenu),a
+	ld (wMenuDisabled),a
 	ld h,d
 	ld l,$a4
 	ld (hl),$00
@@ -76,8 +76,8 @@ enemyCode02:
 	ld a,$89
 	call loadPaletteHeader
 	ld a,$01
-	ld ($cfcf),a
-	ld ($cbca),a
+	ld (wTmpcfc0+$0f),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	call ecom_setSpeedAndState8
 	ld a,$53
 	jp playSound
@@ -360,8 +360,8 @@ generalOnox_subid1:
 	inc l
 	xor a
 	ld (hl),a
-	ld ($cd18),a
-	ld ($cd19),a
+	ld (wScreenShakeCounterY),a
+	ld (wScreenShakeCounterX),a
 	ld l,$b0
 	dec a
 	ldi (hl),a
@@ -383,12 +383,12 @@ generalOnox_subid1:
 	ld a,(de)
 	or a
 	ret nz
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	ret nz
 	inc a
-	ld ($cca4),a
-	ld ($cbca),a
+	ld (wDisabledObjects),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	ld e,$85
 	ld (de),a
 	ld bc,TX_501d
@@ -426,8 +426,8 @@ generalOnox_subid1:
 	ld l,$a4
 	set 7,(hl)
 	xor a
-	ld ($cca4),a
-	ld ($cbca),a
+	ld (wDisabledObjects),a
+	ld (wDisableLinkCollisionsAndMenu),a
 
 @func_5ae5:
 	ld h,d
@@ -570,12 +570,12 @@ generalOnox_subid2:
 	.dw @stateC
 
 @state8:
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret nz
-	ld ($cfcf),a
+	ld (wTmpcfc0+$0f),a
 	inc a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld h,d
 	ld l,$8b
 	ld (hl),$50
@@ -625,11 +625,11 @@ generalOnox_subid2:
 	ld l,e
 	inc (hl)
 	ld a,$30
-	ld ($cd08),a
+	ld (wScreenOffsetY),a
 	ld a,$08
-	ld ($cbae),a
+	ld (wTextboxFlags),a
 	ld a,$06
-	ld ($cbac),a
+	ld (wTextboxPosition),a
 	ld bc,TX_5022
 	jp showText
 
@@ -650,10 +650,10 @@ generalOnox_subid2:
 	jp fadeoutToWhite
 
 @stateC:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cfc8
+	ld hl,wTmpcfc0+8
 	inc (hl)
 	jp enemyDelete
 

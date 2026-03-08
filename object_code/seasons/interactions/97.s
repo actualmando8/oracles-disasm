@@ -13,7 +13,7 @@ interactionCode97:
 	call interactionInitGraphics
 	jp objectSetVisible83
 @state1:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	inc a
 	jp z,interactionDelete
@@ -24,12 +24,12 @@ interactionCode97:
 	.dw @substate1
 	.dw @substate2
 @substate0:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $02
 	ret z
 	call interactionAnimate
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	bit 1,(hl)
 	ret z
 	call interactionIncSubstate
@@ -45,7 +45,7 @@ interactionCode97:
 	pop de
 	ret
 @substate1:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	bit 3,(hl)
 	jr z,+
 	call interactionIncSubstate

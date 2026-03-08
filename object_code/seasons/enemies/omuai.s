@@ -130,7 +130,7 @@ enemyCode72:
 	ret
 	
 @state4:
-	ld a,($ccf0)
+	ld a,(wScentSeedActive)
 	or a
 	jp z,func_4c65
 	ld e,$a1
@@ -198,7 +198,7 @@ enemyCode72:
 	jp enemySetAnimation
 	
 @stateB:
-	ld a,($ccf0)
+	ld a,(wScentSeedActive)
 	or a
 	jr z,+
 	ld e,$84

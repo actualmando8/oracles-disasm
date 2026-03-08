@@ -41,7 +41,7 @@ enemyCode7e:
 	
 @state0:
 	ld a,$7e
-	ld ($cc1c),a
+	ld (wEnemyIDToLoadExtraGfx),a
 	ld b,PART_3b
 	call ecom_spawnProjectile
 	ret nz
@@ -337,7 +337,7 @@ func_5f54:
 	add $08
 	inc l
 	ld (hl),a
-	ld hl,$cca9
+	ld hl,wNumTorchesLit
 	ld a,(hl)
 	or a
 	jr z,+
@@ -359,7 +359,7 @@ poeSister5f7e:
 	ld a,(de)
 	or a
 	jr z,+
-	ld a,($cba0)
+	ld a,(wTextIsActive)
 	or a
 	ret nz
 	call showText
@@ -492,7 +492,7 @@ poeSister604b:
 	ret z
 	ld h,d
 	ld l,$b7
-	ld a,($cca9)
+	ld a,(wNumTorchesLit)
 	or a
 	jr z,+
 	res 0,(hl)
@@ -507,7 +507,7 @@ poeSister604b:
 	ld l,$b0
 	dec (hl)
 	ret nz
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	ret nz
 	ld a,(wWarpTransition2)

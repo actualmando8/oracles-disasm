@@ -24,7 +24,7 @@ specialWarp_subid0:
 specialWarp_subid1:
 	call checkInteractionState
 	jr nz,+
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $01
 	ret z
 	ld a,$01
@@ -32,16 +32,16 @@ specialWarp_subid1:
 	call objectGetTileAtPosition
 	ld (hl),$20
 +
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret nz
 	call objectGetTileAtPosition
-	ld a,($ccb3)
+	ld a,(wActiveTilePos)
 	cp l
 	ret nz
 	ld (hl),$eb
 	ld a,$81
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	jp interactionDelete
 
 specialWarp_subid2:
@@ -90,13 +90,13 @@ specialWarp_subid4:
 @state1:
 	ld a,d
 	ld (wDisableWarpTiles),a
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	cp $d1
 	ret nz
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
 	ret nc
 	xor a
-	ld ($cc65),a
+	ld (wWarpTransition),a
 @setWarpVariables:
 	ld h,d
 	ld l,$70
@@ -137,19 +137,19 @@ specialWarp_subid7:
 @state1:
 @state2:
 	ld a,d
-	ld ($ccab),a
-	ld a,($cc48)
+	ld (wDisableScreenTransitions),a
+	ld a,(wLinkObjectIndex)
 	cp $d1
 	ret nz
 	xor a
-	ld ($ccab),a
-	ld a,($cd00)
+	ld (wDisableScreenTransitions),a
+	ld a,(wScrollMode)
 	and $01
 	ret nz
 	xor a
-	ld ($cd00),a
+	ld (wScrollMode),a
 	ld a,$ff
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld (wActiveMusic),a
 	jr specialWarp_subid4@setWarpVariables
 
@@ -165,7 +165,7 @@ specialWarp_subidC:
 	ld a,$02
 	call objectSetCollideRadius
 +
-	ld a,($cc78)
+	ld a,(wLinkSwimmingState)
 	rlca
 	ret nc
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
@@ -203,12 +203,12 @@ specialWarp_subidD:
 	ld a,$02
 	call objectSetCollideRadius
 +
-	ld a,($cc78)
+	ld a,(wLinkSwimmingState)
 	rlca
 	ret nc
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
 	ret nc
-	ld hl,$cc63
+	ld hl,wWarpDestGroup
 	ld (hl),$85
 	inc l
 	ld (hl),$12

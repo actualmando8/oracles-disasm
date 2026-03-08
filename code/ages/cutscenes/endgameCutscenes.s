@@ -599,7 +599,7 @@ endgameCutsceneHandler_20:
 	jp updateAllObjects
 
 @runStates:
-	ld de,$cbc1
+	ld de,wTmpcbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -628,7 +628,7 @@ endgameCutsceneHandler_20:
 
 @state0:
 	ld a,$0b
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	call cutscene_loadRoomObjectSetAndFadein
 	call hideStatusBar
 	ld a,PALH_ac
@@ -804,7 +804,7 @@ endgameCutsceneHandler_20:
 	ret nz
 	call incCbc1
 	ld a,$0c
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	call cutscene_loadRoomObjectSetAndFadein
 	ld hl,w1Link.enabled
 	ld (hl),$03
@@ -828,7 +828,7 @@ endgameCutsceneHandler_20:
 
 @stateA:
 	call updateStatusBar
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $01
 	ret nz
 	call incCbc1
@@ -875,7 +875,7 @@ endgameCutsceneHandler_20:
 	call hideStatusBar
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$de90
+	ld hl,w2TilesetBgPalettes+$10
 	ld b,$08
 	ld a,$ff
 	call fillMemory
@@ -1006,7 +1006,7 @@ endgameCutsceneHandler_20:
 ;;
 ; CUTSCENE_ROOM_OF_RITES_COLLAPSE
 endgameCutsceneHandler_0f:
-	ld de,$cbc1
+	ld de,wTmpcbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1018,7 +1018,7 @@ endgameCutsceneHandler_0f:
 	jp updateAllObjects
 
 @@runSubstates:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1043,7 +1043,7 @@ endgameCutsceneHandler_0f:
 	ld (hl),$ff
 	xor a
 	ldh (<hActiveObjectType),a
-	ld de,$d000
+	ld de,w1Link
 	ld bc,$f8f0
 	ld a,$28
 	call objectCreateExclamationMark
@@ -1184,7 +1184,7 @@ endgameCutsceneHandler_0f:
 	jp updateAllObjects
 
 @@runSubstates:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1205,7 +1205,7 @@ endgameCutsceneHandler_0f:
 	ret nz
 	call incCbc2
 	ld a,$11
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	call cutscene_loadRoomObjectSetAndFadein
 	ld a,$04
 	ld b,$02
@@ -1244,7 +1244,7 @@ endgameCutsceneHandler_0f:
 	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ld a,$03
 	jp fadeinFromWhiteWithDelay
 @@substate4:
@@ -1275,11 +1275,11 @@ endgameCutsceneHandler_0f:
 	call cutscene_loadAObjectGfxBTimes
 	ld hl,wTmpcbb3
 	ld (hl),$3c
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	ld (hl),$02
 	jp incCbc2
 @@substate7:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $09
 	ret nz
 	call incCbc2
@@ -1341,7 +1341,7 @@ endgameCutsceneHandler_0a:
 	jp func_3539
 
 @runStates:
-	ld de,$cbc1
+	ld de,wTmpcbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1349,7 +1349,7 @@ endgameCutsceneHandler_0a:
 	.dw @state2
 	.dw @state3
 @state0:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1394,14 +1394,14 @@ endgameCutsceneHandler_0a:
 	jr z,+
 	ld b,$04
 +
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	ld (hl),b
 	inc l
 	ld (hl),$00
 	jp fadeoutToWhite
 
 @state1:
-	ld de,$cbc2
+	ld de,wTmpcbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1421,11 +1421,11 @@ endgameCutsceneHandler_0a:
 	call clearOam
 	ld a,$10
 	ldh (<hOamTail),a
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	ld c,a
 	call cutscene_clearCFC0ToCFDF
 	ld a,c
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	cp $04
 	jr nc,+
 	ld hl,@@table_5f1c
@@ -1435,19 +1435,19 @@ endgameCutsceneHandler_0a:
 	ld c,(hl)
 	ld a,$00
 	call forceLoadRoom
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	ld hl,@@table_5f24
 	rst_addAToHl
 	ldi a,(hl)
 	call loadUncompressedGfxHeader
 +
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	add a
 	add GFXH_CREDITS_SCENE1
 	call loadGfxHeader
 	ld a,PALH_0f
 	call loadPaletteHeader
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	ld b,$ff
 	or a
 	jr z,+
@@ -1469,7 +1469,7 @@ endgameCutsceneHandler_0a:
 	ld (wScrollMode),a
 	xor a
 	ldh (<hCameraX),a
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	ld b,(hl)
 	call cutscene_parseObjectData_andLoadObjectGfx
 	ld a,$04
@@ -1496,7 +1496,7 @@ endgameCutsceneHandler_0a:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld a,($cfdf)
+	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
 	call incCbc2
@@ -1510,7 +1510,7 @@ endgameCutsceneHandler_0a:
 	call incCbc2
 	call disableLcd
 	call clearWramBank1
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	add a
 	add GFXH_CREDITS_IMAGE1
 	call loadGfxHeader
@@ -1520,7 +1520,7 @@ endgameCutsceneHandler_0a:
 	call loadPaletteHeader
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	ld hl,@@table_5f81
 	rst_addAToHl
 	ld a,(hl)
@@ -1528,7 +1528,7 @@ endgameCutsceneHandler_0a:
 	ld a,$10
 	ldh (<hCameraX),a
 	xor a
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	jp fadeinFromWhite
 @@table_5f81:
 	.db $00 $d0 $00 $d0
@@ -1544,7 +1544,7 @@ endgameCutsceneHandler_0a:
 	ret nz
 	ld (hl),INTERAC_CREDITS_TEXT_HORIZONTAL
 	inc l
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	ldi (hl),a
 	ld (hl),$00
 	ret
@@ -1554,7 +1554,7 @@ endgameCutsceneHandler_0a:
 	ret nz
 	xor a
 	ldh (<hOamTail),a
-	ld a,($cfdf)
+	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
 	ld b,$03
@@ -1562,19 +1562,19 @@ endgameCutsceneHandler_0a:
 	jr z,+
 	ld b,$07
 +
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	ld a,(hl)
 	cp b
 	jr nc,@@func_5fc7
 	inc (hl)
 	xor a
-	ld ($cbc2),a
+	ld (wTmpcbc2),a
 	jr ++
 @@func_5fc7:
 	call cutscene_clearTmpCBB3
 	call cutscene_clearCFC0ToCFDF
 	ld a,$02
-	ld ($cbc1),a
+	ld (wTmpcbc1),a
 ++
 	jp fadeoutToWhite
 
@@ -1618,7 +1618,7 @@ cutscene_parseObjectData_andLoadObjectGfx:
 	jp cutsceneFunc_6026
 
 cutsceneFunc_6026:
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	cp $00
 	jr z,cutscene_load_04_ObjectGfx2Times_andReload
 	cp $01
@@ -1696,7 +1696,7 @@ cutscene_clearTmpCBB3:
 ;;
 cutscene_clearCFC0ToCFDF:
 	ld b,$20
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	jp clearMemory
 
 cutscene_setScreenShakeCounterTo4RumbleAt0:

@@ -11,7 +11,7 @@ interactionCode73:
 	ld a,(hl)
 	or a
 	jr z,@func_7078
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $0e
 	jr z,@func_7078
 	ld a,$3c
@@ -105,7 +105,7 @@ interactionCode73:
 	ld a,(wDimitriState)
 	and $08
 	jr nz,@func_7131
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	call @func_71c0
@@ -124,7 +124,7 @@ interactionCode73:
 	jp interactionRunScript
 @func_7131:
 	ld a,$01
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld e,Interaction.state
 	ld a,$02
 	ld (de),a
@@ -147,7 +147,7 @@ interactionCode73:
 @mooshState1:
 	call interactionAnimate
 	call objectSetPriorityRelativeToLink_withTerrainEffects
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld a,(wNumEnemies)

@@ -758,7 +758,7 @@ wildTokayParticipantSubstate2:
 
 	; If so, set failure flag?
 	ld a,$ff
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	jr @delete
 +
 	; Delete "meat" accessory
@@ -768,7 +768,7 @@ wildTokayParticipantSubstate2:
 	ld d,a
 	call objectDelete_de
 
-	; If this is the last tokay (colored red), mark "success" condition in $cfde
+	; If this is the last tokay (colored red), mark "success" condition in wTmpcfc0.genericCutscene.cfde
 	pop de
 	ld e,Interaction.oamFlags
 	ld a,(de)
@@ -776,7 +776,7 @@ wildTokayParticipantSubstate2:
 	jr nz,@delete
 
 	ld a,$01
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 @delete:
 	jp interactionDelete
 
@@ -818,7 +818,7 @@ wildTokayParticipant_checkGrabMeat:
 	call objectDelete_de
 
 	; Delete something?
-	ld hl,$cfda
+	ld hl,wTmpcfc0+$1a
 	ldi a,(hl)
 	ld e,(hl)
 	ld d,a
@@ -904,7 +904,7 @@ tokayRunSubid19:
 	cp $19
 	jr nz,++
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 ++
 	jp interactionDelete
 

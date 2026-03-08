@@ -23,17 +23,17 @@ partCode16:
 	call func_6515
 	inc a
 	ld (wDisableScreenTransitions),a
-	ld ($cca4),a
-	ld ($cbca),a
+	ld (wDisabledObjects),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	inc a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld a,$08
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 +
 	ld a,$01
-	ld ($cc36),a
+	ld (wcdd7),a
 @normalStatus:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	inc a
 	jp z,partDelete
@@ -54,7 +54,7 @@ partCode16:
 	jp objectSetPriorityRelativeToLink_withTerrainEffects
 @state2:
 	call @state1
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $02
 	ret z
@@ -75,18 +75,18 @@ partCode16:
 +
 	call partCommon_decCounter1IfNonzero
 	jr nz,+
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $01
 	jr z,+
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	jp nz,+
 	call func_6515
 	inc a
 	ld (wDisableScreenTransitions),a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld (wDisabledObjects),a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 +
 	ldi a,(hl)
 	cp $5a

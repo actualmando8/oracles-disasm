@@ -145,7 +145,7 @@ linkCutscene_oscillateZ_1:
 
 ;;
 linkCutscene_oscillateZ:
-	ld a,($cbb7)
+	ld a,(wTmpcbb7)
 .ifdef ROM_SEASONS
 	ld b,a
 	and $07
@@ -156,7 +156,7 @@ linkCutscene_oscillateZ:
 	and $07
 	jr nz,++
 
-	ld a,($cbb7)
+	ld a,(wTmpcbb7)
 .endif
 	and $38
 	swap a
@@ -196,7 +196,7 @@ linkCutscene0_substate6:
 	ret
 +
 	call specialObjectAnimate
-	ld a,($cbb7)
+	ld a,(wTmpcbb7)
 	rrca
 	jp nc,objectSetInvisible
 	jp objectSetVisible
@@ -241,7 +241,7 @@ linkCutscene1:
 	.dw @ret
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret nz
 
@@ -324,18 +324,18 @@ linkCutscene1:
 	call itemDecCounter1
 	jr nz,@animateSelfAndRelatedObj2
 	ld a,$02
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	jp itemIncSubstate
 
 @substate6:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	jr nz,@animateSelfAndRelatedObj2
 	call @seasonsFunc_06_6f71
 	jp itemIncSubstate
 
 @substate7:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $04
 	ret nz
 	call itemIncSubstate
@@ -367,12 +367,12 @@ linkCutscene1:
 @substateA:
 	call itemDecCounter1
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$05
 	jp itemIncSubstate
 
 @substateB:
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.genericCutscene.cfd1
 	bit 6,(hl)
 	ret z
 @seasonsFunc_06_7025:
@@ -430,11 +430,11 @@ linkCutscene1:
 	call itemDecCounter1
 	ret nz
 	ld a,$07
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	jp itemIncSubstate
 
 @substateF:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	ret nz
 	call itemIncSubstate
@@ -504,7 +504,7 @@ linkCutscene1:
 	call objectCheckWithinScreenBoundary
 	ret c
 	ld a,$0a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	jp itemIncSubstate
 
 
@@ -530,7 +530,7 @@ linkCutscene2:
 	.dw @substate3
 
 @substate0:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $01
 	ret nz
@@ -562,7 +562,7 @@ linkCutscene2:
 @substate2:
 	call itemDecCounter1
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$02
 	call itemIncSubstate
 	ld l,Item.direction
@@ -571,7 +571,7 @@ linkCutscene2:
 	jp specialObjectSetAnimation
 
 @substate3:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	ret nz
 	ld a,SPECIALOBJECT_LINK
@@ -649,7 +649,7 @@ linkCutscene3:
 	call itemDecCounter1
 	jr nz,+
 	ld a,$80
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	call itemIncSubstate
 	ld bc,-$100
 	call objectSetSpeedZ
@@ -677,7 +677,7 @@ linkCutscene3:
 	call itemDecCounter1
 	ret nz
 	ld a,$01
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 
@@ -732,12 +732,12 @@ linkCutscene4:
 @substate2:
 	call itemDecCounter1
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	ld (hl),$01
 	jp itemIncSubstate
 
 @substate3:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $02
 	ret nz
 	call itemIncSubstate
@@ -763,7 +763,7 @@ linkCutscene4:
 @substate5:
 	call itemDecCounter1
 	jp nz,specialObjectAnimate
-	ld hl,$cfdf
+	ld hl,wTmpcfc0.genericCutscene.cfdf
 	ld (hl),$01
 	ret
 
@@ -799,7 +799,7 @@ linkCutscene5:
 	ld l,Item.counter1
 	ld (hl),$3c
 	call itemIncSubstate
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	ld (hl),$01
 @seasonsFunc_06_72d0:
 	ld bc,$f804
@@ -813,7 +813,7 @@ linkCutscene5:
 @substate1:
 	call itemDecCounter1
 	ret nz
-	ld hl,$cfdf
+	ld hl,wTmpcfc0.genericCutscene.cfdf
 	ld (hl),$01
 
 @ret:
@@ -862,7 +862,7 @@ linkCutscene6:
 	.dw @substate3
 
 @substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $01
 	ret nz
 
@@ -874,7 +874,7 @@ linkCutscene6:
 .endif
 
 @substate1:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $07
 	ret nz
 
@@ -887,7 +887,7 @@ linkCutscene6:
 	jp specialObjectSetAnimation
 
 @substate2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $08
 	ret nz
 
@@ -920,7 +920,7 @@ linkCutscene6:
 	call decHlRef16WithCap
 	ret nz
 
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	ld (hl),$09
 	ret
 
@@ -995,7 +995,7 @@ linkCutscene9:
 	.dw @ret
 
 @substate0:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	or a
 	ret z
 	call itemIncSubstate
@@ -1108,7 +1108,7 @@ linkCutsceneA:
 
 @state1:
 	ld a,(wFrameCounter)
-	ld ($cbb7),a
+	ld (wTmpcbb7),a
 	ld e,SpecialObject.substate
 	ld a,(de)
 	rst_jumpTable

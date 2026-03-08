@@ -70,7 +70,7 @@ interactionCode30:
 	ld bc,$fe00
 	jp objectSetSpeedZ
 @func_600e:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 1,(hl)
 	ret
 @state3:
@@ -95,7 +95,7 @@ interactionCode30:
 	.dw @substate2
 	.dw @substate3
 @substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	call getHighestSetBit
 	ret nc
 	cp $03
@@ -114,7 +114,7 @@ interactionCode30:
 	jp interactionSetAnimation
 @substate1:
 	call interactionAnimate
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	ret z
 	ld e,$45
@@ -134,7 +134,7 @@ interactionCode30:
 	add (hl)
 	ld (hl),a
 +
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	ret z
 	ld l,$45

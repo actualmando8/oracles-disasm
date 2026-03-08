@@ -86,7 +86,7 @@ interactionCode76:
 	and $1f
 	call z,func_743e
 	ld a,$78
-	ld ($cc85),a
+	ld (wInstrumentsDisabledCounter),a
 	ret
 @state2:
 	ld c,$40
@@ -109,19 +109,19 @@ interactionCode76:
 	cp $01
 	jr nz,@delete
 	xor a
-	ld ($cba0),a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wTextIsActive),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 @delete:
 	jp interactionDelete
 @state3:
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $0e
 	ret nz
 	call interactionAnimateAsNpc
 	jr ++
 @state1:
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $0e
 	ret nz
 	call interactionAnimateAsNpc
@@ -133,7 +133,7 @@ interactionCode76:
 	and $08
 	jr nz,func_742a
 ++
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld c,$40

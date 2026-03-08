@@ -1945,7 +1945,7 @@ _mainLoop_nextThread:
 	callfrombank0 bank3f.refreshDirtyPalettes
 	xor a
 	ld ($ff00+R_SVBK),a
-	ld hl,$c49e
+	ld hl,wc49e
 	inc (hl)
 	ld hl,wGfxRegs1
 	ld de,wGfxRegsFinal
@@ -3584,15 +3584,15 @@ queueDrawEverything:
 	ld b,Item.yh
 	call @func
 
-	ld de,$d080
+	ldde FIRST_ENEMY_INDEX, Enemy.start
 	ld b,Enemy.yh
 	call @func
 
-	ld de,$d0c0
+	ldde FIRST_PART_INDEX, Part.start
 	ld b,Part.yh
 	call @func
 
-	ld de,$d040
+	ldde FIRST_INTERACTION_INDEX, Interaction.start
 	ld b,Interaction.yh
 @func:
 	call objectQueueDraw
@@ -4049,12 +4049,12 @@ func_1383:
 	ld b,a
 	push bc
 	ld a,$08
-	ld ($cd00),a
+	ld (wScrollMode),a
 	ld a,$03
-	ld ($cd04),a
+	ld (wScreenTransitionState),a
 	xor a
-	ld ($cd05),a
-	ld ($cd06),a
+	ld (wScreenTransitionState2),a
+	ld (wScreenTransitionState3),a
 	ld a,$01
 	setrombank
 	call bank1.func_49c9
@@ -4789,7 +4789,7 @@ loadObjectGfx2:
 	ld h,a
 
 .ifdef ROM_AGES
-	ld a,($cc20)
+	ld a,(wcc1f+1)
 	or a
 	jr nz,@label_00_192
 .endif
@@ -12019,8 +12019,8 @@ seasonsFunc_34a0:
 clearWramBank1:
 	xor a
 	ld ($ff00+R_SVBK),a
-	ld hl,$d000
-	ld bc,$1000
+	ld hl,w1Link
+	ld bc,$e000-w1Link
 	jp clearMemoryBc
 
 ;;
@@ -13074,7 +13074,7 @@ generateVramTilesWithRoomChanges:
 ;;
 ; Gets the mapping data for a tile (the values to form the 2x2 tile).
 ;
-; Tile indices go to $cec0-$cec3, and flag values go to $cec4-$cec7.
+; Tile indices go to wTmpcec0-wTmpcec0+3, and flag values go to wEnemyPlacement.cec4-cec7.
 ;
 ; @param	a	Tile to get mapping data for
 ; @param[out]	b	Top-left flag value
@@ -13106,7 +13106,7 @@ getTileMappingData:
 .endif
 
 	pop de
-	ld a,($cec4)
+	ld a,(wEnemyPlacement.cec4)
 	ld b,a
 	ld a,(wTmpcec0)
 	ld c,a

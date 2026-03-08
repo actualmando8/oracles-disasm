@@ -33,7 +33,7 @@ interactionCode9d:
 	jr nz,@@func_5d73
 	ld a,$1f
 	call playSound
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	jr ++
 @@func_5d73:
@@ -130,7 +130,7 @@ interactionCode9d:
 	call objectSetInvisible
 	call interactionSetAlwaysUpdateBit
 	ld a,$0a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	jr @@func_5dd5
 @@subid5:
 	ld a,GLOBALFLAG_IMPA_ASKED_TO_SAVE_ZELDA
@@ -189,17 +189,17 @@ interactionCode9d:
 @@subid4:
 	call checkInteractionSubstate
 	jr nz,func_5eb1
-	ld a,($cbc3)
+	ld a,(wUseSimulatedInput)
 	rlca
 	ret nc
 	xor a
-	ld ($cbc3),a
+	ld (wUseSimulatedInput),a
 	inc a
 	ld (wDisabledObjects),a
 	call interactionIncSubstate
 	jp objectSetVisible
 func_5eb1:
-	ld a,($cba0)
+	ld a,(wTextIsActive)
 	or a
 	call nz,seasonsFunc_0a_6710
 	call interactionAnimateAsNpc

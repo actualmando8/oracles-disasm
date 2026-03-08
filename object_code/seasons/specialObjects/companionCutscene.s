@@ -36,7 +36,7 @@ func_69f3:
 
 func_69fe:
 	xor a
-	ld ($cbb5),a
+	ld (wTmpcbb5),a
 	ld a,$1e
 	jp specialObjectSetAnimation
 
@@ -68,7 +68,7 @@ rickyState1:
 	or a
 	jr z,+
 	ld a,$01
-	ld ($cbb5),a
+	ld (wTmpcbb5),a
 	ld l,SpecialObject.substate
 	inc (hl)
 +
@@ -196,7 +196,7 @@ rickyState1:
 	ld hl,wActiveRing
 	ld (hl),$ff
 	ld a,$81
-	ld ($cc77),a
+	ld (wLinkInAir),a
 	ld hl,w1Link.speed
 	ld (hl),SPEED_80
 	ld l,<w1Link.speedZ
@@ -218,7 +218,7 @@ rickyState1:
 	ld hl,w1Link.visible
 	ld (hl),a
 	inc a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ret
 
 @@substate8:
@@ -242,7 +242,7 @@ rickyState1:
 	sub $10
 	rlca
 	jr nc,+
-	ld hl,$cfdf
+	ld hl,wTmpcfc0.genericCutscene.cfdf
 	ld (hl),$01
 	ret
 +
@@ -546,7 +546,7 @@ mapleCutscenes:
 	ld a,$f0
 	jr z,+
 	ld a,d
-	ld ($cc48),a
+	ld (wLinkObjectIndex),a
 	ld a,$d0
 +
 	ld l,SpecialObject.zh
@@ -573,7 +573,7 @@ mapleCutscenes:
 	.dw ret
 
 @@@substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	jr z,@@subid0
 	call itemIncSubstate

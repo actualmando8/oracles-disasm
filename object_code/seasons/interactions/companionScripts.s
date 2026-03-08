@@ -33,7 +33,7 @@ companionScript_subid00:
 @state0:
 	ld a,$01
 	ld (de),a
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	and $01
 	jr z,companionScript_delete
 	ld a,($d101)
@@ -93,7 +93,7 @@ companionScript_subid01:
 	jr nz,companionScript_delete
 	or a
 	ld a,$01
-	ld ($ccf4),a
+	ld (wDiggingUpEnemiesForbidden),a
 	ret nz
 	jp interactionAnimateAsNpc
 
@@ -187,8 +187,8 @@ companionScript_subid06:
 	jr nz,@goToRunScriptThenDelete
 	inc a
 	ld (de),a
-	ld ($cc02),a
-	ld hl,$d000
+	ld (wMenuDisabled),a
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	call objectTakePosition
 	ld a,($d10b)
 	ld b,a
@@ -259,7 +259,7 @@ companionScript_subid03:
 	call loseTreasure
 companionScript_giveFlute:
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	call interactionIncState
 	ld e,$79
 	ld a,(de)
@@ -281,7 +281,7 @@ companionScript_giveFlute:
 	ld c,a
 	ld a,TREASURE_FLUTE
 	call giveTreasure
-	ld hl,$cbea
+	ld hl,wStatusBarNeedsRefresh
 	set 0,(hl)
 	ld e,Interaction.subid
 	ld a,$01
@@ -299,11 +299,11 @@ companionScript_giveFlute:
 	xor c
 	ld e,$5c
 	ld (de),a
-	ld hl,$cc6a
+	ld hl,wLinkForceState
 	ld a,$04
 	ldi (hl),a
 	ld (hl),$01
-	ld hl,$d000
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld bc,$f200
 	call objectTakePositionWithOffset
 	call objectSetVisible80
@@ -311,18 +311,18 @@ companionScript_giveFlute:
 
 companionScriptFunc_6eaf:
 	call retIfTextIsActive
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call objectSetInvisible
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	and $0f
 	add a
 	swap a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call interactionRunScript
 	ret nc
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	jr companionScript_delete2
 
 ; Dimitri in Spool Swamp
@@ -393,7 +393,7 @@ companionScript_subid08:
 	cp SPECIALOBJECT_DIMITRI
 	jr z,companionScript_delete2
 @state1:
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $0e
 	ret nz
 	ld hl,$d10b

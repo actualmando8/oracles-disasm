@@ -138,7 +138,7 @@ enemyCode7c:
 	ld a,(hl)
 	cp $09
 	ret c
-	ld a,($cc79)
+	ld a,(wMagnetGloveState)
 	or a
 	ret z
 	bit 1,a
@@ -167,7 +167,7 @@ enemyCode7c:
 	call func_7757
 	ret c
 @@func_742f:
-	ld a,($cc79)
+	ld a,(wMagnetGloveState)
 	or a
 	ret z
 	ld e,$a9
@@ -175,7 +175,7 @@ enemyCode7c:
 	or a
 	ret z
 	call ecom_updateAngleTowardTarget
-	ld a,($cc79)
+	ld a,(wMagnetGloveState)
 	bit 1,a
 	jr nz,+
 	ld e,$89
@@ -200,7 +200,7 @@ enemyCode7c:
 	ld a,(de)
 	or a
 	jr z,+
-	ld a,($cc79)
+	ld a,(wMagnetGloveState)
 	or a
 	jr nz,++
 +
@@ -638,7 +638,7 @@ func_770e:
 	ld a,(wFrameCounter)
 	and $03
 	ret nz
-	ld a,($cc79)
+	ld a,(wMagnetGloveState)
 	bit 1,a
 	jr z,+
 	call objectGetAngleTowardEnemyTarget
@@ -687,7 +687,7 @@ table_7751:
 	
 func_7757:
 	xor a
-	ld a,($cc79)
+	ld a,(wMagnetGloveState)
 	bit 1,a
 	ret z
 	ld c,$0c

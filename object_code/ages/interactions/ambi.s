@@ -39,7 +39,7 @@ interactionCode4d:
 
 ; Cutscene after escaping black tower
 @initSubid01:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0b
 	jp nz,ambi_loadScript
 	call checkIsLinkedGame
@@ -124,11 +124,11 @@ interactionCode4d:
 	ld (hl),a
 
 	ld (wDisableLinkCollisionsAndMenu),a
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	dec a
 	ld (wActiveMusic),a
 
-	ld hl,$cc93
+	ld hl,wcc93
 	set 7,(hl)
 
 	ld a,LINK_STATE_FORCE_MOVEMENT
@@ -174,7 +174,7 @@ ambi_updateAnimationAndRunScript:
 ambi_runSubid01:
 	call checkIsLinkedGame
 	jr z,@updateSubstate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0b
 	jp c,@updateSubstate
 
@@ -190,7 +190,7 @@ ambi_runSubid01:
 	.dw ambi_updateAnimationAndRunScript
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	jr nz,ambi_updateAnimationAndRunScript
 
@@ -227,7 +227,7 @@ ambi_runSubid02:
 @substate1:
 	call interactionAnimateBasedOnSpeed
 	call objectApplySpeed
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $06
 	ret nz
 	call interactionIncSubstate
@@ -247,7 +247,7 @@ ambi_runSubid03:
 	.dw @updateAnimationAndRunScript
 
 @substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $01
 	jr nz,@updateAnimationAndRunScript
 
@@ -294,7 +294,7 @@ ambi_runSubid03:
 	or a
 	ret nz
 	ld a,$02
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	jp interactionIncSubstate
 
 
@@ -322,13 +322,13 @@ ambi_runSubid04:
 	call flashScreen
 	ret z
 	ld a,$03
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	jp interactionIncSubstate
 
 ambi_runSubid05:
 	call interactionRunScript
 	jp c,interactionDelete
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 1,a
 	jp z,interactionAnimate
 	ret
@@ -355,7 +355,7 @@ ambi_runSubid08:
 	ret nc
 
 	ld a,$01
-	ld ($cbb8),a
+	ld (wTmpcbb8),a
 	ld a,CUTSCENE_BLACK_TOWER_EXPLANATION
 	ld (wCutsceneTrigger),a
 	jp interactionDelete

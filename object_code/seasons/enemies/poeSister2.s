@@ -38,7 +38,7 @@ enemyCode76:
 
 @state0:
 	ld a,$76
-	ld ($cc1c),a
+	ld (wEnemyIDToLoadExtraGfx),a
 	call getRandomNumber_noPreserveVars
 	ld e,$b8
 	ld (de),a
@@ -58,7 +58,7 @@ enemyCode76:
 	ld a,$04
 	ldi (hl),a
 	ld (hl),a
-	ld ($cca9),a
+	ld (wNumTorchesLit),a
 	ld hl,$d081
 -
 	ld a,(hl)
@@ -111,7 +111,7 @@ enemyCode76:
 	or a
 	ret nz
 	inc a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld h,d
 	ld l,e
 	inc (hl)
@@ -134,7 +134,7 @@ enemyCode76:
 	dec a
 	jr nz,@animate
 	xor a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld bc,TX_0a05
 	jp showText
 +

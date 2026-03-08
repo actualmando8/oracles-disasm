@@ -122,9 +122,9 @@ interactiond9_state1:
 	ld a,GLOBALFLAG_SECRET_CHEST_WAITING
 	call setGlobalFlag
 
-	; Bit 1 of $cfc0 is a signal for Farore to continue talking
+	; Bit 1 of wTmpcfc0.genericCutscene.state is a signal for Farore to continue talking
 	ld a,$02
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 
 	ld bc,TX_5509 ; "Your secrets have called forth power"
 	call showText
@@ -322,9 +322,9 @@ interactiond9_state2:
 	call refillSeedSatchel
 
 @cleanup:
-	; Bit 1 of $cfc0 is a signal for Farore to continue talking
+	; Bit 1 of wTmpcfc0.genericCutscene.state is a signal for Farore to continue talking
 	ld a,$02
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 
 	ld bc,TX_5509
 	call showText

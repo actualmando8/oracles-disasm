@@ -68,7 +68,7 @@ roomSpecificCode0:
 	ld a,GLOBALFLAG_WON_FAIRY_HIDING_GAME
 	call checkGlobalFlag
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld b,$10
 	jp clearMemory
 

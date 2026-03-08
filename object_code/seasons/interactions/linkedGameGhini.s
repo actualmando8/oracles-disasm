@@ -218,7 +218,7 @@ func_71c5:
 	call clearParts
 	pop de
 	xor a
-	ld ($cc30),a
+	ld (wNumEnemies),a
 	call func_7c50
 	jp func_7cce
 func_7c3f:

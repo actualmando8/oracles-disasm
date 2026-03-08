@@ -49,7 +49,7 @@ interactionCodede:
 	jp objectSetVisible82
 @@state1:
 	ld a,$0f
-	ld ($cc6b),a
+	ld (wcc50),a
 	call interactionDecCounter1
 	ret nz
 	ld (hl),$40
@@ -63,7 +63,7 @@ interactionCodede:
 	ret nz
 	ld (hl),$78
 	ld a,$10
-	ld ($cc6b),a
+	ld (wcc50),a
 	ld l,$4b
 	ld (hl),$28
 	ld l,$4d
@@ -140,9 +140,9 @@ interactionCodede:
 	ret nz
 	ld (hl),$3c
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ld a,$20
-	ld ($cfc1),a
+	ld (wTmpcfc0.genericCutscene.cfc1),a
 	jp interactionIncSubstate
 @@substate3:
 @@substate5:
@@ -150,7 +150,7 @@ interactionCodede:
 	ld a,(wFrameCounter)
 	and $03
 	jr nz,@@incSubstateAtInterval
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.genericCutscene.cfc1
 	dec (hl)
 	jr @@incSubstateAtInterval
 @@substate4:
@@ -158,7 +158,7 @@ interactionCodede:
 	ld a,(wFrameCounter)
 	and $03
 	jr nz,@@incSubstateAtInterval
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.genericCutscene.cfc1
 	inc (hl)
 @@incSubstateAtInterval:
 	call interactionDecCounter1
@@ -166,7 +166,7 @@ interactionCodede:
 	ld (hl),$3c
 	jp interactionIncSubstate
 @@substate8:
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.genericCutscene.cfc1
 	inc (hl)
 	ld a,$b4
 	call playSound
@@ -174,12 +174,12 @@ interactionCodede:
 	call fadeoutToWhiteWithDelay
 	jp interactionIncSubstate
 @@substate9:
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.genericCutscene.cfc1
 	inc (hl)
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	inc (hl)
 	ld a,$08
 	call fadeinFromWhiteWithDelay
@@ -218,7 +218,7 @@ interactionCodede:
 	ret nz
 	jp interactionIncState
 @@state2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	ret z
 	jp interactionIncState
@@ -238,7 +238,7 @@ interactionCodede:
 	or a
 	call z,func_6c8f
 	ld bc,$2850
-	ld a,($cfc1)
+	ld a,(wTmpcfc0.genericCutscene.cfc1)
 	jp objectSetPositionInCircleArc
 func_6c8f:
 	ld a,SND_CIRCLING

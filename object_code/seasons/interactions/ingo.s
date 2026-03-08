@@ -36,13 +36,13 @@ interactionCode57:
 	ret nc
 	ld a,$22
 	ld ($d00b),a
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret nz
 	ld a,$80
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,mainScripts.ingoScript_LinkApproachingVases
 	call interactionSetScript
 	ld h,d

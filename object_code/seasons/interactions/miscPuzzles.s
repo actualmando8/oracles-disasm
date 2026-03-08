@@ -362,7 +362,7 @@ interactionCodedc_subid6:
 	jp nz,interactionDelete
 	call interactionIncState
 +
-	ld a,($cc31)
+	ld a,(wToggleBlocksState)
 	bit 6,a
 	ret z
 	call getFreeInteractionSlot
@@ -469,7 +469,7 @@ interactionCodedc_subid7:
 	ld d,a
 	jp interactionIncState
 @state4:
-	ld a,($cc30)
+	ld a,(wNumEnemies)
 	or a
 	ret nz
 	ld a,(wActiveTriggers)
@@ -545,7 +545,7 @@ interactionCodedc_subid8:
 	inc l
 	ld (hl),c
 	ld l,$4b
-	ld a,($ccbc)
+	ld a,(wcca2)
 	ld b,a
 	and $f0
 	ldi (hl),a
@@ -556,9 +556,9 @@ interactionCodedc_subid8:
 	or $08
 	ld (hl),a
 	ld a,$81
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	xor a
-	ld ($ccbc),a
+	ld (wcca2),a
 	ret
 table_6a02:
 	.db $66 $5b $43 $3b
@@ -600,17 +600,17 @@ interactionCodedc_subidC:
 	call interactionIncState
 	call interactionSetAlwaysUpdateBit
 	ld a,$81
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 +
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld bc,TX_0202
 	call showText
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	jp interactionDelete
 
 interactionCodedc_subidD:

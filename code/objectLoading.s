@@ -14,7 +14,7 @@ m_section_free Objects_1 namespace objectData
 parseObjectData:
 	xor a
 	ld (wNumEnemies),a
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ld hl,wTmpcec0
 	ld b,$20
 	call clearMemory

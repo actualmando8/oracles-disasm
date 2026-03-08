@@ -3,7 +3,7 @@
 ; TODO: finish
 
 seasonsFunc_0f_6f75:
-	ld a,($cfc8)
+	ld a,(wTmpcfc0+8)
 	rst_jumpTable
 	.dw @state0
 	.dw @return
@@ -46,13 +46,13 @@ seasonsFunc_0f_6f75:
 	call clearMemoryBc
 
 	; clear part of wRoomCollisions
-	ld hl,$cea0
+	ld hl,wRoomCollisions+$a0
 	ld b,$10
 	ld a,$0f
 	call fillMemory
 
 	; load data back into wRoomCollisions
-	ld hl,$ce0a
+	ld hl,wRoomCollisions+$0a
 	ld bc,$0b02
 -
 	ld (hl),$0f
@@ -61,7 +61,7 @@ seasonsFunc_0f_6f75:
 	ld l,a
 	dec b
 	jr nz,-
-	ld hl,$ce0f
+	ld hl,wRoomCollisions+$0f
 	ld b,$0b
 	dec c
 	jr nz,-
@@ -71,12 +71,12 @@ seasonsFunc_0f_6f75:
 	ld bc,wRoomLayoutEnd-wRoomLayout
 	call clearMemoryBc
 	xor a
-	ld ($cfca),a
-	ld ($cfcb),a
+	ld (wTmpcfc0+$0a),a
+	ld (wTmpcfc0+$0b),a
 	ld a,$80
-	ld ($cfce),a
+	ld (wTmpcfc0+$0e),a
 	ld (wLinkInAir),a
-	ld hl,$cfc8
+	ld hl,wTmpcfc0+8
 	inc (hl)
 	call disableLcd
 	call seasonsFunc_0f_70b4_swapGraphics
@@ -86,7 +86,7 @@ seasonsFunc_0f_6f75:
 	call fadeinFromWhite
 	ld a,$02
 	call loadGfxRegisterStateIndex
-	ld a,($cfce)
+	ld a,(wTmpcfc0+$0e)
 	ld (wGfxRegs2.LYC),a
 	ld a,$06
 	ldh (<hNextLcdInterruptBehaviour),a
@@ -114,31 +114,31 @@ seasonsFunc_0f_6f75:
 	call clearEnemies
 	call getFreeEnemySlot
 	ld (hl),ENEMY_DRAGON_ONOX
-	ld hl,$cfca
+	ld hl,wTmpcfc0+$0a
 	call seasons_func_0f_712a
-	ld hl,$cfcb
+	ld hl,wTmpcfc0+$0b
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
 	ld ($ff00+R_SVBK),a
 	ld a,$03
-	ld ($cfc8),a
+	ld (wTmpcfc0+8),a
 	ret
 
 seasonsFunc_0f_704d:
 	call seasonsFunc_0f_70b4_swapGraphics
-	ld hl,$cfca
+	ld hl,wTmpcfc0+$0a
 	call seasons_func_0f_712a
 --
-	ld hl,$cfcb
+	ld hl,wTmpcfc0+$0b
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
 	ld ($ff00+$70),a
 	ld a,$02
 	call loadGfxRegisterStateIndex
-	ld a,($cfce)
-	ld ($c490),a
+	ld a,(wTmpcfc0+$0e)
+	ld (wGfxRegs2.LYC),a
 	ld a,$06
 	ldh (<hNextLcdInterruptBehaviour),a
 	ret
@@ -154,7 +154,7 @@ seasonsFunc_0f_704d:
 
 	call stopTextThread
 	ld a,$05
-	ld ($cfc8),a
+	ld (wTmpcfc0+8),a
 	call disableLcd
 
 	xor a
@@ -223,7 +223,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	jp loadUncompressedGfxHeader
 
 @state3:
-	ld hl,$cfc9
+	ld hl,wTmpcfc0+9
 	bit 7,(hl)
 	jr nz,+
 	ld l,$cb
@@ -246,7 +246,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	ret
 
 ;;
-; @param	hl	$cfca/$cfc9 in @state3
+; @param	hl	wTmpcfc0+$0a/wTmpcfc0+9 in @state3
 seasons_func_0f_712a:
 	ld a,(hl)
 	cp $06
@@ -254,13 +254,13 @@ seasons_func_0f_712a:
 	jp seasons_func_0f_71fb
 
 @state5:
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	cp $78
 	ret nz
 	ld a,$06
-	ld ($cfc8),a
+	ld (wTmpcfc0+8),a
 	; Onox phase 1 room flags
-	ld hl,$ca91
+	ld hl,wGroup5RoomFlags+$91
 	set 7,(hl)
 	; game beaten / season always spring?
 	ld a,GLOBALFLAG_SEASON_ALWAYS_SPRING
@@ -277,7 +277,7 @@ seasons_func_0f_712a:
 	ret
 
 seasonsFunc_0f_7159:
-	ld a,($cfcf)
+	ld a,(wTmpcfc0+$0f)
 	or a
 	ret nz
 	ld hl,wScreenShakeCounterY
@@ -293,7 +293,7 @@ seasonsFunc_0f_7159:
 	dec (hl)
 +
 	ld hl,hCameraY
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	sub (hl)
 	cp $40
 	ret z
@@ -311,73 +311,73 @@ seasonsFunc_0f_7159:
 	ret
 
 seasonsFunc_0f_7182:
-	ld hl,$cfcc
+	ld hl,wTmpcfc0+$0c
 	ldh a,(<hCameraY)
 	ld b,a
 	sub (hl)
-	ld ($c48c),a
+	ld (wGfxRegs2.SCY),a
 	inc l
 	xor a
 	sub (hl)
-	ld ($c48d),a
+	ld (wGfxRegs2.SCX),a
 	ld a,b
 	add $28
-	ld ($c4a0),a
+	ld (wGfxRegs6.SCY),a
 	xor a
-	ld ($c4a1),a
+	ld (wGfxRegs6.SCX),a
 	sub b
 	sub $50
 	cp $90
 	jr c,+
 	ld a,$c7
 +
-	ld ($c490),a
-	ld ($cfce),a
-	ld a,($cd18)
+	ld (wGfxRegs2.LYC),a
+	ld (wTmpcfc0+$0e),a
+	ld a,(wScreenShakeCounterY)
 	or a
 	ret z
 	call getRandomNumber_noPreserveVars
 	and $03
 	ld hl,table_71cb
 	rst_addAToHl
-	ld a,($c490)
+	ld a,(wGfxRegs2.LYC)
 	add (hl)
 	cp $90
 	ret nc
-	ld ($c490),a
-	ld a,($c4a0)
+	ld (wGfxRegs2.LYC),a
+	ld a,(wGfxRegs6.SCY)
 	sub (hl)
-	ld ($c4a0),a
+	ld (wGfxRegs6.SCY),a
 	ret
 table_71cb:
 	.db $ff $fe $01 $02
 
 ;;
-; @param	a	$cfca value 0 to 5
+; @param	a	wTmpcfc0+$0a value 0 to 5
 seasonsFunc_0f_71cf_copyw6Filler1IntoWramBank3:
 	call load5aIntoBc
 	push bc
-	ld hl,$d000
+	ld hl,w6DragonOnoxTileMap1
 	add hl,bc
 	ld b,$50
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$d802
+	ld hl,w3VramTiles+$02
 	ld c,$00
 	call seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3
 	pop bc
 
-	ld hl,$d400
+	ld hl,w6DragonOnoxTileAttr1
 	add hl,bc
 	ld b,$50
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$dc02
+	ld hl,w3TileMappingIndices+$02
 	ld c,$20
 	call seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3
 	ld a,UNCMP_GFXH_2e
 	jp loadUncompressedGfxHeader
 
 seasons_func_0f_71fb:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	sub $06
 	cp $03
 	jr c,+
@@ -386,18 +386,18 @@ seasons_func_0f_71fb:
 	add a
 	call load5aIntoBc
 	push bc
-	ld hl,$d1e0
+	ld hl,w6DragonOnoxTileMap1+$1e0
 	add hl,bc
 	ld b,$a0
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$d802
+	ld hl,w3VramTiles+$02
 	call seasons_func_0f_72d1
 	pop bc
-	ld hl,$d5e0
+	ld hl,w6DragonOnoxTileAttr1+$1e0
 	add hl,bc
 	ld b,$a0
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$dc02
+	ld hl,w3TileMappingIndices+$02
 	call seasons_func_0f_72dc
 	ld a,UNCMP_GFXH_2e
 	jp loadUncompressedGfxHeader
@@ -405,14 +405,14 @@ seasons_func_0f_71fb:
 seasons_func_0f_722f:
 	ld a,$03
 	ld ($ff00+$70),a
-	ld hl,$d940
+	ld hl,w3VramTiles+$140
 	ld b,$e0
 	call clearMemory
-	ld hl,$dd40
+	ld hl,w3VramAttributes+$140
 	ld b,$e0
 	ld a,$0d
 	call fillMemory
-	ld a,($cfcb)
+	ld a,(wTmpcfc0+$0b)
 	cp $03
 	jr c,+
 	sub $03
@@ -427,12 +427,12 @@ seasons_func_0f_722f:
 	and $0f
 	ld b,a
 	push bc
-	ld a,($cfcb)
+	ld a,(wTmpcfc0+$0b)
 	ld hl,table_7291
 	rst_addAToHl
 	ld a,(hl)
 	ldh (<hFF8B),a
-	ld hl,$d800
+	ld hl,w6DragonOnoxTileMap2
 	add hl,bc
 	ld b,$40
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
@@ -442,7 +442,7 @@ seasons_func_0f_722f:
 	ld h,$d9
 	call seasons_func_0f_731a
 	pop bc
-	ld hl,$db00
+	ld hl,w6DragonOnoxTileAttr2
 	add hl,bc
 	ld b,$40
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
@@ -515,21 +515,21 @@ seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3:
 	ret
 
 seasons_func_0f_72d1:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	cp $09
 	jr c,++
 	ld c,$00
 	jr +
 
 seasons_func_0f_72dc:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	cp $09
 	jr c,++
 	ld c,$20
 +
 	ld a,$03
 	ld ($ff00+$70),a
-	ld de,$cd4f
+	ld de,wTmpVramBuffer+$0f
 --
 	ld b,$10
 -
@@ -568,21 +568,21 @@ seasons_func_0f_72dc:
 	ret
 
 seasons_func_0f_731a:
-	ld a,($cfcb)
+	ld a,(wTmpcfc0+$0b)
 	cp $03
 	jr c,++
 	ld c,$00
 	jr +
 
 seasons_func_0f_7325:
-	ld a,($cfcb)
+	ld a,(wTmpcfc0+$0b)
 	cp $03
 	jr c,++
 	ld c,$20
 +
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld de,$cd47
+	ld de,wTmpVramBuffer+7
 --
 	ld b,$04
 -

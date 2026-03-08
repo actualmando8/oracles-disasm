@@ -174,7 +174,7 @@ armosWarrior_parent:
 
 ; Waiting for door to close
 armosWarrior_parent_state8:
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 
@@ -510,7 +510,7 @@ armosWarrior_shield:
 
 ; Uninitialized
 @state8:
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 
@@ -563,7 +563,7 @@ armosWarrior_sword:
 
 ; Waiting for door to close
 armosWarrior_sword_state8:
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

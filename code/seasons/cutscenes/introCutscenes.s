@@ -48,10 +48,10 @@ cutscene06Func1:
 	ld a,$ff
 	ld (wTilesetAnimation),a
 	ld a,$01
-	ld ($cfd0),a
-	ld hl,$cc02
+	ld (wTmpcfc0.genericCutscene.cfd0),a
+	ld hl,wMenuDisabled
 	ld (hl),$01
-	ld hl,$d01a
+	ld hl,w1Link.visible
 	res 7,(hl)
 	call saveGraphicsOnEnterMenu
 	ld a,GFXH_DIN_DANCING_CUTSCENE
@@ -60,15 +60,15 @@ cutscene06Func1:
 	call loadPaletteHeader
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$58
 	inc hl
 	ld (hl),$02
-	ld hl,$cbb6
+	ld hl,wTmpcbb6
 	ld (hl),$28
 	call fastFadeinFromWhite
 	call incCutsceneState2
-	ld hl,$cbb5
+	ld hl,wTmpcbb5
 	ld (hl),$02
 	
 seasonsFunc_03_7386:
@@ -126,7 +126,7 @@ cutscene06Func2:
 	jp nz,seasonsFunc_03_7386
 	call seasonsFunc_03_7458
 	call seasonsFunc_03_7386
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	jr z,+
 	ldi a,(hl)
@@ -135,7 +135,7 @@ cutscene06Func2:
 	ld bc,$00f0
 	call compareHlToBc
 	ret nc
-	ld a,($c482)
+	ld a,(wKeysJustPressed)
 	and $01
 	ret z
 +
@@ -148,12 +148,12 @@ seasonsFunc_03_7458:
 	ld a,(wFrameCounter)
 	and $07
 	ret nz
-	ld hl,$cbb6
+	ld hl,wTmpcbb6
 	ld a,(hl)
 	or a
 	ret z
 	dec (hl)
-	ld hl,$c487
+	ld hl,wGfxRegs1.SCX
 	inc (hl)
 	ret
 cutscene06Func3:
@@ -162,22 +162,22 @@ cutscene06Func3:
 	jp nz,seasonsFunc_03_7386
 	xor a
 	ld (wTilesetAnimation),a
-	ld hl,$d01a
+	ld hl,w1Link.visible
 	set 7,(hl)
 	xor a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	call incCutsceneState2
 	jp reloadGraphicsOnExitMenu
 
 cutscene06Func4:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $02
 	ret nz
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	xor a
 	ld (hl),a
 	call seasonsFunc_03_74aa
-	ld hl,$de90
+	ld hl,w2TilesetBgPalettes+$10
 	ld bc,$44e8
 	call func_13c6
 	ld a,SNDCTRL_STOPMUSIC
@@ -246,17 +246,17 @@ cutscene06Func5:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$03
 	call seasonsFunc_03_7516
 	call seasonsFunc_03_74a3
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp incCutsceneState2
 
 seasonsFunc_03_7516:
-	ld de,$cfd2
+	ld de,wTmpcfc0.genericCutscene.cfd2
 	ld b,$03
 -
 	ld a,(de)
@@ -337,7 +337,7 @@ cutscene06Func7:
 	jp seasonsFunc_03_74b6
 	
 cutscene06Func8:
-	ld hl,$cfd2
+	ld hl,wTmpcfc0.genericCutscene.cfd2
 	ld a,(hl)
 	bit 4,a
 	ret z
@@ -359,7 +359,7 @@ cutscene06Func9:
 
 seasonsFunc_03_75a5:
 	ld b,a
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp b
 	ret nz
@@ -369,7 +369,7 @@ seasonsFunc_03_75a5:
 	
 cutscene06Funca:
 	call retIfTextIsActive
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$06
 	jp incCutsceneState2
 	
@@ -380,23 +380,23 @@ cutscene06Funcb:
 	
 cutscene06Funcc:
 	call retIfTextIsActive
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$1e
 	jp incCutsceneState2
 	
 cutscene06Funcd:
 	call decCbb3
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$09
 	jp incCutsceneState2
 	
 cutscene06Funce:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $0b
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp incCutsceneState2
 	
@@ -437,8 +437,8 @@ cutsceneDinImprisoned:
 	ld a,$01
 	ld (de),a
 	ld a,$09
-	ld ($cfd0),a
-	ld hl,$cbb3
+	ld (wTmpcfc0.genericCutscene.cfd0),a
+	ld hl,wTmpcbb3
 	ld (hl),$58
 	inc l
 	ld (hl),$01
@@ -453,7 +453,7 @@ cutsceneDinImprisoned:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	jr nz,+
 	xor a
@@ -461,7 +461,7 @@ cutsceneDinImprisoned:
 	call incCutsceneState2
 	jp fadeoutToWhite
 +
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld a,(hl)
 	and $01
 	ret nz
@@ -480,7 +480,7 @@ cutsceneDinImprisoned:
 	ret nz
 	call incCutsceneState2
 	ld a,$0a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	call disableLcd
 	xor a
 	ld (wScreenOffsetY),a
@@ -499,7 +499,7 @@ cutsceneDinImprisoned:
 	ld a,INTERAC_DIN_IMPRISONED_EVENT
 	ldi (hl),a
 	ld (hl),$00
-	ld ($cc1d),a
+	ld (wInteractionIDToLoadExtraGfx),a
 	call getFreeInteractionSlot
 	jr nz,+
 	ld (hl),INTERAC_DIN_IMPRISONED_EVENT
@@ -516,7 +516,7 @@ cutsceneDinImprisoned:
 	ldh (<hCameraX),a
 	jp fadeinFromWhite
 @state3:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $0b
 	ret nz
@@ -536,16 +536,16 @@ cutsceneDinImprisoned:
 	jp incCutsceneState2
 
 @state4:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	sub $0c
 	ret nz
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	dec a
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	jp incCutsceneState2
 
 @state5:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$01
 	call flashScreen
 	ret z
@@ -557,7 +557,7 @@ cutsceneDinImprisoned:
 	ld a,$81
 	call seasonsFunc_03_7a6b
 	ld a,$81
-	ld ($cbcb),a
+	ld (wOpenedMenuType),a
 	call seasonsFunc_03_7a88
 	ld bc,TX_1e05
 	call showText
@@ -568,7 +568,7 @@ cutsceneDinImprisoned:
 	ldh (<hCameraY),a
 	ld a,(hl)
 	ldh (<hCameraX),a
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$0d
 	jp incCutsceneState2
 
@@ -582,10 +582,10 @@ cutsceneDinImprisoned:
 	ld a,$0d
 	call loadGfxRegisterStateIndex
 	call fadeinFromWhite
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$f0
 	xor a
-	ld ($cbcb),a
+	ld (wOpenedMenuType),a
 	jp incCutsceneState2
 
 @state7:
@@ -605,7 +605,7 @@ cutsceneDinImprisoned:
 	ld a,$ff
 	ld (wTilesetAnimation),a
 	ld a,$0e
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld a,$07
 	ld b,$01
 	call seasonsFunc_03_7aa9
@@ -615,7 +615,7 @@ cutsceneDinImprisoned:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $0f
 	ret nz
@@ -669,16 +669,16 @@ cutscene08Func0:
 	ldh (<hCameraY),a
 	ldi a,(hl)
 	ldh (<hCameraX),a
-	ld de,$cbb6
+	ld de,wTmpcbb6
 	ldi a,(hl)
 	ld (de),a
 	inc de
 	ld a,(hl)
 	ld (de),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	xor a
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	ld (hl),a
 	call seasonsFunc_03_79db
 	ld a,MUS_DISASTER
@@ -701,7 +701,7 @@ cutscene08Func1:
 	ld (hl),a
 	jr nz,-
 +
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$b4
 	inc hl
 	ld (hl),$00
@@ -714,10 +714,10 @@ cutscene08Func2:
 	jr nz,+
 	call seasonsFunc_03_7a01
 	xor a
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	ld (hl),a
 	call seasonsFunc_03_7917
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	inc (hl)
 	set 7,(hl)
 	jp incCutsceneState2
@@ -733,7 +733,7 @@ cutscene08Func3:
 	ld a,(hl)
 	cp $03
 	jr z,+
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	inc (hl)
 	jp seasonsFunc_03_7917
 +
@@ -743,11 +743,11 @@ cutscene08Func3:
 	ld a,PALH_SEASONS_98
 	call loadPaletteHeader
 	call seasonsFunc_03_7a17
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$78
 	inc l
 	ld (hl),$00
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	inc (hl)
 	res 7,(hl)
 	jp incCutsceneState2
@@ -759,12 +759,12 @@ cutscene08Func4:
 	inc l
 	ld (hl),a
 	call seasonsFunc_03_7917
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	ld (hl),$ff
 	call incCutsceneState2
-	ld hl,$cbba
+	ld hl,wTmpcbba
 	ld (hl),$02
-	ld hl,$cbb8
+	ld hl,wTmpcbb8
 	jp seasonsFunc_03_7a3b
 +
 	call seasonsFunc_03_7909
@@ -781,7 +781,7 @@ cutscene08Func5:
 	jr z,+
 	jp seasonsFunc_03_7917
 +
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	call reloadObjectGfx
 	ld a,$07
@@ -793,14 +793,14 @@ cutscene08Func6:
 	call decCbb3
 	ret nz
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld bc,$1e04
 	call showText
 	jp incCutsceneState2
 cutscene08Func7:
 	call retIfTextIsActive
 	call incCutsceneState2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$5a
 	jp fadeoutToBlack
 cutscene08Func8:
@@ -816,22 +816,22 @@ cutscene08Func8:
 	jpab bank1.loadDeathRespawnBufferPreset
 
 seasonsFunc_03_7909:
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	inc (hl)
 	ld a,(hl)
 	sub $07
 	ret nz
 	ld (hl),a
-	ld hl,$cbb6
+	ld hl,wTmpcbb6
 	inc (hl)
 	ret
 
 seasonsFunc_03_7917:
-	ld ($cbbb),a
-	ld hl,$cbb3
+	ld (wTmpcbbb),a
+	ld hl,wTmpcbb3
 	ld (hl),$5a
 	call disableLcd
-	ld a,($cbbb)
+	ld a,(wTmpcbbb)
 	cp $03
 	jr c,++
 	sub $03
@@ -842,18 +842,18 @@ seasonsFunc_03_7917:
 	ld c,(hl)
 	call forceLoadRoom
 	ld b,$31
-	ld a,($cbbb)
+	ld a,(wTmpcbbb)
 	cp $05
 	jr nz,+
 	ld b,UNCMP_GFXH_0f
 +
 	ld a,b
 	call loadUncompressedGfxHeader
-	ld a,($cbbb)
+	ld a,(wTmpcbbb)
 ++
 	add GFXH_TEMPLEFALL_SCENE2
 	call loadGfxHeader
-	ld a,($cbbb)
+	ld a,(wTmpcbbb)
 	ld hl,seasonsTable_03_7972
 	rst_addAToHl
 	ld a,(hl)
@@ -862,13 +862,13 @@ seasonsFunc_03_7917:
 	call loadPaletteHeader
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld a,($cbbb)
+	ld a,(wTmpcbbb)
 	sub $03
 	ret c
 	ld hl,seasonsTable_03_7978
 	rst_addAToHl
 	ld a,(hl)
-	ld de,$cbb9
+	ld de,wTmpcbb9
 	ld (de),a
 	ret
 
@@ -890,11 +890,11 @@ seasonsFunc_03_7981:
 	and $0f
 	ld a,SND_RUMBLE2
 	call z,playSound
-	ld de,$cbb5
+	ld de,wTmpcbb5
 	ld a,(de)
 	cp $02
 	jr z,+
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	dec (hl)
 	jr nz,+
 	inc a
@@ -913,7 +913,7 @@ seasonsFunc_03_79af:
 	ld de,wGfxRegs1.SCY
 	dec b
 	jr nz,+
-	ld de,$c488
+	ld de,wGfxRegs1.WINY
 +
 	jp seasonsFunc_03_79cd
 
@@ -923,7 +923,7 @@ seasonsFunc_03_79bb:
 	ldi (hl),a
 	ldh a,(<hCameraX)
 	ldi (hl),a
-	ld de,$cbb6
+	ld de,wTmpcbb6
 	ld a,(de)
 	ldi (hl),a
 	inc de
@@ -949,7 +949,7 @@ seasonsFunc_03_79db:
 	ld hl,seasonsTable_03_79e7
 	rst_addAToHl
 	ld a,(hl)
-	ld hl,$cbb4
+	ld hl,wTmpcbb4
 	ld (hl),a
 	ld a,b
 	ret
@@ -963,8 +963,8 @@ seasonsTable_03_79e9:
 	.db $ff $01 $00 $01 $00 $00 $ff $00
 
 seasonsFunc_03_7a01:
-	ld hl,$cbd5
-	ld de,$c485
+	ld hl,wGfxRegs4
+	ld de,wGfxRegs1
 	ld b,$0c
 -
 	ld a,(de)
@@ -978,8 +978,8 @@ seasonsFunc_03_7a01:
 	ret
 
 seasonsFunc_03_7a17:
-	ld hl,$cbd5
-	ld de,$c485
+	ld hl,wGfxRegs4
+	ld de,wGfxRegs1
 	ld b,$0c
 -
 	ldi a,(hl)
@@ -987,23 +987,23 @@ seasonsFunc_03_7a17:
 	inc e
 	dec b
 	jr nz,-
-	ld a,($c485)
-	ld ($c497),a
+	ld a,(wGfxRegs1)
+	ld (wGfxRegsFinal),a
 	ld ($ff00+R_LCDC),a
 	ret
 
 seasonsFunc_03_7a2e:
-	ld hl,$cbba
+	ld hl,wTmpcbba
 	dec (hl)
 	ret nz
 	ld (hl),$02
-	ld hl,$cbb8
+	ld hl,wTmpcbb8
 	dec (hl)
 	jr nz,+
 
 seasonsFunc_03_7a3b:
 	ld (hl),$1f
-	ld hl,$cbb9
+	ld hl,wTmpcbb9
 	inc (hl)
 	ld a,(hl)
 	and $03
@@ -1015,11 +1015,11 @@ seasonsFunc_03_7a3b:
 	ld l,a
 	ld b,h
 	ld c,l
-	ld hl,$de90
+	ld hl,w2TilesetBgPalettes+$10
 	call func_13c6
 	xor a
 	ld (wPaletteThread_mode),a
-	ld hl,$cbb8
+	ld hl,wTmpcbb8
 +
 	jp func_35ec
 
@@ -1056,10 +1056,10 @@ seasonsFunc_03_7a88:
 	push af
 	ld a,$04
 	ld ($ff00+R_SVBK),a
-	ld hl,$d000
+	ld hl,w4TileMap
 	ld bc,$0240
 	call clearMemoryBc
-	ld hl,$d400
+	ld hl,w4AttributeMap
 	ld bc,$0240
 	ldh a,(<hFF8B)
 	call fillMemoryBc
@@ -1147,11 +1147,11 @@ cutscene0dFunc0:
 +
 	ld a,MUS_FINAL_DUNGEON
 	call playSound
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,$13
 	call loadGfxRegisterStateIndex
-	ld a,($c48d)
+	ld a,(wGfxRegs2.SCX)
 	ldh (<hCameraX),a
 	xor a
 	ldh (<hCameraY),a
@@ -1164,7 +1164,7 @@ cutscene0dFunc1:
 	call decCbb3
 	ret nz
 	call incCutsceneState2
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),e
 	ld a,SND_CREEPY_LAUGH
 	jp playSound
@@ -1177,11 +1177,11 @@ cutscene0dFunc3:
 	call incCutsceneState2
 	call fastFadeinFromBlack
 	ld a,$10
-	ld ($c4b2),a
-	ld ($c4b4),a
+	ld (wDirtyFadeSprPalettes),a
+	ld (wFadeSprPaletteSources),a
 	ld a,$03
-	ld ($c4b1),a
-	ld ($c4b3),a
+	ld (wDirtyFadeBgPalettes),a
+	ld (wFadeBgPaletteSources),a
 	ld a,SND_LIGHTTORCH
 	jp playSound
 cutscene0dFunc4:
@@ -1190,14 +1190,14 @@ cutscene0dFunc4:
 	ret nz
 	call incCutsceneState2
 	ld a,$0e
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	call fadeinFromBlack
 	ld a,$ef
-	ld ($c4b2),a
-	ld ($c4b4),a
+	ld (wDirtyFadeSprPalettes),a
+	ld (wFadeSprPaletteSources),a
 	ld a,$fc
-	ld ($c4b1),a
-	ld ($c4b3),a
+	ld (wDirtyFadeBgPalettes),a
+	ld (wFadeBgPaletteSources),a
 	ret
 cutscene0dFunc5:
 	call decCbb3
@@ -1205,35 +1205,35 @@ cutscene0dFunc5:
 	xor a
 	ld (wPaletteThread_mode),a
 	ld a,$78
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	jp incCutsceneState2
 cutscene0dFunc6:
 	call decCbb3
 	ret nz
 	call incCutsceneState2
 	ld a,$08
-	ld ($cbae),a
+	ld (wTextboxFlags),a
 	ld a,$03
-	ld ($cbac),a
+	ld (wTextboxPosition),a
 	ld bc,$0c15
 	jp showText
 cutscene0dFunc7:
 	call retIfTextIsActive
 	call incCutsceneState2
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	dec a
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	call restartSound
 	ld a,SND_BIG_EXPLOSION_2
 	jp playSound
 cutscene0dFunc8:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$03
 	call flashScreen
 	ret z
 	call incCutsceneState2
 	ld a,$3c
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	ld a,$02
 	jp fadeoutToWhiteWithDelay
 cutscene0dFunc9:
@@ -1268,19 +1268,19 @@ cutscene0eFunc0:
 	call clearDynamicInteractions
 	ld a,SNDCTRL_FAST_FADEOUT
 	call playSound
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
-	ld hl,$d01a
+	ld hl,w1Link.visible
 	res 7,(hl)
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	jp incCutsceneState2
 cutscene0eFunc1:
 	call decCbb3
 	ret nz
 	ld (hl),$14
 	call incCutsceneState2
-	ld hl,$cbae
+	ld hl,wTextboxFlags
 	ld (hl),$04
 	ld bc,$1719
 	jp showText
@@ -1292,7 +1292,7 @@ cutscene0eFunc2:
 	call getFreeInteractionSlot
 	jr nz,+
 	ld a,INTERAC_DIN
-	ld ($cc1d),a
+	ld (wInteractionIDToLoadExtraGfx),a
 	ldi (hl),a
 	ld (hl),$06
 	call refreshObjectGfx
@@ -1320,14 +1320,14 @@ cutscene0eFunc2:
 	ld (wTilesetAnimation),a
 	call loadAnimationData
 	xor a
-	ld ($cbb3),a
+	ld (wTmpcbb3),a
 	dec a
-	ld ($cbba),a
+	ld (wTmpcbba),a
 	ld a,SND_LIGHTNING
 	call playSound
 	jp incCutsceneState2
 cutscene0eFunc3:
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld b,$01
 	call flashScreen
 	ret z
@@ -1335,14 +1335,14 @@ cutscene0eFunc3:
 	ldh (<hFF8B),a
 	ld a,$f0
 	ld c,a
-	ld ($c4ae),a
+	ld (wPaletteThread_parameter),a
 	call seasonsFunc_35cc
 	ld a,$ff
 	ldh (<hDirtyBgPalettes),a
 	ldh (<hDirtySprPalettes),a
 	ldh (<hBgPaletteSources),a
 	ldh (<hSprPaletteSources),a
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	ld a,MUS_DISASTER
 	call playSound
@@ -1353,11 +1353,11 @@ cutscene0eFunc4:
 	ld (hl),$3c
 	call brightenRoom
 	ld a,$ff
-	ld ($c4b2),a
-	ld ($c4b4),a
+	ld (wDirtyFadeSprPalettes),a
+	ld (wFadeSprPaletteSources),a
 	xor a
-	ld ($c4b1),a
-	ld ($c4b3),a
+	ld (wDirtyFadeBgPalettes),a
+	ld (wFadeBgPaletteSources),a
 	jp incCutsceneState2
 cutscene0eFunc5:
 	ld a,(wPaletteThread_mode)
@@ -1367,11 +1367,11 @@ cutscene0eFunc5:
 	ret nz
 	ld (hl),$5a
 	ld a,$f0
-	ld ($c4ae),a
+	ld (wPaletteThread_parameter),a
 	call brightenRoom
 	ld a,$ff
-	ld ($c4b1),a
-	ld ($c4b3),a
+	ld (wDirtyFadeBgPalettes),a
+	ld (wFadeBgPaletteSources),a
 	jp incCutsceneState2
 cutscene0eFunc6:
 	call decCbb3
@@ -1384,20 +1384,20 @@ cutscene0eFunc6:
 +
 	jp incCutsceneState2
 cutscene0eFunc7:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	ret z
 	call showStatusBar
 	ld a,SNDCTRL_FAST_FADEOUT
 	call playSound
 	xor a
-	ld ($cc66),a
+	ld (wWarpDestPos),a
 	ld a,$82
-	ld ($cc63),a
+	ld (wWarpDestGroup),a
 	ld a,$5d
-	ld ($cc64),a
+	ld (wWarpDestRoom),a
 	xor a
-	ld ($cc65),a
+	ld (wWarpTransition),a
 	ld a,$03
 	ld (wWarpTransition2),a
 	ret
@@ -1408,7 +1408,7 @@ cutscene0dFunca:
 	push af
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$de80
+	ld hl,w2TilesetBgPalettes
 	ld b,$40
 	call clearMemory
 	pop af
@@ -1438,11 +1438,11 @@ cutscene0dFunca:
 	ld a,$15
 	jp loadGfxRegisterStateIndex
 cutscene0dFuncb:
-	ld a,($cbb9)
+	ld a,(wTmpcbb9)
 	cp $07
 	ret nz
 	call clearLinkObject
-	ld hl,$cbb3
+	ld hl,wTmpcbb3
 	ld (hl),$3c
 	jp incCutsceneState2
 cutscene0dFuncc:
@@ -1462,10 +1462,10 @@ seasonsFunc_03_7db8:
 	push af
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld hl,$d800
+	ld hl,w3VramTiles
 	ld bc,$0240
 	call clearMemoryBc
-	ld hl,$dc00
+	ld hl,w3VramAttributes
 	ld bc,$0240
 	ld a,$02
 	call fillMemoryBc

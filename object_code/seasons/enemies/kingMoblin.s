@@ -50,7 +50,7 @@ enemyCode07:
 
 @state0:
 	ld a,$07
-	ld ($cc1c),a
+	ld (wEnemyIDToLoadExtraGfx),a
 	ld a,$8c
 	call loadPaletteHeader
 	ld a,$14
@@ -65,7 +65,7 @@ enemyCode07:
 	ret
 
 @state8:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	bit 0,(hl)
 	jp z,enemyAnimate
 	ld (hl),$00
@@ -214,8 +214,8 @@ enemyCode07:
 	ld e,$b3
 	ld a,$01
 	ld (de),a
-	ld ($cc02),a
-	ld ($cca4),a
+	ld (wMenuDisabled),a
+	ld (wDisabledObjects),a
 +
 	ld a,$05
 	jp enemySetAnimation
@@ -289,7 +289,7 @@ enemyCode07:
 	ld l,$85
 	inc (hl)
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ret
 
 @table_6f13:

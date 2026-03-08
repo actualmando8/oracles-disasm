@@ -25,7 +25,7 @@ interactionCodebb:
 @@state1:
 	call interactionRunScript
 	call func_7886
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 7,a
 	ret z
 	call func_788e
@@ -137,7 +137,7 @@ interactionCodebb:
 	jp interactionIncSubstate
 @@substate3:
 	call func_77e5
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $01
 	ret nz
 	ld e,$4f
@@ -156,7 +156,7 @@ interactionCodebb:
 	call @@func_772e
 	jp interactionIncSubstate
 @@substate5:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $02
 	jr nz,+
 	ld e,$4f
@@ -287,7 +287,7 @@ interactionCodebb:
 	call interactionSetAnimation
 	jp interactionIncSubstate
 @@substate8:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	ret nz
 	call interactionDecCounter1
@@ -296,7 +296,7 @@ interactionCodebb:
 	jr func_77eb
 @@substate9:
 	call func_77e5
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $04
 	ret nz
 	ld e,$4f

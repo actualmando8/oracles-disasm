@@ -139,7 +139,7 @@ interactionCode3c:
 @@notStone:
 	push af
 	xor a
-	ld ($cfd3),a
+	ld (wTmpcfc0.genericCutscene.cfd3),a
 
 	ldbc INTERAC_BALL,$00
 	call objectCreateInteraction
@@ -285,7 +285,7 @@ boyRunSubid00:
 	.dw @substate3
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	jp nz,interactionRunScript
 
@@ -295,7 +295,7 @@ boyRunSubid00:
 
 @substate1:
 	call interactionAnimate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $10
 	ret nz
 
@@ -336,7 +336,7 @@ boyRunSubid01:
 
 @substate0:
 	call interactionRunScript
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $01
 	jr nz,+
 	jp interactionIncSubstate
@@ -349,7 +349,7 @@ boyRunSubid01:
 
 @substate1:
 	call interactionRunScript
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $02
 	jr nz,++
 
@@ -563,7 +563,7 @@ boyRunSubid09:
 
 @substate3:
 	call boyUpdateGravityAndHopWhenLanded
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $01
 	ret nz
 
@@ -587,7 +587,7 @@ boyRunSubid09:
 	jp interactionIncSubstate
 
 @substate5:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $02
 	jr nz,++
 	ld e,Interaction.zh
@@ -753,7 +753,7 @@ boyRunSubid09:
 
 ; Waiting for signal to start hopping again
 @substate8:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	ret nz
 	call interactionDecCounter1
@@ -766,7 +766,7 @@ boyRunSubid09:
 @substate9:
 	call boyUpdateGravityAndHopWhenLanded
 
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $04
 	ret nz
 	ld e,Interaction.zh
@@ -824,7 +824,7 @@ boyRunSubid0c:
 
 @substate0:
 	call interactionAnimate2Times
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $01
 	ret nz
 
@@ -852,7 +852,7 @@ boyRunSubid0c:
 	ret nz
 
 	ld a,$02
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	call interactionIncSubstate
 	ld l,Interaction.counter1
 	ld (hl),120

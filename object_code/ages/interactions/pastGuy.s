@@ -78,7 +78,7 @@ interactionCode43:
 	jp objectSetVisiblec2
 +
 	call interactionRunScript
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $02
 	jp c,interactionAnimate
 	ret
@@ -114,7 +114,7 @@ interactionCode43:
 	.dw @@substate2
 
 @@substate0:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $01
 	ret nz
 	jpab agesInteractionsBank08.setCounter1To120AndPlaySoundEffectAndIncSubstate
@@ -140,7 +140,7 @@ interactionCode43:
 	call decHlRef16WithCap
 	ret nz
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 

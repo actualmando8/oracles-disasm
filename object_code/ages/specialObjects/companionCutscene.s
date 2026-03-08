@@ -214,7 +214,7 @@ rickyCutscene_state1:
 	sub $10
 	rlca
 	jr nc,+
-	ld hl,$cfdf
+	ld hl,wTmpcfc0.genericCutscene.cfdf
 	ld (hl),$01
 	ret
 +
@@ -615,7 +615,7 @@ specialObjectCode_mapleCutscene:
 	jp objectUpdateSpeedZ_paramC
 +
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 ;;

@@ -11,9 +11,9 @@ interactionCode6a:
 	.dw @subid3
 @subid0:
 	ld a,$01
-	ld ($ccea),a
+	ld (wTmpcfc0.goronDance.dataEnd),a
 	ld b,$20
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.goronDance.filler1
 	call clearMemory
 	ld hl,objectData.objectData7e6c
 	call parseGivenObjectData
@@ -58,13 +58,13 @@ interactionCode6a:
 @@@substate0:
 	ld a,$01
 	ld (de),a
-	ld ($cfda),a
+	ld (wTmpcfc0.goronDance.roundIndex),a
 	ld a,$50
-	ld ($cfd3),a
+	ld (wTmpcfc0.goronDance.linkJumping),a
 	ld hl,mainScripts.danceLeaderScript_promptForTutorial
 	jp interactionSetScript
 @@@substate2:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	xor a
@@ -78,13 +78,13 @@ interactionCode6a:
 
 @@func_5c6f:
 	ld a,$01
-	ld ($cfd2),a
+	ld (wTmpcfc0.goronDance.danceAnimation),a
 	ld a,$04
 	jr +++
 
 @@func_5c78:
 	ld a,$ff
-	ld ($cfd2),a
+	ld (wTmpcfc0.goronDance.danceAnimation),a
 	ld a,$04
 	jr +++
 
@@ -94,10 +94,10 @@ interactionCode6a:
 	
 	ld a,$03
 +++
-	ld ($cfd4),a
+	ld (wTmpcfc0.goronDance.linkStartedDance),a
 	ld a,$09
-	ld ($cfd1),a
-	ld hl,$cfda
+	ld (wTmpcfc0.goronDance.failureType),a
+	ld hl,wTmpcfc0.goronDance.roundIndex
 	inc (hl)
 	ret
 
@@ -118,19 +118,19 @@ interactionCode6a:
 	jr c,+
 	ld a,$08
 +
-	ld ($cfd7),a
-	ld ($cfdc),a
+	ld (wTmpcfc0.goronDance.currentMove),a
+	ld (wTmpcfc0.goronDance.beat),a
 	call @@@func_5cdd
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.goronDance.currentMove)
 	ld hl,@@@table_5d0b
 	rst_addAToHl
 	call getRandomNumber
 	and $03
 	add (hl)
-	ld ($cfd5),a
+	ld (wTmpcfc0.goronDance.frameCounter),a
 	xor a
-	ld ($cfd4),a
-	ld ($cfdb),a
+	ld (wTmpcfc0.goronDance.linkStartedDance),a
+	ld (wTmpcfc0.goronDance.numFailedRounds),a
 	ld a,$cc
 	call playSound
 	ld e,$47
@@ -139,13 +139,13 @@ interactionCode6a:
 	ld a,$22
 	jp playSound
 @@@func_5cdd:
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.goronDance.currentMove)
 	ld hl,@@@table_5ced
 	rst_addDoubleIndex
 	ldi a,(hl)
-	ld ($cfd3),a
+	ld (wTmpcfc0.goronDance.linkJumping),a
 	ldi a,(hl)
-	ld ($cfd6),a
+	ld (wTmpcfc0.goronDance.frameCounter+1),a
 	ret
 @@@table_5ced:
 	.db $28 $20
@@ -173,7 +173,7 @@ interactionCode6a:
 	ld (hl),$01
 	ld a,$02
 	ld (de),a
-	ld hl,$cfc8
+	ld hl,wTmpcfc0+8
 	call @func_5ec4
 	ldi (hl),a
 	call @func_5ec4
@@ -183,26 +183,26 @@ interactionCode6a:
 	xor a
 	ld (hl),a
 	ld e,$46
-	ld a,($cfd6)
+	ld a,(wTmpcfc0.goronDance.frameCounter+1)
 	ld (de),a
 	call @func_5eb9
 @@@substate2:
 	call @func_5f1d
 	ret nz
-	ld a,($cfcb)
+	ld a,(wTmpcfc0+$0b)
 	cp $03
 	jr z,+
 	jp @func_5ee1
 +
 	call interactionIncSubstate
-	ld a,($cfd6)
+	ld a,(wTmpcfc0.goronDance.frameCounter+1)
 	ld l,$46
 	ld (hl),a
 	xor a
-	ld ($cfcb),a
-	ld ($cfd9),a
+	ld (wTmpcfc0+$0b),a
+	ld (wTmpcfc0.goronDance.cfd9),a
 	ld a,$ff
-	ld ($cfd8),a
+	ld (wTmpcfc0.goronDance.consecutiveBPressCounter),a
 	ld a,$02
 	call interactionSetAnimation
 @@@substate3:
@@ -210,18 +210,18 @@ interactionCode6a:
 	jr nz,@@@func_5d91
 	call @func_5f1d
 	ret nz
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.goronDance.failureType)
 	or a
 	ret nz
-	ld a,($cfcb)
+	ld a,(wTmpcfc0+$0b)
 	cp $03
 	jr z,+
 	jp @func_5eea
 +
-	ld a,($cfd9)
+	ld a,(wTmpcfc0.goronDance.cfd9)
 	cp $03
 	jr nz,@@@func_5d91
-	ld hl,$cfd5
+	ld hl,wTmpcfc0.goronDance.frameCounter
 	dec (hl)
 	jr z,@@@func_5dab
 	call @@func_5e77
@@ -229,7 +229,7 @@ interactionCode6a:
 	ld a,$01
 	ld (de),a
 	xor a
-	ld ($cfcb),a
+	ld (wTmpcfc0+$0b),a
 	ret
 @@@func_5d91:
 	ld bc,TX_0104
@@ -238,7 +238,7 @@ interactionCode6a:
 	ld e,Interaction.substate
 	ld (de),a
 	ld a,$ff
-	ld ($cfd0),a
+	ld (wTmpcfc0.goronDance.filler1+$0f),a
 	ld a,$cc
 	call playSound
 	ld a,$fb
@@ -248,7 +248,7 @@ interactionCode6a:
 	inc l
 	ld (hl),$00
 	ld a,$01
-	ld ($cfd0),a
+	ld (wTmpcfc0.goronDance.filler1+$0f),a
 	ld a,$fb
 	call playSound
 	ld bc,TX_010a
@@ -275,7 +275,7 @@ interactionCode6a:
 	ld (de),a
 	jp fastFadeoutToWhite
 @@@substate1:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	xor a
@@ -288,18 +288,18 @@ interactionCode6a:
 	ld (hl),$02
 	call interactionIncSubstate
 	ld a,$81
-	ld ($cca4),a
-	ld ($cbca),a
+	ld (wDisabledObjects),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	ld a,$1e
 	call addToGashaMaturity
 	jp fastFadeinFromWhite
 @@@substate2:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld a,$81
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	ld hl,wNumTimesPlayedSubrosianDance
 	call incHlRefWithCap
 	ld a,(hl)
@@ -344,7 +344,7 @@ interactionCode6a:
 	call interactionRunScript
 	jp npcFaceLinkAndAnimate
 @@func_5e77:
-	ld hl,$cfdb
+	ld hl,wTmpcfc0.goronDance.numFailedRounds
 	ld a,(hl)
 	cp $08
 	jr c,+
@@ -360,30 +360,30 @@ interactionCode6a:
 	rrca
 	and $03
 	ld b,a
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.goronDance.currentMove)
 	add b
-	ld ($cfd7),a
+	ld (wTmpcfc0.goronDance.currentMove),a
 	jp @@state4@func_5cdd
 @func_5e97:
-	ld a,($cfdd)
+	ld a,(wTmpcfc0.goronDance.danceLevel)
 	or a
 	ret nz
-	ld a,($cfd8)
+	ld a,(wTmpcfc0.goronDance.consecutiveBPressCounter)
 	ld b,a
 	inc a
 	ret z
-	ld a,($cfd9)
+	ld a,(wTmpcfc0.goronDance.cfd9)
 	cp $03
 	ret z
-	ld hl,$cfd9
+	ld hl,wTmpcfc0.goronDance.cfd9
 	inc (hl)
-	ld hl,$cfc8
+	ld hl,wTmpcfc0+8
 	rst_addAToHl
 	ld a,(hl)
 	cp b
 	ret nz
 	ld a,$ff
-	ld ($cfd8),a
+	ld (wTmpcfc0.goronDance.consecutiveBPressCounter),a
 	ret
 @func_5eb9:
 	ld a,$02
@@ -412,15 +412,15 @@ interactionCode6a:
 	ldh a,(<hFF8B)
 	call @func_5f10
 +
-	ld hl,$cfcb
+	ld hl,wTmpcfc0+$0b
 	inc (hl)
 	ld e,$46
-	ld a,($cfd6)
+	ld a,(wTmpcfc0.goronDance.frameCounter+1)
 	ld (de),a
 	ret
 @func_5efd:
-	ld a,($cfcb)
-	ld hl,$cfc8
+	ld a,(wTmpcfc0+$0b)
+	ld hl,wTmpcfc0+8
 	rst_addAToHl
 	ld a,(hl)
 	ldh (<hFF8B),a
@@ -498,7 +498,7 @@ interactionCode6a:
 	.db <TX_010e, <TX_010f, <TX_0110
 	.db <TX_0111, <TX_0112, <TX_0113
 @@state1:
-	ld a,($cfda)
+	ld a,(wTmpcfc0.goronDance.roundIndex)
 	or a
 	jr nz,+
 	call interactionRunScript
@@ -513,16 +513,16 @@ interactionCode6a:
 	call @func_60a4
 	jr c,@@func_5fb8
 	call interactionAnimate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.goronDance.filler1+$0f)
 	or a
 	jr nz,@@func_5fb8
 	ld h,d
 	ld l,$7b
-	ld a,($cfda)
+	ld a,(wTmpcfc0.goronDance.roundIndex)
 	cp (hl)
 	ret z
 	ld (hl),a
-	ld a,($cfd4)
+	ld a,(wTmpcfc0.goronDance.linkStartedDance)
 	ld l,$44
 	ld (hl),a
 	cp $04
@@ -549,7 +549,7 @@ interactionCode6a:
 	inc hl
 	jr -
 +
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.goronDance.danceAnimation)
 	bit 7,a
 	jr nz,+
 	ld a,(hl)
@@ -609,7 +609,7 @@ interactionCode6a:
 	call interactionSetAnimation
 	jr @func_6037
 @func_6037:
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.goronDance.failureType
 	ld a,(hl)
 	or a
 	ret z
@@ -624,7 +624,7 @@ interactionCode6a:
 	ld e,$4d
 	ld a,(de)
 	ld (hl),a
-	ld a,($cfd3)
+	ld a,(wTmpcfc0.goronDance.linkJumping)
 	ld e,$50
 	ld (de),a
 	call objectApplySpeed
@@ -646,7 +646,7 @@ interactionCode6a:
 	ret nc
 +
 	ld (hl),a
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.goronDance.danceAnimation)
 	ld l,$48
 	add (hl)
 	and $03
@@ -692,7 +692,7 @@ interactionCode6a:
 	call objectCheckCollidedWithLink
 	ret nc
 	ld a,$01
-	ld ($cfdd),a
+	ld (wTmpcfc0.goronDance.danceLevel),a
 	ret
 @subid3:
 	ld e,Interaction.state
@@ -706,7 +706,7 @@ interactionCode6a:
 	ld (de),a
 	call interactionInitGraphics
 +
-	ld a,($cfdf)
+	ld a,(wTmpcfc0.goronDance.dancePattern)
 	ld b,a
 	or a
 	jp z,objectSetInvisible

@@ -22,27 +22,27 @@ interactionCode62:
 	ld e,Interaction.state
 	ld a,$01
 	ld (de),a
-	ld ($ccbb),a
+	ld (wcca1),a
 	xor a
-	ld ($cfd8),a
-	ld ($cfd9),a
+	ld (wTmpcfc0+$18),a
+	ld (wTmpcfc0+$19),a
 @@state1:
 	ld a,(wNumEnemies)
 	or a
 	ret nz
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld b,a
 	ld c,$00
 	call @@func_4fa5
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	ld b,a
 	ld c,$01
 	call @@func_4fa5
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	ld b,a
 	ld c,$02
 	call @@func_4fa5
-	ld a,($cfd3)
+	ld a,(wTmpcfc0.genericCutscene.cfd3)
 	ld b,a
 	ld c,$03
 	call @@func_4fa5
@@ -92,7 +92,7 @@ interactionCode62:
 	ld a,TILEINDEX_CHEST
 	call setTile
 @@state2:
-	ld a,($cfd9)
+	ld a,(wTmpcfc0+$19)
 	or a
 	jp nz,func_5076
 	call objectPreventLinkFromPassing
@@ -104,14 +104,14 @@ interactionCode62:
 	ld a,(de)
 	cp b
 	ret nz
-	ld a,($cfd8)
+	ld a,(wTmpcfc0+$18)
 	ld b,a
 	ld e,$43
 	ld a,(de)
 	cp b
 	jr nz,@@func_5040
 	inc a
-	ld ($cfd8),a
+	ld (wTmpcfc0+$18),a
 	ld hl,$d040
 	ld b,$40
 	call clearMemory
@@ -120,7 +120,7 @@ interactionCode62:
 	inc l
 	ld (hl),$60
 	inc l
-	ld a,($cfd8)
+	ld a,(wTmpcfc0+$18)
 	dec a
 	ld bc,@@table_504b
 	call addDoubleIndexToBc
@@ -136,13 +136,13 @@ interactionCode62:
 	ld a,$03
 	ld (de),a
 	ld a,$81
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ret
 @@func_5040:
 	ld a,$5a
 	call playSound
 	ld a,$01
-	ld ($cfd9),a
+	ld (wTmpcfc0+$19),a
 	ret
 @@table_504b:
 	; $d042 - $d043
@@ -151,7 +151,7 @@ interactionCode62:
 	.db TREASURE_EMBER_SEEDS $00
 	.db TREASURE_SMALL_KEY   $03
 @@state3:
-	ld a,($cfd9)
+	ld a,(wTmpcfc0+$19)
 	or a
 	jr nz,func_5076
 	ret

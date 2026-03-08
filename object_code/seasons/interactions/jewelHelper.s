@@ -81,15 +81,15 @@ interactionCode90:
 	call checkIsLinkedGame
 	jr nz,@label_0a_132
 	ld a,$34
-	ld ($ccbd),a
+	ld (wChestContentsOverride),a
 	ld a,$01
-	ld ($ccbe),a
+	ld (wEyePuzzleCorrectDirection),a
 	jp interactionDelete
 @label_0a_132:
 	xor a
-	ld ($ccbc),a
+	ld (wcca2),a
 	inc a
-	ld ($ccbb),a
+	ld (wcca1),a
 	ret
 
 @subid7Init:
@@ -175,7 +175,7 @@ interactionCode90:
 	xor a
 	ld e,Interaction.substate
 	ld (de),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld (wDisabledObjects),a
 	ret
 
@@ -287,17 +287,17 @@ interactionCode90:
 	.dw @@substate1
 	.dw @@substate2
 @@substate0:
-	ld a,($ccbc)
+	ld a,(wcca2)
 	or a
 	ret z
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	ret nz
 	call interactionIncSubstate
 	ld l,$46
 	ld (hl),$1e
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld a,$81
 	ld (wDisabledObjects),a
 	ret

@@ -223,11 +223,11 @@ interactionCode3e:
 +
 	jp animateRunScript
 @@@substate1:
-	ld a,($ccc3)
+	ld a,(wUnknown)
 	or a
 	ret nz
 	inc a
-	ld ($ccc3),a
+	ld (wUnknown),a
 	call interactionIncSubstate
 	jp objectSetVisiblec2
 @@@substate2:
@@ -252,7 +252,7 @@ interactionCode3e:
 	jp interactionSetAnimation
 @@@substate4:
 	ld e,$4f
-	ld a,($ccc3)
+	ld a,(wUnknown)
 	ld (de),a
 	or a
 	ret nz

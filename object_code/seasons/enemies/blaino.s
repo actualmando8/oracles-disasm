@@ -41,7 +41,7 @@ enemyCode54:
 
 @normalStatus:
 	call seasonsFunc_0d_7323
-	ld a,($cced)
+	ld a,(wShopHaveEnoughRupees+1)
 	cp $02
 	jr z,+
 	ld e,$84

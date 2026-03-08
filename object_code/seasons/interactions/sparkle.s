@@ -97,19 +97,19 @@ interactionCode84:
 	jp interactionAnimate
 
 @runSubid04:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 0,a
 	jp nz,interactionDelete
 	jr @animateAndFlicker
 
 @runSubid09:
-	ld a,($cbb9)
+	ld a,(wTmpcbb9)
 	cp $06
 	jp z,interactionDelete
 	jr @animateFlickerAndTakeRelatedObj1Position
 
 @runSubid06:
-	ld a,($cbb9)
+	ld a,(wTmpcbb9)
 	cp $07
 	jp z,interactionDelete
 
@@ -118,7 +118,7 @@ interactionCode84:
 	ld a,$0b
 	call objectGetRelatedObject1Var
 	call objectTakePosition
-	ld a,($cbb7)
+	ld a,(wTmpcbb7)
 	jr @flicker4
 
 @runSubid08:

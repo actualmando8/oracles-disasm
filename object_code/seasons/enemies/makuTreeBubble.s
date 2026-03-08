@@ -2,7 +2,7 @@
 ; ENEMY_MAKU_TREE_BUBBLE
 ;
 ; Variables:
-;   $cfc0: bit 7 set when popped
+;   wTmpcfc0.genericCutscene.state: bit 7 set when popped
 ; ==================================================================================================
 enemyCode56:
 	jr z,@normalStatus
@@ -28,7 +28,7 @@ enemyCode56:
 	ld e,Enemy.subid
 	ld a,(de)
 	jr z,+
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	bit 7,(hl)
 	jr z,+
 	ld e,Enemy.state
@@ -111,7 +111,7 @@ enemyCode56:
 	ld (hl),a
 	ld a,$01
 	call enemySetAnimation
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 7,(hl)
 	jr @snore
 +

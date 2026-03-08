@@ -143,7 +143,7 @@ flameOfDestructionCutscene_state1:
 	ld (wDirtyFadeSprPalettes),a
 	ld (wFadeSprPaletteSources),a
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call cutscene_func_03_72af
 	call loadInteracIdb4_subid6And7
 	ld a,MUS_DISASTER
@@ -241,7 +241,7 @@ zeldaAndVillagersCutscene_state1:
 	jp incTmpcbb3
 
 @waitToFadeOut:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 1,a
 	ret z
 	call fadeoutToWhite
@@ -345,7 +345,7 @@ zeldaKidnappedCutscene_state1Handler:
 @waitUntilRoomLoaded:
 	call waitUntilFadeIsDone
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 7,(hl)
 	ld a,$ff
 	ld (wGenericCutscene.cbb5),a
@@ -367,11 +367,11 @@ zeldaKidnappedCutscene_state1Handler:
 	ld a,$3c
 	cp (hl)
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 6,(hl)
 	ret
 +
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 5,(hl)
 	ld a,$3c
 	ld (wGenericCutscene.cbb5),a
@@ -384,7 +384,7 @@ zeldaKidnappedCutscene_state1Handler:
 	ld a,$1e
 	ld (wGenericCutscene.cbb5),a
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call cutscene_func_03_72af
 	call loadInteracIdb4_subid2And3
 	ld a,$21
@@ -393,7 +393,7 @@ zeldaKidnappedCutscene_state1Handler:
 	jp incTmpcbb3
 
 @startCutsceneText12:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 0,a
 	ret z
 	ld hl,wGenericCutscene.cbb5
@@ -417,12 +417,12 @@ zeldaKidnappedCutscene_state1Handler:
 @func9:
 	call waitUntilTextInactive
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	res 0,(hl)
 	jp incTmpcbb3
 
 @funca:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 0,a
 	ret z
 	xor a
@@ -435,10 +435,10 @@ zeldaKidnappedCutscene_state1Handler:
 	call zeldaKidnappedFlashFadeoutToWhite
 	ret nz
 	call clearWramBank1
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	res 0,(hl)
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call loadInteracIdb4_subid4And5
 	ld a,$04
 	call fadeinFromWhiteWithDelay
@@ -461,7 +461,7 @@ zeldaKidnappedCutscene_state1Handler:
 @funce:
 	call waitUntilTextInactive
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 0,(hl)
 	ld a,$3c
 	ld (wGenericCutscene.cbb5),a
@@ -485,7 +485,7 @@ zeldaKidnappedCutscene_state1Handler:
 	ld a,$f1
 	call playSound
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call loadInteracIdb4_subid6And7
 	call getFreeInteractionSlot
 	jr nz,+

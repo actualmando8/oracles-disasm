@@ -47,7 +47,7 @@ interactionCodeca:
 	ld (hl),$b4
 	call func_7a0d
 +
-	ld hl,$ccf8
+	ld hl,wcce2
 	ldi a,(hl)
 	cp $30
 	jr nz,+
@@ -76,14 +76,14 @@ interactionCodeca:
 	ld hl,mainScripts.troyScript_gameBegun
 	call interactionSetScript
 	ret
-	ld hl,$ccf7
+	ld hl,wcce1
 	xor a
 	ldi (hl),a
 	ldi (hl),a
 	ld (hl),a
 	ret
 func_79df:
-	ld hl,$ccf7
+	ld hl,wcce1
 	ldi a,(hl)
 	cp $59
 	jr nz,+
@@ -94,7 +94,7 @@ func_79df:
 	cp $99
 	ret z
 +
-	ld hl,$ccf7
+	ld hl,wcce1
 	call func_7a01
 	ret nz
 	inc hl
@@ -117,7 +117,7 @@ func_7a01:
 	ret
 func_7a0d:
 	ld a,$04
-	ld hl,$cc30
+	ld hl,wNumEnemies
 	sub (hl)
 	ret z
 	ldh (<hFF8D),a

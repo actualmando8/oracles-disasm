@@ -49,13 +49,13 @@ interactionCode69:
 	ld a,$ff
 	ld (wActiveMusic),a
 	ld a,$80
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	jr @@@substate1
 @@@table_5976:
 	.db $7e $7f $88 $89
 @@@substate1:
 	call func_5ae0
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld e,Interaction.state
@@ -74,7 +74,7 @@ interactionCode69:
 	ld l,$4b
 	jp setShortPosition
 @@state1:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	inc a
 	ret nz
 	ld e,Interaction.state
@@ -125,7 +125,7 @@ interactionCode69:
 @@state3:
 	ld a,$3c
 	call setScreenShakeCounter
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	call interactionDecCounter1
@@ -138,25 +138,25 @@ interactionCode69:
 	ret nz
 	jp interactionDelete
 @func_5a0a:
-	ld a,($cc57)
+	ld a,(wDungeonFloor)
 	inc a
-	ld ($cc57),a
+	ld (wDungeonFloor),a
 	call getActiveRoomFromDungeonMapPosition
-	ld ($cc64),a
-	ld a,($cfd0)
-	ld ($cc66),a
-	ld a,($cc49)
+	ld (wWarpDestRoom),a
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
+	ld (wWarpDestPos),a
+	ld a,(wActiveGroup)
 	or $80
-	ld ($cc63),a
+	ld (wWarpDestGroup),a
 	xor a
-	ld ($cc65),a
+	ld (wWarpTransition),a
 	ld a,$03
 	ld (wWarpTransition2),a
 	call getThisRoomFlags
 	res 4,(hl)
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	jp interactionDelete
 @subid1:
 	ld e,Interaction.state
@@ -196,7 +196,7 @@ interactionCode69:
 	call objectCreateInteraction
 	jr nz,+
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 +
 	jp interactionDelete
 @subid2:
@@ -209,7 +209,7 @@ interactionCode69:
 	call interactionInitGraphics
 	call objectSetVisible83
 +
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	jp nz,interactionDelete
 	jp interactionAnimate
@@ -231,14 +231,14 @@ interactionCode69:
 	inc a
 	ret nz
 	ld a,$ff
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	call objectGetShortPosition
 	ld c,a
 	ld a,$d5
 	call setTile
 	jp interactionDelete
 @subid4:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	call interactionDecCounter1

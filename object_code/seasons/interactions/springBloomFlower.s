@@ -16,7 +16,7 @@ interactionCode9c:
 @state0:
 	ld a,$01
 	ld (de),a
-	ld a,($cc4e)
+	ld a,(wRoomStateModifier)
 	or a
 	jp nz,interactionDelete
 	ld a,$06
@@ -24,7 +24,7 @@ interactionCode9c:
 	call interactionInitGraphics
 	call objectSetVisible83
 @state1:
-	ld a,($ccc3)
+	ld a,(wUnknown)
 	or a
 	jr z,+
 	ld a,$05
@@ -33,13 +33,13 @@ interactionCode9c:
 	ld a,($cc88)
 	or a
 	ret nz
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	rrca
 	ret c
 	call objectCheckCollidedWithLink
 	ret nc
 	ld a,$02
-	ld ($ccc3),a
+	ld (wUnknown),a
 ++
 	ld e,$44
 	ld (de),a
@@ -51,7 +51,7 @@ interactionCode9c:
 	ld a,(de)
 	or a
 	ret z
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	cp $d0
 	jp nz,seasonsFunc_0a_5d18
 	call checkLinkID0AndControlNormal
@@ -83,7 +83,7 @@ interactionCode9c:
 	jp interactionSetAnimation
 @state3:
 	ld a,$10
-	ld ($cc6b),a
+	ld (wcc50),a
 	call interactionAnimate
 	ld e,$61
 	ld a,(de)
@@ -101,7 +101,7 @@ interactionCode9c:
 	ld a,$04
 	ld (de),a
 	ld a,$06
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	jp objectSetVisible83
 @state4:
 @state7:
@@ -129,12 +129,12 @@ interactionCode9c:
 	inc a
 	jr nz,@func_5ce8
 	ld (de),a
-	ld ($ccc3),a
+	ld (wUnknown),a
 	call objectSetVisible83
 	jp interactionIncState
 @func_5ce8:
 	dec a
-	ld ($ccc3),a
+	ld (wUnknown),a
 	cp $02
 	ret c
 	jp objectSetVisible82
@@ -170,7 +170,7 @@ seasonsFunc_0a_5d18:
 	ld a,$01
 	ld (de),a
 	dec a
-	ld ($ccc3),a
+	ld (wUnknown),a
 	call interactionSetAlwaysUpdateBit
 	res 7,(hl)
 	call objectSetVisible83

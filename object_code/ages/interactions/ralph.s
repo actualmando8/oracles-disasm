@@ -49,7 +49,7 @@ ralphState0:
 
 @initSubid06:
 	ld hl,mainScripts.ralphSubid06Script_part1
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0b
 	jr nz,++
 	ld bc,$4850
@@ -101,7 +101,7 @@ ralphState0:
 @initSubid04:
 	ld a,$01
 	call interactionSetAnimation
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	jr z,++
 	ld hl,mainScripts.ralphSubid04Script_part1
@@ -191,7 +191,7 @@ ralphState0:
 @@setScript:
 	call interactionSetScript
 	call setLinkForceStateToState08
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	inc a
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
@@ -284,8 +284,8 @@ ralphState0:
 	ld hl,mainScripts.ralphSubid0cScript
 	call interactionSetScript
 	xor a
-	ld ($cfde),a
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	call interactionSetAnimation
 	call interactionRunScript
 	jr ralphRunSubid
@@ -345,7 +345,7 @@ ralphSubid00:
 
 @substate0:
 	call interactionAnimate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	ret nz
 
@@ -387,7 +387,7 @@ ralphSubid02:
 @state0:
 	call interactionRunScript
 	call interactionAnimate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $1f
 	ret nz
 	jp interactionIncSubstate
@@ -564,7 +564,7 @@ ralphSubid04:
 	.dw @substate2
 
 @substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $08
 	jp nz,nayruFlipDirectionAtRandomIntervals
 
@@ -592,7 +592,7 @@ ralphSubid05:
 	.dw ralphRunScript
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $01
 	ret nz
 	call startJump
@@ -607,7 +607,7 @@ ralphSubid05:
 	jp interactionIncSubstate
 
 @substate2:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $02
 	jp nz,interactionRunScript
 	call startJump
@@ -636,7 +636,7 @@ ralphSubid06:
 
 @substate0:
 	callab scriptHelp.objectWritePositionTocfd5
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $08
 	jp nz,interactionRunScript
 	call startJump
@@ -729,7 +729,7 @@ ralphSubid08:
 	call interactionDecCounter1
 	ret nz
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 ;;
@@ -904,7 +904,7 @@ ralphSubid0a_linked:
 ; $10: Cutscene after talking to Cheval
 ralphSubid0b:
 ralphSubid10:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	call nz,ralphTurnLinkTowardSelf
 

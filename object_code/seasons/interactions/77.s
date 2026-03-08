@@ -20,7 +20,7 @@ interactionCode77:
 	jp z,objectSetVisible82
 	jp objectSetVisible83
 @state1:
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	ld a,(hl)
 	and $80
 	jp nz,objectSetInvisible

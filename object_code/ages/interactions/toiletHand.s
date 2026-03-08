@@ -80,7 +80,7 @@ interactionCode5b:
 	jp interactionSetScript
 
 ;;
-; Reads from the "object fallen in hole" buffer at $cfd8 to decide on a reaction. Sets
+; Reads from the "object fallen in hole" buffer at wTmpcfc0+$18 to decide on a reaction. Sets
 ; var38 to an index based on which item it was to be used in a script later.
 ;
 ; @param[out]	cflag	c if there is a defined reaction to the object that fell in the
@@ -90,7 +90,7 @@ interactionCode5b:
 	or a
 	ret nz
 
-	ld a,($cfd8)
+	ld a,(wTmpcfc0+$18)
 	inc a
 	ld e,a
 	ld hl,@objectTypeTable
@@ -102,7 +102,7 @@ interactionCode5b:
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
-	ld a,($cfd9)
+	ld a,(wTmpcfc0+$19)
 	ld e,a
 	call lookupKey
 	ret nc

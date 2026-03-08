@@ -126,7 +126,7 @@ interactionCode4f_state1:
 	.dw @subid5
 
 @subid0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	jp z,interactionDelete
 	cp $0d
@@ -316,14 +316,14 @@ interactionCode4f_state1:
 	call objectApplySpeed
 	call interactionDecCounter1
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$0c
 	ld a,$79
 	call @func_7957
 	jp interactionIncSubstate
 
 @@substate8:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $0d
 	ret nz
@@ -460,7 +460,7 @@ interactionCode4f_state1:
 	ret nz
 	jp interactionIncSubstate
 +
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $0c
 	jp z,interactionDelete
@@ -492,7 +492,7 @@ interactionCode4f_state1:
 	jp playSound
 
 @@substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	ret nz
 	call objectSetInvisible

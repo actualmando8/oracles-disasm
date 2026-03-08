@@ -20,11 +20,11 @@ interactionCode9a:
 	call interactionInitGraphics
 	jp objectSetVisible82
 @@subid2:
-	ld a,($cc36)
+	ld a,(wcdd7)
 	or a
 	jp z,interactionDelete
 	xor a
-	ld ($cc36),a
+	ld (wcdd7),a
 	ld a,GLOBALFLAG_DESTROYED_MOBLIN_HOUSE_REPAIRED
 	call unsetGlobalFlag
 	call getThisRoomFlags
@@ -62,7 +62,7 @@ interactionCode9a:
 	ld (hl),a
 	ld a,$01
 	ld (wDisabledObjects),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld l,$46
 	ld (hl),$5a
 	ret
@@ -179,11 +179,11 @@ interactionCode9a:
 	xor a
 	call func_5a82
 	ret nz
-	ld hl,$cc69
+	ld hl,wSeedTreeRefilledBitset
 	res 1,(hl)
 	xor a
 	ld (wDisabledObjects),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	jp interactionDelete
 
 ;;
@@ -250,13 +250,13 @@ state1_subid3:
 	xor a
 	jp func_5a82
 @substate2:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ldh (<hSprPaletteSources),a
 	dec a
 	ldh (<hDirtySprPalettes),a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	call interactionIncSubstate
 	ld l,$46
 	ld (hl),$1e
@@ -279,7 +279,7 @@ state1_subid3:
 	call interactionDecCounter1
 	ret nz
 	ld a,$03
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	xor a
 	ld (wLinkHealth),a
 	jp interactionDelete

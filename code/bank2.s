@@ -833,11 +833,11 @@ fileSelectMode6:
 	call secretFunctionCaller
 	jp nz,fileSelect_printError
 
-	ld a,($ced2)
+	ld a,(wEnemyPlacement.placedEnemyPositions+2)
 	or a
 	jr z,+
 
-	ld a,($cec5)
+	ld a,(wEnemyPlacement.cec5)
 .ifdef ROM_AGES
 	dec a
 .else; ROM_SEASONS
@@ -904,9 +904,9 @@ runSecretEntryMenu:
 	jr nz,@invalidSecret
 
 
-	; [$cec4] = the unpacked secret's "wShortSecretIndex" value (only for short secret
+	; [wEnemyPlacement.cec4] = the unpacked secret's "wShortSecretIndex" value (only for short secret
 	; types)
-	ld a,($cec4)
+	ld a,(wEnemyPlacement.cec4)
 	ld b,a
 	ld a,(wSecretInputType)
 	cp $ff
@@ -922,7 +922,7 @@ runSecretEntryMenu:
 	cp $02
 	jr z,@loadRingSecretData
 
-	; 5-letter secret: check that [$cec4] == [wSecretInputType]&$3f (basically, this
+	; 5-letter secret: check that [wEnemyPlacement.cec4] == [wSecretInputType]&$3f (basically, this
 	; is the short secret type that we're looking for, not somebody else's)
 	and $3f
 	sub b
@@ -2154,7 +2154,7 @@ fileSelectDrawAcornCursor:
 ;;
 ; This is probably for linking to transfer ring secrets
 runGameLinkMenu:
-	ld hl,$cbb6
+	ld hl,wFileSelect.cbb6
 	inc (hl)
 	call fileSelect_redrawDecorationsAndSetWramBank4
 
@@ -2207,7 +2207,7 @@ fileSelectMode7:
 	ldh (<hFFBE),a
 	xor a
 	ldh (<hSerialLinkState),a
-	ld ($cbc2),a
+	ld (wTmpcbc2),a
 
 	ld hl,wFileSelect.linkTimer
 	ld a,$f0
@@ -2271,7 +2271,7 @@ fileSelectMode7:
 	jr nz,-
 
 	ld a,$85
-	ld ($cbc2),a
+	ld (wTmpcbc2),a
 	ld a,$ff
 	ld (wFileSelect.cursorPos),a
 	jp @func_02_4c4b
@@ -2312,7 +2312,7 @@ fileSelectMode7:
 	ld a,$03
 	ld (wFileSelect.cursorPos),a
 	ld a,$8f
-	ld ($cbc2),a
+	ld (wTmpcbc2),a
 
 @selectedSomething:
 	ld a,(wFileSelect.cursorPos)
@@ -2325,7 +2325,7 @@ fileSelectMode7:
 	ld a,$03
 	ld (wFileSelect.cursorPos),a
 	ld a,$8f
-	ld ($cbc2),a
+	ld (wTmpcbc2),a
 	jr @func_02_4c4b
 
 @selectedSomething:
@@ -2405,7 +2405,7 @@ fileSelectMode7:
 	add hl,bc
 	jr -
 +
-	; Copy to the first $16 bytes of the new file to create ($c600-$c615). Includes link/child
+	; Copy to the first $16 bytes of the new file to create (wc600Block). Includes link/child
 	; name, animal companion, etc.
 	ld b,$16
 	ld de,wc600Block
@@ -4667,7 +4667,7 @@ inventoryMenuState2:
 	xor a
 	ldi (hl),a
 
-	; $cbc1 = 1
+	; [wInventory.cbc1] = 1
 	inc a
 	ldi (hl),a
 
@@ -5724,7 +5724,7 @@ inventorySubscreen2_drawTreasures:
 	call fillRectangleInTilemap
 	pop bc
 	ld a,b
-	ld hl,$d3df
+	ld hl,w4SubscreenTextIndices-1
 	rst_addAToHl
 	ld (hl),$00
 @nextEssence:

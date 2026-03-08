@@ -3,8 +3,8 @@
 ; var37 - 0 if enough rupees, else 1
 ; var38 - RUPEEVAL_10 if cheated, otherwise RUPEEVAL_20
 ; var39 - pointer to Blaino / script ???
-; $ccec - result of fight - $01 if won, $02 if lost, $03 if cheated
-; $cced - $00 on init, $01 when starting fight, $03 when fight done
+; wShopHaveEnoughRupees - result of fight - $01 if won, $02 if lost, $03 if cheated
+; wShopHaveEnoughRupees+1 - $00 on init, $01 when starting fight, $03 when fight done
 ; ==================================================================================================
 interactionCode72:
 	ld e,Interaction.subid
@@ -21,7 +21,7 @@ interactionCode72:
 
 @state0:
 	call interactionIncState
-	ld a,($cced)
+	ld a,(wShopHaveEnoughRupees+1)
 	cp $00
 	jr z,+
 	cp $01
@@ -83,7 +83,7 @@ blainoSubid01:
 	.dw @substate2
 
 @substate0:
-	ld a,($cbb5)
+	ld a,(wTmpcbb5)
 	or a
 	jr z,@substate2
 	ld h,d

@@ -270,7 +270,7 @@ enemyCode06:
 	ld a,($d00f)
 	rlca
 	ret c
-	ld hl,$cc6a
+	ld hl,wLinkForceState
 	ld a,$14
 	ldi (hl),a
 	ld (hl),$00

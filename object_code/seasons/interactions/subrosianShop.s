@@ -154,7 +154,7 @@ interactionCode81:
 	xor a
 	ld (de),a
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ret
 @state3:
 	ld e,Interaction.substate
@@ -167,14 +167,14 @@ interactionCode81:
 	.dw @substate4
 @substate0:
 	call objectSetVisible80
-	ld a,($ccea)
+	ld a,(wInShop)
 	dec a
-	ld ($ccea),a
+	ld (wInShop),a
 	call func_7973
 	ld a,$04
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	ld a,$01
-	ld ($cc6b),a
+	ld (wcc50),a
 	ld h,d
 	ld l,$4b
 	ld a,($d00b)
@@ -190,7 +190,7 @@ interactionCode81:
 	ld l,$45
 	ld a,$01
 	ld (hl),a
-	ld hl,$cbea
+	ld hl,wStatusBarNeedsRefresh
 	set 2,(hl)
 	ld e,Interaction.subid
 	ld a,(de)
@@ -242,8 +242,8 @@ interactionCode81:
 @substate1:
 	call retIfTextIsActive
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	jp interactionDelete
 @substate2:
 	call interactionDecCounter1
@@ -274,7 +274,7 @@ interactionCode81:
 	jp fadeoutToWhite
 @substate3:
 	call interactionAnimate
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	call interactionDecCounter2
@@ -291,12 +291,12 @@ interactionCode81:
 	call setStatusBarNeedsRefreshBit1
 	jp fadeinFromWhite
 @substate4:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	ld bc,TX_2b0e
 	call showText
 	jp interactionDelete
@@ -329,7 +329,7 @@ func_7931:
 	ld e,$79
 	ld a,(de)
 	call cpOreChunkValue
-	ld hl,$cba8
+	ld hl,wTextNumberSubstitution
 	ld (hl),c
 	inc l
 	ld (hl),b
@@ -358,7 +358,7 @@ func_7973:
 	or a
 	ret z
 	ld a,$ff
-	ld ($cbea),a
+	ld (wStatusBarNeedsRefresh),a
 	ld e,$77
 	ld a,(de)
 	or a

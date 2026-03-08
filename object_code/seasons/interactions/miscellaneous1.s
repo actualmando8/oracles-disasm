@@ -55,7 +55,7 @@ floodgateKeeper:
 	call interactionSetScript
 	call objectSetVisible82
 	xor a
-	ld ($cfc1),a
+	ld (wTmpcfc0.genericCutscene.cfc1),a
 @state1:
 	call interactionAnimate
 	call objectPreventLinkFromPassing
@@ -106,10 +106,10 @@ floodgateKeyhole:
 @state2:
 	ld a,$04
 	call setScreenShakeCounter
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	bit 7,a
 	ret z
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
 	jr ++
@@ -119,8 +119,8 @@ resetMusicThenSolvePuzzleSound:
 	ld (wActiveMusic),a
 ++
 	xor a
-	ld ($cc02),a
-	ld ($cca4),a
+	ld (wMenuDisabled),a
+	ld (wDisabledObjects),a
 	ld a,$f1
 	call playSound
 	ld a,SND_SOLVEPUZZLE
@@ -177,7 +177,7 @@ d4KeyHole:
 	callab scriptHelp.d4KeyHolw_disableAllSorts
 	ret
 @state3:
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $01
 	ret z
 	call getThisRoomFlags
@@ -218,10 +218,10 @@ floodgateKey:
 	call checkTreasureObtained
 	ret nc
 	call interactionIncState
-	ld hl,$cca4
+	ld hl,wDisabledObjects
 	set 7,(hl)
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,mainScripts.floodgateKeyScript_keeperNoticesKey
 	jp interactionSetScript
 
@@ -251,7 +251,7 @@ tarmArmosUnlockingStairs:
 	jp runScriptDeleteWhenDone
 
 tarmArmosWallByStump:
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp $42
 	jp nz,interactionDelete
 	ld e,Interaction.state
@@ -288,7 +288,7 @@ tarmArmosWallByStump:
 	ld a,(wRoomStateModifier)
 	cp SEASON_WINTER
 	ret z
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret z
 	call getThisRoomFlags
@@ -309,7 +309,7 @@ tarmArmosWallByStump:
 
 tarmEscapedLostWoods:
 	call returnIfScrollMode01Unset
-	ld a,($cd02)
+	ld a,(wScreenTransitionDirection)
 	or a
 	jp nz,interactionDelete
 ++
@@ -331,9 +331,9 @@ oreChunkDigSpot:
 	jp nz,interactionDelete
 +
 	call objectGetShortPosition
-	ld ($ccc5),a
+	ld (wccaa),a
 @state1:
-	ld a,($ccc5)
+	ld a,(wccaa)
 	inc a
 	ret nz
 	call getFreePartSlot
@@ -428,10 +428,10 @@ piratesBellRoomWhenFallingIn:
 	call getThisRoomFlags
 	and $20
 	ret z
-	ld hl,$cca4
+	ld hl,wDisabledObjects
 	set 0,(hl)
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	call interactionIncState
 	ld hl,mainScripts.piratesBellRoomDroppingInScript
 	jp interactionSetScript
@@ -566,9 +566,9 @@ natzuSwitch:
 	or a
 	ret z
 	ld a,$81
-	ld ($cc02),a
-	ld ($cca4),a
-	ld ($ccab),a
+	ld (wMenuDisabled),a
+	ld (wDisabledObjects),a
+	ld (wDisableScreenTransitions),a
 	call getThisRoomFlags
 	set 6,(hl)
 	call interactionIncState
@@ -580,9 +580,9 @@ natzuSwitch:
 	call interactionRunSimpleScript
 	ret nc
 	xor a
-	ld ($cc02),a
-	ld ($cca4),a
-	ld ($ccab),a
+	ld (wMenuDisabled),a
+	ld (wDisabledObjects),a
+	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 
 onoxCastleCutscene:
@@ -593,8 +593,8 @@ onoxCastleCutscene:
 	call checkGlobalFlag
 	jp nz,interactionDelete
 	ld a,$01
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	call returnIfScrollMode01Unset
 	ld a,CUTSCENE_S_ONOX_CASTLE_FORCE
 	ld (wCutsceneTrigger),a
@@ -632,7 +632,7 @@ unblockingD3Dam:
 @state1:
 	call interactionRunSimpleScript
 	ret nc
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.genericCutscene.state
 	set 7,(hl)
 	jp interactionDelete
 	
@@ -655,14 +655,14 @@ stolenFeatherGottenHandler:
 	inc (hl)
 @state1:
 	ld a,$01
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	call objectGetTileAtPosition
 	ld e,$49
 	ld a,(de)
 	cp (hl)
 	ret z
 	xor a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 	
 horonVillagePortalBridgeSpawner:
@@ -727,7 +727,7 @@ tickTockSecretEntrance:
 	cp $04
 	ret nz
 	ld a,l
-	ld ($ccc5),a
+	ld (wccaa),a
 	ld e,Interaction.state
 	ld a,$01
 	ld (de),a
@@ -753,7 +753,7 @@ graveSecretEntrance:
 	cp $01
 	ret z
 	ld a,l
-	ld ($ccc5),a
+	ld (wccaa),a
 	jr setEnteredWarpSetStairsPlaySolvedSound
 
 d4MinibossRoom:
@@ -789,12 +789,12 @@ sentBackFromOnoxCastleBarrier:
 	ld (hl),$3c
 @state1:
 	ld a,$01
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call interactionDecCounter1
 	ret nz
 	xor a
-	ld ($cc02),a
-	ld ($cca4),a
+	ld (wMenuDisabled),a
+	ld (wDisabledObjects),a
 	ld bc,TX_501b
 	call showText
 	jp interactionDelete
@@ -808,7 +808,7 @@ sidescrollingStaticSeedSatchel:
 	jp misc1_spawnTreasureBCifRoomFlagBit5NotSet
 
 mtCuccoBananaTree:
-	ld a,($cc4e)
+	ld a,(wRoomStateModifier)
 	or a
 	jp nz,interactionDelete
 	call getThisRoomFlags
@@ -910,7 +910,7 @@ interactionCode6bSubid25:
 	ld a,TILEINDEX_INDOOR_UPSTAIRCASE
 	call setTile
 	xor a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	jp interactionDelete
 
 ; TODO: there is a subrosian where this one should be?

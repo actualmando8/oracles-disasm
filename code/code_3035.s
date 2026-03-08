@@ -35,13 +35,13 @@ decCbb3:
 
 ;;
 incCbc1:
-	ld hl,$cbc1
+	ld hl,wTmpcbc1
 	inc (hl)
 	ret
 
 ;;
 incCbc2:
-	ld hl,$cbc2
+	ld hl,wTmpcbc2
 	inc (hl)
 	ret
 

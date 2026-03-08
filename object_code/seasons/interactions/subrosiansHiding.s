@@ -38,10 +38,10 @@ rosaSubId0:
 	call interactionSetAlwaysUpdateBit
 	call objectSetReservedBit1
 	ld a,$01
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	ld e,$79
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	ld (de),a
 	xor a
 	ld (wActiveMusic),a
@@ -49,9 +49,9 @@ rosaSubId0:
 	call playSound
 @func_67d1:
 	ld a,$80
-	ld ($cc9f),a
+	ld (wcc85),a
 	ld a,$01
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ldbc $01 INTERAC_ROSA_HIDING
 	call spawnHider
 	ld e,a
@@ -70,16 +70,16 @@ rosaSubId0:
 	.db $58 $58
 	.db $58 $58
 @func_67fb:
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp $cb
 	jp z,interactionDelete
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
 @func_680c:
 	xor a
-	ld ($cc9f),a
-	ld ($ccab),a
+	ld (wcc85),a
+	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 @substate1:
 	ld e,$78
@@ -88,10 +88,10 @@ rosaSubId0:
 	.dw @var38_00
 	.dw @var38_01
 @var38_00:
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp $cb
 	jr nz,@func_67fb
-	ld a,($cc9e)
+	ld a,(wcc84)
 	cp $02
 	ret nz
 	ld e,$78
@@ -99,19 +99,19 @@ rosaSubId0:
 	ld (de),a
 	ret
 @var38_01:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	jr z,+
 	ld e,$7a
 	ld a,$01
 	ld (de),a
 	xor a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 +
 	ld e,$79
 	ld a,(de)
 	ld b,a
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp b
 	ret z
 	ld (de),a
@@ -131,7 +131,7 @@ rosaSubId0:
 	call addAToBc
 	ld a,(bc)
 	ld b,a
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp b
 	jr nz,@func_67fb
 	jp @func_67d1
@@ -247,8 +247,8 @@ func_6919:
 	ret
 +
 	xor a
-	ld ($cca4),a
-	ld ($ccab),a
+	ld (wDisabledObjects),a
+	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 table_6931:
 	.dw mainScripts.rosaHidingScript_1stScreen
@@ -275,13 +275,13 @@ strangeBrothersSubId0:
 	ld e,$40
 	ld a,$83
 	ld (de),a
-	ld a,($cc4c)
-	ld ($cfd1),a
+	ld a,(wActiveRoom)
+	ld (wTmpcfc0.genericCutscene.cfd0+1),a
 	ld a,GLOBALFLAG_STRANGE_BROTHERS_HIDING_IN_PROGRESS
 	call setGlobalFlag
 func_6964:
 	ld a,$01
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ldbc $01 INTERAC_STRANGE_BROTHERS_HIDING
 	call spawnHider
 	ldbc $02 INTERAC_STRANGE_BROTHERS_HIDING
@@ -293,7 +293,7 @@ func_6964:
 	call getRandomNumber
 	and $01
 +
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld e,$46
 	ld a,(de)
 	cp $06
@@ -304,7 +304,7 @@ func_698f:
 	call playSound
 func_6995:
 	xor a
-	ld ($cc9e),a
+	ld (wcc84),a
 	jp interactionDelete
 
 ;;
@@ -335,14 +335,14 @@ func_69ac:
 	ret
 
 strangeBrothersSubId0State1:
-	ld a,($cd00)
+	ld a,(wScrollMode)
 	and $01
 	ret z
-	ld a,($cc9e)
+	ld a,(wcc84)
 	cp $02
 	ret nz
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ld e,Interaction.state
 	ld a,$02
 	ld (de),a
@@ -352,7 +352,7 @@ strangeBrothersSubId0State1:
 	jp playSound
 
 strangeBrothersSubId0State2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $ff
 	jr z,func_6a23
 	and $03
@@ -361,16 +361,16 @@ strangeBrothersSubId0State2:
 	ld e,$7a
 	ld (de),a
 	xor a
-	ld ($ccab),a
-	ld ($cfc0),a
+	ld (wDisableScreenTransitions),a
+	ld (wTmpcfc0.genericCutscene.state),a
 +
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	ld b,a
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd0+1)
 	cp b
 	ret z
 	ld a,b
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd0+1),a
 	cp $51
 	jr z,func_698f
 	ld e,$7a
@@ -387,7 +387,7 @@ strangeBrothersSubId0State2:
 	call addAToBc
 	ld a,(bc)
 	ld b,a
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp b
 	jp nz,func_698f
 	jp func_6964
@@ -399,12 +399,12 @@ func_6a23:
 	ld a,$03
 	ld (de),a
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld bc,TX_2804
 	jp showText
 
 strangeBrothersSubId0State3:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	or a
 	ret nz
 	ld a,GLOBALFLAG_JUST_CAUGHT_BY_STRANGE_BROTHERS
@@ -412,7 +412,7 @@ strangeBrothersSubId0State3:
 	ld a,GLOBALFLAG_STRANGE_BROTHERS_HIDING_IN_PROGRESS
 	call unsetGlobalFlag
 	xor a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ld hl,@warpDestVariables
 	call setWarpDestVariables
 	jp interactionDelete
@@ -488,7 +488,7 @@ strangeBrothersSubId2:
 	ld a,(de)
 	or a
 	jr nz,@func_6add
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.genericCutscene.state)
 	cp $ff
 	jr z,@func_6add
 	call interactionAnimate
@@ -503,9 +503,9 @@ strangeBrothersSubId2:
 	jp objectSetSpeedZ
 @func_6add:
 	ld a,$ff
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	ld a,$01
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld h,d
 	ld l,$44
 	inc (hl)
@@ -533,5 +533,5 @@ strangeBrothersSubId2:
 	jr +
 +
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.genericCutscene.state),a
 	jp interactionDelete

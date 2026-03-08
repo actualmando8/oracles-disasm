@@ -13,21 +13,21 @@
 ;   var36:
 ;   var37:
 ;   var38:
-;   $cfc8 - near end
-;   $cfc9
-;   $cfca
-;   $cfcb
-;   $cfcc
-;   $cfcd
-;   $cfd7 - Pointer to main body (subid $01)
-;   $cfd8 - Pointer to left shoulder (subid $02)
-;   $cfd9 - Pointer to right shoulder (subid $03)
-;   $cfda - Pointer to left claw (subid $04)
-;   $cfdb - Pointer to right claw (subid $05)
-;   $cfdc - Pointer to left claw sphere (subid $06)
-;   $cfdd - Pointer to right claw sphere (subid $07)
-;   $cfde - Pointer to left shoulder sphere (subid $08)
-;   $cfdf - Pointer to right shoulder sphere (subid $09)
+;   wTmpcfc0+8 - near end
+;   wTmpcfc0+9
+;   wTmpcfc0+$0a
+;   wTmpcfc0+$0b
+;   wTmpcfc0+$0c
+;   wTmpcfc0+$0d
+;   wTmpcfc0+$17 - Pointer to main body (subid $01)
+;   wTmpcfc0+$18 - Pointer to left shoulder (subid $02)
+;   wTmpcfc0+$19 - Pointer to right shoulder (subid $03)
+;   wTmpcfc0+$1a - Pointer to left claw (subid $04)
+;   wTmpcfc0+$1b - Pointer to right claw (subid $05)
+;   wTmpcfc0+$1c - Pointer to left claw sphere (subid $06)
+;   wTmpcfc0+$1d - Pointer to right claw sphere (subid $07)
+;   wTmpcfc0+$1e - Pointer to left shoulder sphere (subid $08)
+;   wTmpcfc0+$1f - Pointer to right shoulder sphere (subid $09)
 ; ==================================================================================================
 enemyCode05:
 	jr z,@normalStatus
@@ -70,7 +70,7 @@ enemyCode05:
 	; var31 - $06
 	; var32 - $04
 	; var37 - $01
-	; $cfc9 - $86
+	; wTmpcfc0+9 - $86
 	ld l,Enemy.var37
 	ld (hl),$01
 	ld l,Enemy.var31
@@ -117,14 +117,14 @@ dragonOnox_bodyPartSpawner:
 	ld a,(de)
 	ld (hl),a
 	ld a,h
-	; store in $cfd7 a pointer to Dragon Onox with subid $01
-	ld hl,$cfd7
+	; store in wTmpcfc0+$17 a pointer to Dragon Onox with subid $01
+	ld hl,wTmpcfc0+$17
 	ldi (hl),a
 	ld c,$08
 -
 	push hl
 	call ecom_spawnUncountedEnemyWithSubid01
-	; spawn from subids $02 to $09, storing in $cfd8 to $cfdf
+	; spawn from subids $02 to $09, storing in wTmpcfc0+$18 to wTmpcfc0+$1f
 	ld a,$0a
 	sub c
 	ld (hl),a
@@ -216,13 +216,13 @@ dragonOnox_checkTransitionState:
 ++
 	; non-state 8
 	;	var30 - bit 0 of previous var30
-	;	$cfc9 - $80|bit 0 of previous var30
+	;	wTmpcfc0+9 - $80|bit 0 of previous var30
 	; state 8, substate of $02/$03, bit 4 of angle set (ANGLE_DOWN/ANGLE_LEFT)
 	;	var30 - $08
-	;	$cfc9 - $88
+	;	wTmpcfc0+9 - $88
 	; state 8, substate of $02/$03, bit 4 of angle not set (ANGLE_UP/ANGLE_RIGHT)
 	;	var30 - $09
-	;	$cfc9 - $89
+	;	wTmpcfc0+9 - $89
 	jp dragonOnoxLoadaIntoVar30Andcfc9
 
 dragonOnox_mainBody_state0:
@@ -356,7 +356,7 @@ dragonOnox_mainBody_state2:
 	call ecom_decCounter1
 	jr nz,+
 	ld (hl),$1e
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	sub $10
 	cp $40
 	jr c,+
@@ -372,9 +372,9 @@ dragonOnox_mainBody_state2:
 	; var36
 	inc l
 	ld c,(hl)
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	ld h,a
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	ld l,a
 	sub c
 	add $06
@@ -404,7 +404,7 @@ dragonOnox_mainBody_state2:
 	ld a,(w1Link.xh)
 	cp (hl)
 	; dragon Onox subid 4
-	ld hl,$cfda
+	ld hl,wTmpcfc0+$1a
 	jr c,+
 	; subid 5
 	inc l
@@ -657,7 +657,7 @@ dragonOnox_mainBody_state8:
 	ld l,Enemy.var36
 	bit 7,(hl)
 	; dragon Onox subid 4
-	ld hl,$cfda
+	ld hl,wTmpcfc0+$1a
 	jr z,+
 	inc l
 +
@@ -671,7 +671,7 @@ dragonOnox_mainBody_state8:
 @substate3:
 	ld h,d
 	ld l,Enemy.var36
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	sub (hl)
 	add $02
 	cp $05
@@ -692,7 +692,7 @@ dragonOnox_mainBody_state8:
 	call objectNudgeAngleTowards
 +
 	call seasonsFunc_0f_650d
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	cp $d0
 	ret nz
 	ld h,d
@@ -705,7 +705,7 @@ dragonOnox_mainBody_state8:
 @substate5:
 	call ecom_decCounter1
 	ld bc,$b000
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	or a
 	jr nz,+
 	ld l,e
@@ -713,7 +713,7 @@ dragonOnox_mainBody_state8:
 	ret
 +
 	ld l,a
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	ld h,a
 	ld e,Enemy.counter1
 	ld a,(de)
@@ -725,7 +725,7 @@ dragonOnox_mainBody_state8:
 	jp seasonsFunc_0f_650d
 
 @substate6:
-	ld hl,$cfcc
+	ld hl,wTmpcfc0+$0c
 	inc (hl)
 	ret nz
 	ld h,d
@@ -889,23 +889,23 @@ dragonOnox_mainBody_stateE:
 	ld l,Enemy.collisionType
 	res 7,(hl)
 	; dragon Onox subid 4 - left claw
-	ld a,($cfda)
+	ld a,(wTmpcfc0+$1a)
 	ld h,a
 	res 7,(hl)
 	; dragon Onox subid 5 - right claw
-	ld a,($cfdb)
+	ld a,(wTmpcfc0+$1b)
 	ld h,a
 	res 7,(hl)
 
 	ld a,$04
-	ld ($cfc8),a
+	ld (wTmpcfc0+8),a
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	cpl
 	inc a
 	ld (wScreenOffsetX),a
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	cpl
 	inc a
 	ld (wScreenOffsetY),a
@@ -932,9 +932,9 @@ dragonOnox_mainBody_stateE:
 	and $03
 	ld hl,@seasonsTable_0f_61b9
 	rst_addAToHl
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	add (hl)
-	ld ($cfcd),a
+	ld (wTmpcfc0+$0d),a
 	jp seasonsFunc_0f_650d
 
 @seasonsTable_0f_61b9:
@@ -955,7 +955,7 @@ dragonOnox_leftShoulder:
 	call objectSetVisible83
 
 @offsetBasedOncfca:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	cp $08
 	ld bc,$603a
 	jr c,+
@@ -967,12 +967,12 @@ dragonOnox_leftShoulder:
 	; $08		bc = $5238
 	; $09+		bc = $6640
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	add b
 	ld (de),a
 
 	ld e,Enemy.xh
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	add c
 	ld (de),a
 	ret
@@ -992,7 +992,7 @@ dragonOnox_rightShoulder:
 	call objectSetVisible83
 
 @offsetBasedOncfca:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	cp $08
 	ld bc,$6066
 	jr c,+
@@ -1004,12 +1004,12 @@ dragonOnox_rightShoulder:
 	; $08		bc = $6660
 	; $09+		bc = $5268
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	add b
 	ld (de),a
 
 	ld e,Enemy.xh
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	add c
 	ld (de),a
 	ret
@@ -1043,7 +1043,7 @@ dragonOnox_leftClaw:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 1
-	ld a,($cfd7)
+	ld a,(wTmpcfc0+$17)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$03
@@ -1058,7 +1058,7 @@ dragonOnox_leftClaw:
 	ld a,$00
 	call objectGetRelatedObject1Var
 	ld bc,$30d8
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	cp $06
 	jr c,+
 	sub $09
@@ -1103,7 +1103,7 @@ dragonOnox_leftClaw:
 	ret
 
 @state2:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	sub $06
 	cp $02
 	jr c,+
@@ -1314,7 +1314,7 @@ dragonOnox_leftClaw:
 	call enemySetAnimation
 
 @@substate1:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	or a
 	call z,@@seasonsFunc_0f_63e1
 	ld a,$00
@@ -1373,7 +1373,7 @@ dragonOnox_rightClaw:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 1
-	ld a,($cfd7)
+	ld a,(wTmpcfc0+$17)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$04
@@ -1389,7 +1389,7 @@ dragonOnox_rightClaw:
 	ld a,Enemy.enabled-Enemy
 	call objectGetRelatedObject1Var
 	ld bc,$3028
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	cp $06
 	jr c,+
 	sub $08
@@ -1420,13 +1420,13 @@ dragonOnox_leftClawSphere:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 4
-	ld a,($cfda)
+	ld a,(wTmpcfc0+$1a)
 	ldd (hl),a
 	ld (hl),$80
 
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 2
-	ld a,($cfd8)
+	ld a,(wTmpcfc0+$18)
 	ldd (hl),a
 	ld (hl),$80
 
@@ -1467,12 +1467,12 @@ dragonOnox_rightClawSphere:
 	inc (hl)
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 5
-	ld a,($cfdb)
+	ld a,(wTmpcfc0+$1b)
 	ldd (hl),a
 	ld (hl),$80
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 3
-	ld a,($cfd9)
+	ld a,(wTmpcfc0+$19)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$0e
@@ -1493,13 +1493,13 @@ dragonOnox_leftShoulderSphere:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 4
-	ld a,($cfda)
+	ld a,(wTmpcfc0+$1a)
 	ldd (hl),a
 	ld (hl),$80
 
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 2
-	ld a,($cfd8)
+	ld a,(wTmpcfc0+$18)
 	ldd (hl),a
 	ld (hl),$80
 
@@ -1542,12 +1542,12 @@ dragonOnox_rightShoulderSphere:
 	inc (hl)
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 5
-	ld a,($cfdb)
+	ld a,(wTmpcfc0+$1b)
 	ldd (hl),a
 	ld (hl),$80
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 3
-	ld a,($cfd9)
+	ld a,(wTmpcfc0+$19)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$0c
@@ -1557,18 +1557,18 @@ dragonOnox_rightShoulderSphere:
 
 seasonsFunc_0f_650d:
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	ld (de),a
 	ld e,Enemy.xh
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	ld (de),a
 	call objectApplySpeed
 	ld e,Enemy.yh
 	ld a,(de)
-	ld ($cfcc),a
+	ld (wTmpcfc0+$0c),a
 	ld e,Enemy.xh
 	ld a,(de)
-	ld ($cfcd),a
+	ld (wTmpcfc0+$0d),a
 	ret
 
 seasonsFunc_0f_6529:
@@ -1690,7 +1690,7 @@ seasonsFunc_0f_65bb:
 	ret
 
 seasonsFunc_0f_65c7:
-	ld a,($cfca)
+	ld a,(wTmpcfc0+$0a)
 	and $0e
 	ld b,a
 	rrca
@@ -1698,12 +1698,12 @@ seasonsFunc_0f_65c7:
 	ld hl,seasonsTable_0f_65ed
 	rst_addAToHl
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	add (hl)
 	ld (de),a
 	ld e,Enemy.xh
 	inc hl
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	add (hl)
 	ld (de),a
 	inc hl
@@ -1743,7 +1743,7 @@ seasonsFunc_0f_65fc:
 	ld (de),a
 +
 	or $80
-	ld ($cfc9),a
+	ld (wTmpcfc0+9),a
 ++
 	; Enemy.var32
 	inc l
@@ -1756,14 +1756,14 @@ seasonsFunc_0f_65fc:
 	ld b,$04
 +
 	ld (hl),b
-	ld a,($cfcb)
+	ld a,(wTmpcfc0+$0b)
 	inc a
 	cp $06
 	jr c,+
 	xor a
 +
 	or $80
-	ld ($cfcb),a
+	ld (wTmpcfc0+$0b),a
 	ret
 
 seasonsFunc_0f_6637:
@@ -1857,9 +1857,9 @@ seasonsTable_0f_669a:
 	.db $08 $10
 
 seasonsFunc_0f_66aa:
-	ld a,($cfcc)
+	ld a,(wTmpcfc0+$0c)
 	ld h,a
-	ld a,($cfcd)
+	ld a,(wTmpcfc0+$0d)
 	ld l,a
 	cp c
 	jr nz,+
@@ -1878,7 +1878,7 @@ dragonOnoxLoadaIntoVar30Andcfc9:
 	ld e,Enemy.var30
 	ld (de),a
 	or $80
-	ld ($cfc9),a
+	ld (wTmpcfc0+9),a
 	ret
 
 dragonOnoxLowHealthThresholdIntoC:

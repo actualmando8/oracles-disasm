@@ -130,7 +130,7 @@ partCode38:
 	jp objectApplySpeed
 	
 func_6b5f:
-	ld e,$cd
+	ld e,wTmpcfc0.genericCutscene.cfd3
 	ld a,(de)
 	add b
 	ld (de),a
@@ -146,7 +146,7 @@ func_6b65:
 	
 func_6b71:
 	ld a,$ff
-	ld ($cfd5),a
+	ld (wTmpcfc0.genericCutscene.cfd5),a
 	xor a
 func_6b77:
 	ldh (<hFF8B),a
@@ -155,20 +155,20 @@ func_6b77:
 	ld a,(hl)
 	cp c
 	jr nz,func_6b9f
-	ld a,($ccd6)
+	ld a,(wShootingGalleryBallStatus)
 	and $7f
 	cp $01
 	ldh a,(<hFF8B)
-	ld ($cfd5),a
+	ld (wTmpcfc0.genericCutscene.cfd5),a
 	jr z,+
 	add $04
 +
 	ld hl,bitTable
 	add l
 	ld l,a
-	ld a,($ccd4)
+	ld a,(wccd4)
 	or (hl)
-	ld ($ccd4),a
+	ld (wccd4),a
 	jr func_6baf
 
 func_6b9f:
@@ -176,7 +176,7 @@ func_6b9f:
 	inc a
 	cp $04
 	jr nz,func_6b77
-	ld hl,$ccd6
+	ld hl,wShootingGalleryBallStatus
 	dec (hl)
 	ret
 	
@@ -194,7 +194,7 @@ func_6baf:
 	ld h,d
 	ld l,$c6
 	ld (hl),$03
-	ld a,($ccd6)
+	ld a,(wShootingGalleryBallStatus)
 	and $7f
 	cp $01
 	ret nz
@@ -202,14 +202,14 @@ func_6baf:
 	jp playSound
 
 func_6bca:
-	ld a,($cfd5)
+	ld a,(wTmpcfc0.genericCutscene.cfd5)
 	cp $ff
 	ret z
 	ld a,$04
 --
 	ldh (<hFF8B),a
 	ldbc, INTERAC_FALLING_ROCK $04
-	ld a,($cfd5)
+	ld a,(wTmpcfc0.genericCutscene.cfd5)
 	cp $02
 	jr c,+
 	ldbc, INTERAC_FALLING_ROCK $05
@@ -231,7 +231,7 @@ func_6bf6:
 	ld a,SND_STRIKE
 	call playSound
 	ld a,$01
-	ld ($cfd6),a
+	ld (wTmpcfc0.genericCutscene.cfd5+1),a
 	jr func_6c27
 
 func_6c02:
@@ -244,20 +244,20 @@ func_6c08:
 
 func_6c0e:
 	xor a
-	ld ($cfd6),a
-	ld hl,$ccd6
+	ld (wTmpcfc0.genericCutscene.cfd5+1),a
+	ld hl,wShootingGalleryBallStatus
 	inc (hl)
 	ret
 	
 func_6c17:
 	xor a
-	ld ($cfd6),a
-	ld a,($ccd6)
+	ld (wTmpcfc0.genericCutscene.cfd5+1),a
+	ld a,(wShootingGalleryBallStatus)
 	and $7f
 	jr nz,func_6c27
 	ld a,SND_ERROR
 	call playSound
 func_6c27:
-	ld hl,$ccd6
+	ld hl,wShootingGalleryBallStatus
 	set 7,(hl)
 	jp partDelete

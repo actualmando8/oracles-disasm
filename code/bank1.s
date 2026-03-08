@@ -2028,8 +2028,8 @@ setObjectsEnabledTo2:
 	call setEnemiesEnabledTo2
 	call setPartsEnabledTo2
 	call setItemsEnabledTo2
-	ld hl,$d000
-	ld c,$d2
+	ldhl LINK_OBJECT_INDEX, Item.start
+	ld c,COMPANION_OBJECT_INDEX+1
 	jr setObjectsEnabledTo2_hlpr
 
 ;;
@@ -2039,17 +2039,17 @@ setItemsEnabledTo2:
 	jr setObjectsEnabledTo2_hlpr
 ;;
 setInteractionsEnabledTo2:
-	ld hl,$d040
+	ldhl FIRST_INTERACTION_INDEX, Interaction.start
 	ld c,$e0
 	jr setObjectsEnabledTo2_hlpr
 ;;
 setEnemiesEnabledTo2:
-	ld hl,$d080
+	ldhl FIRST_ENEMY_INDEX, Enemy.start
 	ld c,$e0
 	jr setObjectsEnabledTo2_hlpr
 ;;
 setPartsEnabledTo2:
-	ld hl,$d0c0
+	ldhl FIRST_PART_INDEX, Part.start
 	ld c,$e0
 
 setObjectsEnabledTo2_hlpr:
@@ -2075,8 +2075,8 @@ clearObjectsWithEnabled2:
 	call clearEnemiesWithEnabled2
 	call clearPartsWithEnabled2
 	call clearItemsWithEnabled2
-	ld hl,$d000
-	ld c,$d2
+	ldhl LINK_OBJECT_INDEX, Item.start
+	ld c,COMPANION_OBJECT_INDEX+1
 	jr clearObjectsWithEnabled2_hlpr
 
 ;;
@@ -2087,19 +2087,19 @@ clearItemsWithEnabled2:
 
 ;;
 clearInteractionsWithEnabled2:
-	ld hl,$d040
+	ldhl FIRST_INTERACTION_INDEX, Interaction.start
 	ld c,$e0
 	jr clearObjectsWithEnabled2_hlpr
 
 ;;
 clearEnemiesWithEnabled2:
-	ld hl,$d080
+	ldhl FIRST_ENEMY_INDEX, Enemy.start
 	ld c,$e0
 	jr clearObjectsWithEnabled2_hlpr
 
 ;;
 clearPartsWithEnabled2:
-	ld hl,$d0c0
+	ldhl FIRST_PART_INDEX, Part.start
 	ld c,$e0
 
 clearObjectsWithEnabled2_hlpr:
@@ -2495,8 +2495,8 @@ cutscene15:
 	ld ($ff00+R_SVBK),a
 
 	; Clear all objects except Link
-	ld hl,$d040
-	ld bc,$e000-$d040
+	ld hl,w1ReservedInteraction0
+	ld bc,$e000-w1ReservedInteraction0
 	call clearMemoryBc
 
 	call clearScreenVariables
@@ -3361,7 +3361,7 @@ runGameLogic:
 ; Clears a lot of memory, loads common palette header $0f,
 initializeGame:
 	ld hl,wOamEnd
-	ld bc,$d000-wOamEnd
+	ld bc,w1Link-wOamEnd
 	call clearMemoryBc
 	call clearScreenVariablesAndWramBank1
 	call initializeSeedTreeRefillData
@@ -5453,7 +5453,7 @@ func_7b93:
 	ld hl,wGenericCutscene.cbb3
 	inc (hl)
 	ld a,$03
-	ld ($d000),a
+	ld (w1Link.enabled),a
 	ld a,LINK_STATE_WARPING
 	ld (wLinkForceState),a
 	ld a,$0b

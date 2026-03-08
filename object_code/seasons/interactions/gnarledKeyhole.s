@@ -27,9 +27,9 @@ interactionCode21:
 	ld l,$46
 	ld (hl),$1e
 	call setLinkForceStateToState08
-	ld a,($cca4)
+	ld a,(wDisabledObjects)
 	or $80
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call func_545d
 @state3:
 	call func_54ae
@@ -72,11 +72,11 @@ interactionCode21:
 	call func_5471
 	xor a
 	ld (wDisableWarpTiles),a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	ld a,$4d
 	call playSound
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
 	jp interactionDelete

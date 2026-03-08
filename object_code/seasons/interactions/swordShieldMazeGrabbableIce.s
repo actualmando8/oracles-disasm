@@ -19,10 +19,10 @@ interactionCode68:
 @state1:
 	ld c,$20
 	call objectUpdateSpeedZ_paramC
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	jr nz,+
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	rrca
 	call nc,objectPushLinkAwayOnCollision
 +
@@ -91,17 +91,17 @@ interactionCode68:
 	ld a,($d004)
 	cp $01
 	jr nz,delete
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	jr nz,delete
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	cp $d0
 	jr nz,delete
 	call resetLinkInvincibility
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld (wDisableWarpTiles),a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	call getThisRoomFlags
 	set 6,(hl)
 	call func_58e4
@@ -147,7 +147,7 @@ func_5907:
 func_590b:
 	ld a,l
 func_590c:
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld a,(wActiveRoom)
 	cp $7f
 	jr nz,+
