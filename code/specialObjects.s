@@ -8,7 +8,6 @@ updateSpecialObjects:
 	and $7f
 	ld (w1Link.id),a
 +
-.ifdef ROM_AGES
 	ld hl,w1Link.var2f
 	ld a,(hl)
 	and $3f
@@ -19,6 +18,7 @@ updateSpecialObjects:
 	jr nc,+
 	set 6,(hl)
 +
+.ifdef ROM_AGES
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	jr z,+

@@ -2,11 +2,7 @@
 ; ENEMY_ARROW_DARKNUT
 ; ==================================================================================================
 enemyCode21:
-.ifdef ROM_AGES
-	call ecom_checkHazards
-.else
 	call ecom_seasonsFunc_4446
-.endif
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

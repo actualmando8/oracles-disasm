@@ -596,3 +596,5 @@
 	m_GfxData oth_twinrova_normal_layout ; $0e3b9a
 	m_GfxData gfx_tileset_blaino_gym_outside ; $0e3baf
 	m_GfxData spr_caravan ; $0e3ca0
+
+	m_GfxData gfx_harp_inventory

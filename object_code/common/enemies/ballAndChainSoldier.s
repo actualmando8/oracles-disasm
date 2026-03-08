@@ -18,11 +18,7 @@ enemyCode4b:
 	jp enemyDie
 
 @normalStatus:
-.ifdef ROM_AGES
-	call ecom_checkHazards
-.else
 	call ecom_seasonsFunc_4446
-.endif
 	ld e,Enemy.state
 	ld a,(de)
 	rst_jumpTable

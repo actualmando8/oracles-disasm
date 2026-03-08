@@ -758,11 +758,10 @@ wPirateBellState: ; -/$c6bd
 	db
 .endif
 
-wSatchelSelectedSeeds: ; $c6c4/$c6be
-	db
-wShooterSelectedSeeds: ; $c6c5/$c6bf
-; Can also be slingshot selected seeds for seasons
-	db
+wUnusedc6c4:
+; Used to have satchel/shooter selected seeds here
+	dsb 2
+
 wRingBoxContents: ; $c6c6/$c6c0
 	dsb 5
 wActiveRing: ; $c6cb/$c6c5
@@ -879,8 +878,12 @@ wPirateShipX: ; $c6ee
 wPirateShipAngle: ; $c6ef
 	db
 
+wMagnetGlovePolarity: ; $c6f0
+; 0=S, 1=N
+	db
+
 wc6f0: ; $c6f0
-	dsb $b
+	dsb $1
 
 .endif ; ROM_AGES
 
@@ -902,6 +905,35 @@ wSecretType: ; $c6fe
 ; 1: same? (unused?)
 ; 2: ring secret
 ; 3: 5-letter secret
+	db
+
+.ifdef ROM_SEASONS
+
+wSwitchHookLevel: ; -/$c6ea
+	db
+wBraceletLevel: ; -/$c6eb
+	db
+wSelectedHarpSong:
+	db
+
+.else
+
+wSlingshotLevel:
+	db
+wBoomerangLevel:
+	db
+wFeatherLevel:
+	db
+wObtainedSeasons:
+	db
+
+.endif
+
+wSatchelSelectedSeeds:
+	db
+wShooterSelectedSeeds:
+	db
+wSlingshotSelectedSeeds:
 	db
 
 .ENDS
@@ -2423,7 +2455,14 @@ wFollowingLinkObjectType: ; $cce7/$ccfd
 wFollowingLinkObject: ; $cce8/$ccfe
 	db
 
-wcce9: ; $cce9/$ccff
+.ifdef ROM_SEASONS
+wSwitchHookState: ; -/$ccff
+; Used when swapping with the switch hook.
+	db
+.endif
+
+
+wcce9: ; $cce9/$cd00
 ; This might be a marker for the end of data in the $cc00 block?
 	.db
 
@@ -2553,7 +2592,11 @@ wObjectTileIndex: ; $cd1f
 ; This is set when calling "objectCheckIsOverHazard". Might be ages-exclusive?
 	db
 
-wTilesetUniqueGfx: ; $cd20
+wTilesetIndex: ; $cd20
+; HACK-BASE: New variable for this branch. This is the index of the loaded tileset.
+; Replaces "wTilesetUniqueGfx".
+; Bit 7 determines whether graphics should be loaded before or after the screen transition (just
+; like "wTilesetUniqueGfx"). Ignore bit 7 to get the true tileset index.
 	db
 wTilesetGfx: ; $cd21
 	db
@@ -2561,7 +2604,10 @@ wTilesetPalette: ; $cd22
 	db
 wTilesetLayout: ; $cd23
 	db
-wTilesetLayoutGroup: ; $cd24
+wLayoutGroupOverride: ; $cd24
+; HACK-BASE: Replaced wTilesetLayoutGroup variable with wLayoutGroupOverride.
+; Instead of tilesets specifying the layout group, this is always set to value $ff unless some code
+; decides to override it. If left at $ff, the layout group is determined based on wActiveGroup.
 	db
 wTilesetAnimation: ; $cd25
 ; Note: intro cutscene hardcoded to use animation $10
@@ -2572,7 +2618,9 @@ wcd26: ; $cd26
 wcd27: ; $cd27
 	db
 
-wLoadedTilesetUniqueGfx: ; $cd28
+wLoadedTilesetIndex: ; $cd28
+; HACK-BASE: Renamed from "wLoadedTilesetUniqueGfx" to "wLoadedTilesetGfx". Similar to before, this
+; is used to check whether graphics actually need to be reloaded or not when a tileset is loaded.
 	db
 wLoadedTilesetPalette: ; $cd29
 	db

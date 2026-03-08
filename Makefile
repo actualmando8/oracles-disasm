@@ -6,7 +6,7 @@
 # The build folder also changes when this variable changes, to ensure the
 # makefile doesn't get confused due to the different assets being loaded. (Also
 # saves tons of time if you switch between branches a lot.)
-BUILD_VANILLA = true
+BUILD_VANILLA = false
 
 # ANSI color codes
 BOLD=\033[1;37m
@@ -69,7 +69,7 @@ seasons:
 ifneq ($(filter 1, $(ROM_AGES) $(ROM_SEASONS)),)
 
 # defines for wla-gb
-DEFINES =
+DEFINES = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
 CFLAGS =
 
 ifeq ($(BUILD_VANILLA), true)
@@ -80,8 +80,8 @@ ifeq ($(BUILD_VANILLA), true)
 	AGES_BUILD_DIR = build_ages_v
 	SEASONS_BUILD_DIR = build_seasons_v
 else
-	AGES_BUILD_DIR = build_ages_e
-	SEASONS_BUILD_DIR = build_seasons_e
+	AGES_BUILD_DIR = build_ages_h
+	SEASONS_BUILD_DIR = build_seasons_h
 endif
 
 ifdef FORCE_SECTIONS
@@ -95,6 +95,9 @@ ifdef ROM_SEASONS
 	TEXT_INSERT_ADDRESS = 0x71c00
 	BUILD_DIR = $(SEASONS_BUILD_DIR)
 	GAME_COLOR = $(RED)
+
+    # HACK-BASE: Enable AGES_ENGINE define in seasons
+	DEFINES += -D AGES_ENGINE
 else # ROM_AGES
 	GAME_DEFINE = ROM_AGES
 	GAME = ages
@@ -103,6 +106,14 @@ else # ROM_AGES
 	BUILD_DIR = $(AGES_BUILD_DIR)
 	GAME_COLOR = $(BLUE)
 endif
+
+# Can use ORACLE_FORCE_REBUILD environment variable to force the assembler to rerun
+ifeq ($(ORACLE_FORCE_REBUILD), 1)
+    $(shell rm $(BUILD_DIR)/*.o)
+endif
+
+# HACK-BASE: Enable bugfixes.
+DEFINES += -D ENABLE_BUGFIXES
 
 DEFINES += -D $(GAME_DEFINE) -D BUILD_DIR="$(BUILD_DIR)/"
 CFLAGS += $(DEFINES)
@@ -157,17 +168,6 @@ ROOMLAYOUTFILES := $(ROOMLAYOUTFILES:.bin=.cmp)
 ROOMLAYOUTFILES := $(foreach file, $(ROOMLAYOUTFILES), \
                     $(BUILD_DIR)/rooms/$(notdir $(file)))
 
-COLLISIONFILES = $(wildcard tileset_layouts/$(GAME)/tilesetCollisions*.bin)
-COLLISIONFILES := $(COLLISIONFILES:.bin=.cmp)
-COLLISIONFILES := $(foreach file, $(COLLISIONFILES), \
-                    $(BUILD_DIR)/tileset_layouts/$(notdir $(file)))
-
-MAPPINGINDICESFILES = $(wildcard tileset_layouts/$(GAME)/tilesetMappings*.bin)
-MAPPINGINDICESFILES := $(foreach file, $(MAPPINGINDICESFILES), \
-                         $(BUILD_DIR)/tileset_layouts/$(notdir $(file)))
-
-MAPPINGINDICESFILES := $(MAPPINGINDICESFILES:.bin=Indices.cmp)
-
 # Common data files (for both games)
 COMMONDATAFILES = $(shell find data/ -name '*.s' | grep -v '/ages/\|/seasons/')
 
@@ -196,18 +196,15 @@ endif
 $(BUILD_DIR)/linkfile: linkfile_$(GAME)
 	sed 's/BUILD_DIR/${BUILD_DIR}/' $< > $@
 
-$(MAPPINGINDICESFILES): $(BUILD_DIR)/tileset_layouts/mappingsDictionary.bin
-$(COLLISIONFILES): $(BUILD_DIR)/tileset_layouts/collisionsDictionary.bin
-
 $(BUILD_DIR)/$(GAME).o: $(MAIN_ASM_FILES) $(COMMONDATAFILES) $(GAMEDATAFILES)
-$(BUILD_DIR)/$(GAME).o: $(GFXFILES) $(ROOMLAYOUTFILES) $(COLLISIONFILES) $(MAPPINGINDICESFILES)
-$(BUILD_DIR)/$(GAME).o: $(BUILD_DIR)/tileset_layouts/tileMappingTable.bin
-$(BUILD_DIR)/$(GAME).o: $(BUILD_DIR)/tileset_layouts/tileMappingIndexData.bin
-$(BUILD_DIR)/$(GAME).o: $(BUILD_DIR)/tileset_layouts/tileMappingAttributeData.bin
+$(BUILD_DIR)/$(GAME).o: $(GFXFILES) $(ROOMLAYOUTFILES)
 $(BUILD_DIR)/$(GAME).o: rooms/$(GAME)/*.bin
 
 $(BUILD_DIR)/audio.o: $(AUDIO_FILES)
 $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
+
+# HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
+$(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/$(GAME)/*.bin
 
 $(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/textData.s $(BUILD_DIR)/textDefines.s Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
@@ -218,10 +215,6 @@ $(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)
 $(BUILD_DIR)/rooms/%.cmp: rooms/$(GAME)/small/%.bin | $(BUILD_DIR)/rooms
 	@echo "Compressing $< to $@..."
 	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ $(OPTIMIZE)
-
-$(BUILD_DIR)/tileset_layouts/collisionsDictionary.bin: precompressed/tileset_layouts/$(GAME)/collisionsDictionary.bin | $(BUILD_DIR)/tileset_layouts
-	@echo "Copying $< to $@..."
-	@cp $< $@
 
 
 
@@ -311,44 +304,21 @@ $(BUILD_DIR)/textDefines.s: precompressed/text/$(GAME)/textDefines.s | $(BUILD_D
 
 else
 
-# The parseTilesetLayouts script generates all of these files.
-# They need dummy rules in their recipes to convince make that they've been changed?
-$(MAPPINGINDICESFILES:.cmp=.bin): $(BUILD_DIR)/tileset_layouts/mappingsUpdated
-	@sleep 0
-$(BUILD_DIR)/tileset_layouts/mappingsDictionary.bin: $(BUILD_DIR)/tileset_layouts/mappingsUpdated
-	@sleep 0
-$(BUILD_DIR)/tileset_layouts/tileMappingTable.bin: $(BUILD_DIR)/tileset_layouts/mappingsUpdated
-	@sleep 0
-$(BUILD_DIR)/tileset_layouts/tileMappingIndexData.bin: $(BUILD_DIR)/tileset_layouts/mappingsUpdated
-	@sleep 0
-$(BUILD_DIR)/tileset_layouts/tileMappingAttributeData.bin: $(BUILD_DIR)/tileset_layouts/mappingsUpdated
-	@sleep 0
-
-# mappingsUpdated is a stub file which is just used as a timestamp from the
-# last time parseTilesetLayouts was run.
-$(BUILD_DIR)/tileset_layouts/mappingsUpdated: $(wildcard tileset_layouts/$(GAME)/tilesetMappings*.bin) | $(BUILD_DIR)/tileset_layouts
-	@echo "Compressing tileset mappings..."
-	@$(PYTHON) tools/build/parseTilesetLayouts.py $(GAME) $(BUILD_DIR)
-	@echo "Done compressing tileset mappings."
-	@touch $@
-
-$(BUILD_DIR)/tileset_layouts/tilesetMappings%Indices.cmp: $(BUILD_DIR)/tileset_layouts/tilesetMappings%Indices.bin $(BUILD_DIR)/tileset_layouts/mappingsDictionary.bin | $(BUILD_DIR)/tileset_layouts
-	@echo "Compressing $< to $@..."
-	@$(PYTHON) tools/build/compressTilesetLayoutData.py $< $@ 1 $(BUILD_DIR)/tileset_layouts/mappingsDictionary.bin
-
-$(BUILD_DIR)/tileset_layouts/tilesetCollisions%.cmp: tileset_layouts/$(GAME)/tilesetCollisions%.bin $(BUILD_DIR)/tileset_layouts/collisionsDictionary.bin | $(BUILD_DIR)/tileset_layouts
-	@echo "Compressing $< to $@..."
-	@$(PYTHON) tools/build/compressTilesetLayoutData.py $< $@ 0 $(BUILD_DIR)/tileset_layouts/collisionsDictionary.bin
-
+# HACK-BASE: Not compressing large rooms at all anymore. Using the pre-built dictionary could cause
+# problems down the line, and regenerating it on each build would be kind of costly, so we're just
+# not going to bother.
 $(BUILD_DIR)/rooms/room04%.cmp: rooms/$(GAME)/large/room04%.bin | $(BUILD_DIR)/rooms
-	@echo "Compressing $< to $@..."
-	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ -d rooms/$(GAME)/dictionary4.bin
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
 $(BUILD_DIR)/rooms/room05%.cmp: rooms/$(GAME)/large/room05%.bin | $(BUILD_DIR)/rooms
-	@echo "Compressing $< to $@..."
-	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ -d rooms/$(GAME)/dictionary5.bin
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
 $(BUILD_DIR)/rooms/room06%.cmp: rooms/$(GAME)/large/room06%.bin | $(BUILD_DIR)/rooms
-	@echo "Compressing $< to $@..."
-	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ -d rooms/$(GAME)/dictionary6.bin
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
 
 # Parse & compress text
 $(BUILD_DIR)/textData.s: text/$(GAME)/text.yaml text/$(GAME)/dict.yaml tools/build/parseText.py | $(BUILD_DIR)

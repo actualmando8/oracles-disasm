@@ -10,12 +10,12 @@
 ;
 updateSwingableItemAnimation:
 	ld l,Item.animParameter
-.ifdef ROM_AGES
+
 	cp ITEM_CANE_OF_SOMARIA
-.else
-	cp ITEM_ROD_OF_SEASONS
-.endif
 	jr z,label_07_227
+	cp ITEM_ROD_OF_SEASONS
+	jr z,label_07_227
+
 	bit 6,(hl)
 	jr z,label_07_227
 

@@ -265,12 +265,12 @@ interaction60SubidData:
 	m_InteractionSubidData $60 $14 $10
 	m_InteractionSubidData $60 $16 $40
 	m_InteractionSubidData $60 $18 $50
-	m_InteractionSubidData $60 $1a $40
+	m_InteractionSubidData $67 $04 $40 ; CROSSITEMS: Changed magic boomerang to use spr_boomerang.png
 	m_InteractionSubidData $60 $10 $20
 	m_InteractionSubidData $60 $1e $40
 	m_InteractionSubidData $5f $00 $50
 	m_InteractionSubidData $5f $02 $40
-	m_InteractionSubidData $5f $04 $50
+	m_InteractionSubidData $c7 $00 $50 ; CROSSITEMS: Changed hyper slingshot similarly
 	m_InteractionSubidData $5f $16 $03
 	m_InteractionSubidData $61 $00 $50
 	m_InteractionSubidData $61 $02 $33
@@ -364,6 +364,18 @@ interactiondeSubidData:
 	m_InteractionSubidData $64 $08 $33
 	m_InteractionSubidData $64 $0c $13
 	m_InteractionSubidData $64 $10 $03
+
+	; CROSSITEMS: Extra values for ages items, for interaction $60 (INTERAC_TREASURE).
+	m_InteractionSubidData $5d $16 $43 ; $7c (Mermaid Suit)
+	m_InteractionSubidData $61 $1e $50 ; $7d (Power Glove)
+	m_InteractionSubidData $60 $1a $20 ; $7e (Cane of Somaria)
+	m_InteractionSubidData $60 $1e $40 ; $7f (Switch Hook)
+	m_InteractionSubidData $5f $14 $50 ; $80 (Seed Shooter)
+	m_InteractionSubidData $5d $1a $23 ; $81 (Harp of Ages)
+	m_InteractionSubidData $61 $06 $03 ; $82 (Tune of Echoes)
+	m_InteractionSubidData $61 $0e $33 ; $83 (Tune of Currents)
+	m_InteractionSubidData $61 $16 $13 ; $84 (Tune of Ages)
+
 	m_InteractionSubidDataEnd
 
 interaction7dSubidData:

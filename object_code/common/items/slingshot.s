@@ -3,15 +3,16 @@
 ;;
 ; ITEM_SLINGSHOT
 itemCode13:
-
-.ifdef ROM_AGES
-	ret
-.else
 	ld e,Item.state
 	ld a,(de)
 	or a
 	ret nz
+
+.ifdef ROM_AGES
+	ld a,UNCMP_GFXH_AGES_SLINGSHOT
+.else
 	ld a,UNCMP_GFXH_SEASONS_1d
+.endif
 	call loadWeaponGfx
 	call loadAttributesAndGraphicsAndIncState
 	ld h,d
@@ -24,5 +25,3 @@ itemCode13:
 
 foolsOreRet:
 	ret
-
-.endif

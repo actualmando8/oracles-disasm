@@ -3011,6 +3011,8 @@ b2_updateMenus:
 	or b
 	ret nz
 
+; HACK-BASE: This define allows opening the inventory without finishing the intro
+.ifndef HACK_DISABLE_INTRO_LOCKS
 	ld a,(wKeysJustPressed)
 	and BTN_START | BTN_SELECT
 	jr z,+
@@ -3021,6 +3023,8 @@ b2_updateMenus:
 	ld a, SND_ERROR
 	jp z,playSound
 +
+.endif
+
 	ld a,(wMenuDisabled)
 	ld b,a
 	ld a,(wDisableLinkCollisionsAndMenu)
@@ -3252,6 +3256,19 @@ loadCommonGraphics_body:
 	call loadGfxHeader
 
 .ifdef ROM_AGES
+	; CROSSITEMS: Like Seasons, load the key graphic to replace the rupee graphic when in
+	; dungeons. (Necessary to save space in gfx_hud.png.)
+	ld a,(wTilesetFlags)
+	bit TILESETFLAG_BIT_LARGE_INDOORS,a
+	jr nz,+
+	bit TILESETFLAG_BIT_DUNGEON,a
+	jr z,+
+	ld hl,gfx_key
+	ld de,$9040
+	ldbc $00, :gfx_key
+	call queueDmaTransfer
++
+
 	xor a
 	ld (wcbe8),a
 	call updateStatusBar_body
@@ -3298,7 +3315,7 @@ loadCommonGraphics_body:
 	push bc
 	ld hl,gfx_key_orechunk
 	rst_addAToHl
-	ld de,$9090
+	ld de,$9040
 	ldbc $00, :gfx_key_orechunk
 	call queueDmaTransfer
 	pop bc
@@ -3434,7 +3451,7 @@ updateStatusBar_body:
 	call nz,inGameDrawHeartDisplay
 	ld hl,w4StatusBarTileMap+$0a
 	call correctAddressForExtraHeart
-	ld (hl),$09
+	ld (hl),$04
 
 	ld a,(wTilesetFlags)
 
@@ -3445,13 +3462,6 @@ updateStatusBar_body:
 
 	bit TILESETFLAG_BIT_DUNGEON,a
 	jr z,+
-
-.ifdef ROM_AGES
-	; Seasons replaces the rupee gfx with the key gfx if necessary, while Ages has
-	; both the rupee and the key gfx loaded at all times (so it just changes which
-	; tile is shown here).
-	inc (hl)
-.endif
 
 	; "X" symbol next to key icon
 	inc l
@@ -3484,7 +3494,6 @@ updateStatusBar_body:
 	ld c,$30
 +
 
-.ifdef ROM_AGES
 	; If harp is equipped, adjust sprite X-position 8 pixels right
 	ld hl,wInventoryB
 	ld a,ITEM_HARP
@@ -3500,7 +3509,6 @@ updateStatusBar_body:
 	add $08
 	ld c,a
 +
-.endif
 
 	ld hl,wOam
 	ld a,b
@@ -3647,19 +3655,21 @@ loadEquippedItemSpriteData:
 	inc e
 	ld b,a
 
-	; Comparion differs between ages/seasons. See the respective games'
-	; "spr_item_icons_1.bin". This comparison changes the palette used for the seed
-	; satchel, seed shooter, slingshot, and hyper slingshot.
-.ifdef ROM_AGES
-	cp $84
-.else; ROM_SEASONS
+	; This comparison changes the palette used for the seed satchel, seed shooter, slingshot,
+	; and hyper slingshot.
+	cp $8a
+	jr z,+
 	cp $86
-.endif
+	jr c,+
 	ldi a,(hl)
-	jr nc,+
+	jr @gotAttribute
++
+	ldi a,(hl)
 	sub $03
 	or $01
-+
+
+@gotAttribute:
+
 	; Store into [wItemSpriteAttribtue1]
 	set 3,a
 	ld (de),a
@@ -3781,11 +3791,13 @@ drawTreasureExtraTiles:
 	dec a
 	jr z,@val01
 	dec a
-	jr z,@val02
+	jp z,@val02
 	dec a
-	jr z,@val03
+	jp z,@val03
 	dec a
 	jr z,@val04
+	dec a
+	jr z,@val05
 	jr @val00
 
 ; Display item quantity with "x" symbol (ie. slates in ages d8)
@@ -3857,14 +3869,9 @@ drawTreasureExtraTiles:
 	ld (de),a
 	ret
 
-.ifdef ROM_AGES
-
-; Stub
-@val03:
-	ret
 
 ; Display the harp?
-@val02:
+@val05:
 	ld h,d
 	ld l,e
 
@@ -3875,9 +3882,9 @@ drawTreasureExtraTiles:
 
 	; Drawing on A/B buttons
 
-	ld a,$1f
+	ld a,$0f
 	ldd (hl),a
-	ld (hl),$1d
+	ld (hl),$0d
 	set 2,h
 	ld a,$80
 	ldi (hl),a
@@ -3890,15 +3897,21 @@ drawTreasureExtraTiles:
 	ldd (hl),a
 	ld (hl),a
 	res 2,h
-	ld a,$1c
+	ld a,$0c
 	ldi (hl),a
-	ld (hl),$1e
+	ld (hl),$0e
 	ret
 
+.ifdef ROM_AGES
+	.define HARP_TILE_BASE $1c
+.else
+	.define HARP_TILE_BASE $80
+.endif
+
 @@drawOnInventory:
-	ld a,$1f
+	ld a,HARP_TILE_BASE+3
 	ldd (hl),a
-	ld (hl),$1d
+	ld (hl),HARP_TILE_BASE+1
 	set 2,h
 	ld a,$84
 	ldi (hl),a
@@ -3908,15 +3921,21 @@ drawTreasureExtraTiles:
 	ldi (hl),a
 	ldd (hl),a
 	res 2,h
-	ld a,$1c
+	ld a,HARP_TILE_BASE+0
 	ldi (hl),a
-	ld (hl),$1e
+	ld (hl),HARP_TILE_BASE+2
 	ret
 
-.else; ROM_SEASONS
+.undefine HARP_TILE_BASE
+
 
 ; Print magnet glove polarity (overwrites "S" with "N" if necessary)
 @val03:
+	; CROSSITEMS: Return if we're drawing on the status bar rather than the inventory
+	ld a,c
+	cp $07
+	ret nz
+
 	ld h,d
 	ld l,e
 	ld a,(wMagnetGlovePolarity)
@@ -3936,6 +3955,14 @@ drawTreasureExtraTiles:
 
 	; Spring
 	ld b,$1c
+.ifdef ROM_AGES
+	; Inventory only: adjust tile index
+	ld a,c
+	cp $07
+	jr nz,+
+	ld b,$2c
++
+.endif
 	ld a,(wObtainedSeasons)
 	rrca
 	ld e,a
@@ -3963,7 +3990,6 @@ drawTreasureExtraTiles:
 	jr c,@drawTile
 	ret
 
-.endif
 
 ;;
 ; Unused in ages
@@ -4060,6 +4086,10 @@ drawHeartDisplay:
 	ld b,a
 
 ;;
+; CROSSITEMS: Modified this function due to the rearrangement of "gfx_hud.png". To save 2 tiles in
+; that file, the partial heart is dynamically loaded into VRAM, instead of having all 3 possible
+; tiles available at all times.
+;
 ; @param b Number of unfilled hearts (including partially filled one)
 ; @param c Number of filled hearts (not quarters)
 ; @param d Number of quarters in partially-filled heart
@@ -4070,7 +4100,7 @@ drawHeartDisplay:
 	jr z,@partiallyFilledHeart
 
 @filledHearts:
-	ld a,$0f
+	ld a,$0a
 -
 	ldi (hl),a
 	dec c
@@ -4085,8 +4115,33 @@ drawHeartDisplay:
 	or a
 	jr z,@unfilledHearts
 
-	add $0b
-	ldi (hl),a
+	ld (hl),$0b
+	inc hl
+
+	push bc
+	push de
+	push hl
+
+	ld hl,gfx_partial_hearts - $10
+	ld a,d
+	swap a
+	rst_addAToHl
+	ldbc $00, :gfx_partial_hearts
+	ld de,$90b0
+
+	; On file select screen, the heart graphics are loaded in both bank 0 and bank 1, but only
+	; the bank 1 version seems to matter. (Partial hearts are only seen when erasing a file?)
+	ldh a,(<hFF8B)
+	or a
+	jr z,+
+	ld e,$b1 ; vram bank 1
++
+	call queueDmaTransfer
+
+	pop hl
+	pop de
+	pop bc
+
 	ld d,$00
 	dec b
 
@@ -4095,7 +4150,7 @@ drawHeartDisplay:
 	or a
 	jr z,@fillBlankSpace
 
-	ld a,$0b
+	ld a,$09
 -
 	ldi (hl),a
 	dec b
@@ -4133,15 +4188,62 @@ loadItemIconGfx:
 	or a
 	jr z,@clear
 
-.ifdef ROM_AGES
+	ld b,a
+
+	; CROSSITEMS: Replace L-1 boomerang sprite with L-2 sprite if applicable. (This was
+	; necessary due to VRAM limitations.)
+	cp $9c
+	jr nz,+
+	ld a,(wBoomerangLevel)
+	cp $02
+	jr nz,+
+	ld hl,spr_boomerang+$40
+	ld b,:spr_boomerang
+	jp copy20BytesFromBank
++
+	; Also replace L-1 slingshot with L-2 sprite if applicable.
+	ld a,b
+	cp $81
+	jr nz,+
+	ld a,(wSlingshotLevel)
+	cp $02
+	jr nz,+
+	inc b
++
+	; Also replace magnet glove polarity. ("N" symbol was moved from "gfx_hud.png" to
+	; "spr_item_icons_1.png".)
+	ld a,b
+	cp $89
+	jr nz,+
+
+	; Copy "blank" sprite for top half (using lower half of mystery seed sprite)
+	ld hl,spr_item_icons_1 + $07 * $20 + $10
+	ld b,:spr_item_icons_1
+	ld c,$10
+	call copyBytesFromBank
+
+	; Copy polarity sprite ("N" or "S")
+	ld hl,spr_item_icons_1 + $09 * $20
+	ld a,(wMagnetGlovePolarity)
+	and $01
+	xor $01
+	swap a
+	rst_addAToHl
+	ld b,:spr_item_icons_1
+	ld c,$10
+	jp copyBytesFromBank
++
+	ld a,b
+
 	; Special behaviour for harp song icons: add 2 to the index so that the "smaller
 	; version" of the icon is drawn. (spr_item_icons_3.bin has two versions of each
 	; song)
 	cp $a3
 	jr c,+
+	cp $af ; Power Glove sprite was moved to be after the harp
+	jr z,+
 	add $02
 +
-.endif
 
 	add a
 	call multiplyABy16
@@ -4296,6 +4398,23 @@ inventoryMenuState0:
 	call loadCommonGraphics
 	ld a,GFXH_INVENTORY_SCREEN
 	call loadGfxHeader
+
+	; CROSSITEMS: Overwrite L-1 boomerang sprite with L-2 sprite if applicable. (This was
+	; necessary due to VRAM limitations.)
+	ld a,(wBoomerangLevel)
+	cp $02
+	jr nz,+
+	ld a,UNCMP_GFXH_MAGIC_BOOMERANG_INV
+	call loadUncompressedGfxHeader
++
+	; Do the same with the hyper slingshot.
+	ld a,(wSlingshotLevel)
+	cp $02
+	jr nz,+
+	ld a,UNCMP_GFXH_HYPER_SLINGSHOT_INV
+	call loadUncompressedGfxHeader
++
+
 	ld a,UNCMP_GFXH_06
 	call loadUncompressedGfxHeader
 	ld a,PALH_0a
@@ -4416,18 +4535,14 @@ inventoryMenuState1:
 	cp ITEM_SEED_SATCHEL
 	jr z,@hasSubmenu
 
-.ifdef ROM_AGES
+	cp ITEM_SLINGSHOT
+	jr z,@hasSubmenu
 	cp ITEM_SHOOTER
 	jr z,@hasSubmenu
 
 	cp ITEM_HARP
 	jr nz,@finalizeEquip
 	ld c,$e0
-
-.else; ROM_SEASONS
-	cp ITEM_SLINGSHOT
-	jr nz,@finalizeEquip
-.endif
 
 @hasSubmenu:
 	ld a,(wSeedsAndHarpSongsObtained)
@@ -4607,11 +4722,17 @@ inventoryMenuState1:
 ;;
 ; Opening a submenu (seeds, harp songs)
 inventoryMenuState2:
-
-.ifdef ROM_AGES
 	call @subStates
+
+	; CROSSITEMS: We're now drawing the "blank sprites" to hide the harp in Seasons. The check
+	; we're adding here prevents those "blank sprites" from being drawn for 1 frame too long and
+	; creating graphical garbage. This bug exists in Ages, but is more noticeable in Seasons due
+	; to the different palette colors.
+	ld a,(wMenuActiveState)
+	cp $02
+	ret nz
+
 	jp createBlankSpritesForItemSubmenu
-.endif
 
 ; ROM_SEASONS just starts directly at @subStates.
 
@@ -4624,8 +4745,6 @@ inventoryMenuState2:
 
 ;;
 @subState0:
-
-.ifdef ROM_AGES
 	ld hl,wSelectedHarpSong
 	ld d,(hl)
 	dec d
@@ -4633,13 +4752,10 @@ inventoryMenuState2:
 	call cpInventorySelectedItemToHarp
 	jr z,++
 
-.else; ROM_SEASONS
-
-	ld hl,wSatchelSelectedSeeds
-	ld a,(wInventory.selectedItem)
-.endif
-
 	cp ITEM_SEED_SATCHEL
+	jr z,+
+	inc l
+	cp ITEM_SHOOTER
 	jr z,+
 	inc l
 +
@@ -4707,20 +4823,12 @@ inventoryMenuState2:
 
 	call func_02_5938
 
-.ifdef ROM_AGES
 	call cpInventorySelectedItemToHarp
 	ld a,(wInventory.itemSubmenuIndex)
 	jr nz,+
 	add $25
 	jr ++
 +
-
-.else; ROM_SEASONS
-
-	ld a,(wInventory.selectedItem)
-	ld a,(wInventory.itemSubmenuIndex)
-.endif
-
 	call getSeedTypeInventoryIndex
 	add $20
 ++
@@ -4729,23 +4837,20 @@ inventoryMenuState2:
 	rst_addAToHl
 	ld a,(wInventory.selectedItem)
 
-.ifdef ROM_AGES
 	cp ITEM_SHOOTER
-.else
+	jr z,+
 	cp ITEM_SLINGSHOT
-.endif
-
-	ld a,$00
-	jr nz,+
-	ld a,$05
+	jr z,+
+	xor a
+	jr ++
 +
+	ld a,$05
+++
 	add (hl)
 	call showItemText2
 	jp func_02_5a35
 
 @buttonPressed:
-
-.ifdef ROM_AGES
 	call cpInventorySelectedItemToHarp
 	jr nz,+
 
@@ -4754,20 +4859,16 @@ inventoryMenuState2:
 	inc a
 	jr ++
 +
-	ld e,<wSatchelSelectedSeeds
-	cp ITEM_SEED_SATCHEL
-	jr z,+
-	inc e
-+
-.else; ROM_SEASONS
 
 	ld a,(wInventory.selectedItem)
 	ld e,<wSatchelSelectedSeeds
 	cp ITEM_SEED_SATCHEL
 	jr z,+
 	inc e
+	cp ITEM_SHOOTER
+	jr z,+
+	inc e
 +
-.endif
 
 	ld a,(wInventory.itemSubmenuIndex)
 	call getSeedTypeInventoryIndex
@@ -5263,12 +5364,10 @@ inventorySubmenu2_drawCursor:
 func_02_5a35:
 	ldde $05, $00
 
-.ifdef ROM_AGES
 	call cpInventorySelectedItemToHarp
 	jr nz,+
 	ldde $03, $05
 +
-.endif
 
 	; d = maximum number of options
 	; e = first bit to check in wSeedsAndHarpSongsObtained
@@ -5293,12 +5392,10 @@ func_02_5a35:
 	call addSpritesToOam_withOffset
 	pop de
 
-.ifdef ROM_AGES
 	; If this is for the harp, skip over some of the following code
 	ld a,e
 	cp $05
 	jr nc,@seedOnlyCodeDone
-.endif
 
 ; Seed-only code (for seed satchel, seed shooter)
 	ld a,e
@@ -5359,12 +5456,9 @@ seedAndHarpSpriteTable:
 	dbrel @sprite2
 	dbrel @sprite3
 	dbrel @sprite4
-
-.ifdef ROM_AGES
 	dbrel @sprite5
 	dbrel @sprite6
 	dbrel @sprite7
-.endif
 
 @sprite0:
 	.db $01
@@ -5386,9 +5480,6 @@ seedAndHarpSpriteTable:
 	.db $01
 	.db $14 $0c $0e $08
 
-
-.ifdef ROM_AGES
-
 @sprite5:
 	.db $02
 	.db $14 $08 $46 $08
@@ -5403,8 +5494,6 @@ seedAndHarpSpriteTable:
 	.db $02
 	.db $14 $08 $56 $09
 	.db $14 $10 $58 $09
-
-.endif
 
 
 table_5ae5:
@@ -5423,14 +5512,12 @@ table_5ae5:
 	.db $06 $09 $0c $0f
 
 
-.ifdef ROM_AGES
 ;;
 ; Set z flag if selected inventory item is the harp.
 cpInventorySelectedItemToHarp:
 	ld a,(wInventory.selectedItem)
 	cp ITEM_HARP
 	ret
-.endif
 
 
 ;;
@@ -6003,11 +6090,9 @@ drawTreasureDisplayDataToBg:
 ;;
 ; Handles drawing of the maku seed and harp sprites on the inventory subscreens. These are
 ; at least partly sprites, unlike everything else.
+;
 inventoryMenuDrawSprites:
-
-.ifdef ROM_AGES
 	call inventoryMenuDrawHarpSprites
-.endif
 
 ; Remainder of function: draw maku seed sprite
 
@@ -6067,8 +6152,6 @@ inventoryMenuDrawSprites:
 		.db $08 $08 $fc $0f
 	.endif
 
-
-.ifdef ROM_AGES
 
 ;;
 ; Draw harp sprites if it's in the inventory.
@@ -6189,32 +6272,39 @@ createBlankSpritesForItemSubmenu:
 	dbrel @sprites1
 	dbrel @sprites2
 
+
+.ifdef ROM_AGES
+	.define PALETTE 0
+.else
+	.define PALETTE 6
+.endif
+
 @sprites0:
 	.db $08
-	.db $08 $48 $04 $88
-	.db $18 $48 $04 $88
-	.db $08 $50 $04 $88
-	.db $18 $50 $04 $88
-	.db $08 $68 $04 $88
-	.db $18 $68 $04 $88
-	.db $08 $70 $04 $88
-	.db $18 $70 $04 $88
+	.db $08 $48 $04 $88|PALETTE
+	.db $18 $48 $04 $88|PALETTE
+	.db $08 $50 $04 $88|PALETTE
+	.db $18 $50 $04 $88|PALETTE
+	.db $08 $68 $04 $88|PALETTE
+	.db $18 $68 $04 $88|PALETTE
+	.db $08 $70 $04 $88|PALETTE
+	.db $18 $70 $04 $88|PALETTE
 
 @sprites1:
 	.db $02
-	.db $08 $30 $04 $88
-	.db $18 $30 $04 $88
+	.db $08 $30 $04 $88|PALETTE
+	.db $18 $30 $04 $88|PALETTE
 
 @sprites2:
 	.db $06
-	.db $08 $28 $04 $88
-	.db $18 $28 $04 $88
-	.db $08 $88 $04 $88
-	.db $18 $88 $04 $88
-	.db $08 $90 $04 $88
-	.db $18 $90 $04 $88
+	.db $08 $28 $04 $88|PALETTE
+	.db $18 $28 $04 $88|PALETTE
+	.db $08 $88 $04 $88|PALETTE
+	.db $18 $88 $04 $88|PALETTE
+	.db $08 $90 $04 $88|PALETTE
+	.db $18 $90 $04 $88|PALETTE
 
-.endif ; ROM_AGES
+.undefine PALETTE
 
 
 ; This is a list of treasures that are displayed on subscreen 1 if the player has them.
@@ -6268,6 +6358,7 @@ subscreen1TreasureData:
 		; Row 1
 		.db TREASURE_MASTERS_PLAQUE		$01 $00
 		.db TREASURE_FLIPPERS			$01 $00
+		.db TREASURE_MERMAID_SUIT		$01 $00
 		.db TREASURE_POTION			$04 $01
 		.db TREASURE_TRADEITEM			$07 $02
 		.db TREASURE_MAKU_SEED			$0a $03

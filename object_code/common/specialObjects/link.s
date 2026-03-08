@@ -741,8 +741,11 @@ warpTransitionB:
 	ret nz
 
 	; Done falling. Set Link's initial state depending on the game.
+	;
+	; HACK-BASE: Link in Seasons normally starts unconscious. Disable that when
+	; HACK_DISABLE_INTRO_LOCKS is set.
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(HACK_DISABLE_INTRO_LOCKS)
 	call itemIncSubstate
 	call animateLinkStanding
 	ld a,SND_SPLASH
@@ -3070,22 +3073,18 @@ overworldSwimmingState1:
 	call linkCancelAllItemUsage
 	call linkSetSwimmingSpeed
 
-.ifdef ROM_AGES
 	; Set counter1 to the number of frames to stay in swimmingState2.
 	; This is just a period of time during which Link's speed is locked immediately
 	; after entering the water.
 	ld l,SpecialObject.var2f
 	bit 6,(hl)
-.endif
 
 	ld l,SpecialObject.counter1
 	ld (hl),$0a
 
-.ifdef ROM_AGES
 	jr z,+
 	ld (hl),$02
 +
-.endif
 
 	ld a,(wLinkSwimmingState)
 	bit 6,a
@@ -3194,7 +3193,6 @@ overworldSwimmingState3:
 +
 	call updateLinkDirectionFromAngle
 
-.ifdef ROM_AGES
 	; Check whether the flippers or the mermaid suit are in use
 	ld h,d
 	ld l,SpecialObject.var2f
@@ -3205,7 +3203,6 @@ overworldSwimmingState3:
 	call linkUpdateVelocity@mermaidSuit
 	jp specialObjectUpdatePosition
 +
-.endif
 	; Flippers movement
 	call linkUpdateFlippersSpeed
 	call func_5933
@@ -3468,7 +3465,6 @@ linkUpdateSwimming_sidescroll:
 	call checkTreasureObtained
 	jr nc,@drown
 
-.ifdef ROM_AGES
 	ld hl,w1Link.var2f
 	bit 6,(hl)
 	ld a,LINK_ANIM_MODE_SWIM_2D
@@ -3477,10 +3473,6 @@ linkUpdateSwimming_sidescroll:
 	set 7,(hl)
 	ld a,LINK_ANIM_MODE_MERMAID
 	jr ++
-.else
-	ld a,LINK_ANIM_MODE_SWIM_2D
-	jr ++
-.endif
 
 
 @drown:
@@ -3524,7 +3516,6 @@ linkUpdateSwimming_sidescroll:
 	; Ensure that he's facing either left or right (not up or down)
 	set 0,(hl)
 
-.ifdef ROM_AGES
 	; Jump if Link does not have the mermaid suit (only flippers)
 	ld l,SpecialObject.var2f
 	bit 6,(hl)
@@ -3534,7 +3525,6 @@ linkUpdateSwimming_sidescroll:
 	call linkUpdateVelocity@mermaidSuit
 	jr ++
 +
-.endif
 	; Flippers movement
 	call linkUpdateFlippersSpeed
 	call func_5933
@@ -3567,7 +3557,9 @@ linkUpdateVelocity:
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	jr z,@label_05_159
-
+.else
+	jr @label_05_159
+.endif
 @mermaidSuit:
 	ld c,$98
 	call updateLinkSpeed_withParam
@@ -3606,7 +3598,6 @@ linkUpdateVelocity:
 ++
 	ld l,SpecialObject.var12
 	ld (hl),$14
-.endif
 
 @label_05_159:
 	ld a,(wLinkAngle)
@@ -3717,7 +3708,6 @@ linkState01_sidescroll:
 	bit TILETYPE_SS_BIT_WATER,a
 	jr z,@notInWater
 
-.ifdef ROM_AGES
 	; In water
 
 	ld h,d
@@ -3726,7 +3716,6 @@ linkState01_sidescroll:
 	jr z,+
 	set 7,(hl)
 +
-.endif
 	; If link was in water last frame, don't create a splash
 	ld a,(wLinkSwimmingState)
 	or a
@@ -4471,10 +4460,8 @@ updateLinkSpeed_withParam:
 	; Unused?
 	.db SPEED_080, $03, SPEED_0c0, SPEED_080, SPEED_100, SPEED_120, SPEED_0c0, SPEED_180
 
-.ifdef ROM_AGES
 	; Mermaid suit movement
 	.db SPEED_000, $05, SPEED_120, SPEED_120, SPEED_120, SPEED_120, SPEED_120, SPEED_120
-.endif
 
 ;;
 ; Updates Link's speed and updates his position if he's experiencing knockback.

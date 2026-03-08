@@ -226,3 +226,6 @@ objectGfxHeaderTable:
 	/* $dd */ m_ObjectGfxHeader spr_twinrova_8
 	/* $de */ m_ObjectGfxHeader spr_twinrova_9
 	/* $df */ m_ObjectGfxHeader spr_twinrovamerged_2, 1
+
+	; CROSSITEMS: Extra object gfx headers
+	/* $e0 */ m_ObjectGfxHeader spr_hyperslingshot_inventory

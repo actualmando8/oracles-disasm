@@ -13,6 +13,7 @@
 
 .include "objects/macros.s"
 .include "include/gfxDataMacros.s"
+.include "include/musicMacros.s"
 
 .include {"{BUILD_DIR}/textDefines.s"}
 
@@ -208,13 +209,13 @@ specialObjectLoadAnimationFrameToBuffer:
 		.include "object_code/common/items/bombchus.s"
 		.include "object_code/common/items/bombs.s"
 		.include "object_code/common/items/boomerang.s"
-		.include "object_code/ages/items/switchHook.s"
+		.include "object_code/common/items/switchHook.s"
 		.include "object_code/common/items/rickyTornado.s"
 		.include "object_code/common/items/magnetBall.s"
-		.include "object_code/ages/items/seedShooter.s"
+		.include "object_code/common/items/seedShooter.s"
 		.include "object_code/common/items/rickyMooshAttack.s"
 		.include "object_code/common/items/shovel.s"
-		.include "object_code/ages/items/caneOfSomaria.s"
+		.include "object_code/common/items/caneOfSomaria.s"
 		.include "object_code/common/items/minecartCollision.s"
 		.include "object_code/common/items/slingshot.s"
 		.include "object_code/common/items/foolsOre.s"
@@ -227,6 +228,10 @@ specialObjectLoadAnimationFrameToBuffer:
 		.include "object_code/common/items/bracelet.s"
 		.include "object_code/common/items/commonBombAndBraceletCode.s"
 		.include "object_code/common/items/dust.s"
+
+		; CROSSITEMS
+		.include "object_code/common/items/magnetGloves.s"
+		.include "object_code/common/items/rodOfSeasons.s"
 
 		.include {"{GAME_DATA_DIR}/itemAttributes.s"}
 		.include "data/itemAnimations.s"
@@ -549,7 +554,7 @@ m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
 
 	.include "object_code/ages/enemies/veranSpider.s"
 	.include "object_code/ages/enemies/eyesoarChild.s"
-	.include "object_code/ages/enemies/ironMask.s"
+	.include "object_code/common/enemies/ironMask.s"
 	.include "object_code/ages/enemies/veranChildBee.s"
 	.include "object_code/ages/enemies/anglerFishBubble.s"
 	.include "object_code/ages/enemies/enableSidescrollDownTransition.s"
@@ -989,35 +994,15 @@ loadD6ChangingFloorPatternToBigBuffer:
 .ORG 0
 
 	.include {"{GAME_DATA_DIR}/paletteData.s"}
-	.include {"{GAME_DATA_DIR}/tilesetCollisions.s"}
+
+	; HACK-BASE: Removed for expanded tilesets patch
+	;.include {"{GAME_DATA_DIR}/tilesetCollisions.s"}
+
 	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
 
 	.include "code/ages/garbage/bank17End.s"
 
-
-.BANK $18 SLOT 1
-.ORG 0
-
-m_section_free Tile_Mappings
-
-	tileMappingIndexDataPointer:
-		.dw tileMappingIndexData
-	tileMappingAttributeDataPointer:
-		.dw tileMappingAttributeData
-
-	tileMappingTable:
-		.incbin {"{BUILD_DIR}/tileset_layouts/tileMappingTable.bin"}
-	tileMappingIndexData:
-		.incbin {"{BUILD_DIR}/tileset_layouts/tileMappingIndexData.bin"}
-	tileMappingAttributeData:
-		.incbin {"{BUILD_DIR}/tileset_layouts/tileMappingAttributeData.bin"}
-
-.ifdef ROM_AGES
-	.include "code/ages/garbage/bank18End.s"
-.endif
-
-.ends
-
+; HACK-BASE: Bank $18 is repurposed for the expanded tilesets patch.
 
 .BANK $19 SLOT 1
 .ORG 0
@@ -1026,9 +1011,7 @@ m_section_free Gfx_19_1 ALIGN $10
 	.include {"{GAME_DATA_DIR}/gfxDataBank19_1.s"}
 .ends
 
-m_section_superfree Tile_mappings
-	.include {"{GAME_DATA_DIR}/tilesetMappings.s"}
-.ends
+; HACK-BASE: Deleted tileMappings.s include for expanded tilesets patch.
 
 m_section_free Gfx_19_2 ALIGN $10
 	.include {"{GAME_DATA_DIR}/gfxDataBank19_2.s"}
@@ -1083,6 +1066,10 @@ m_section_free Gfx_1b ALIGN $20
 
 	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
+
+	; HACK-BASE: Normally audio code would start in bank $39. But to give more space for the
+	; data in the above includes, it's been relocated. So now, banks all the way up to and
+	; including bank $3e could be used for the above data (text, room layouts, graphics).
 
 
 
@@ -1338,3 +1325,7 @@ oamData_7249:
 .include "code/ages/garbage/bank3fEnd.s"
 
 .ends
+
+
+; HACK-BASE: Expanded tileset data
+.include {"{GAME_DATA_DIR}/expandedTilesets.s"}

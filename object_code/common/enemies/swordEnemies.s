@@ -182,11 +182,7 @@ swordEnemy_gotoState8:
 ; ENEMY_SWORD_DARKNUT
 ; ==================================================================================================
 enemyCode48:
-.ifdef ROM_AGES
-	call ecom_checkHazards
-.else
 	call ecom_seasonsFunc_4446
-.endif
 	call @runState
 	jp swordDarknut_updateEnemyCollisionMode
 
@@ -403,11 +399,7 @@ swordEnemy_updateEnemyCollisionMode:
 	cp ENEMY_SWORD_SHROUDED_STALFOS
 	ld a,ENEMYCOLLISION_BURNABLE_ENEMY
 	jr nz,@setVars
-.ifdef ROM_AGES
-	ld a,ENEMYCOLLISION_BURNABLE_ENEMY
-.else
 	ld a,ENEMYCOLLISION_BURNABLE_UNDEAD
-.endif
 
 @setVars:
 	ld e,Enemy.enemyCollisionMode

@@ -542,6 +542,211 @@ tilesetData:
 	.db PALH_BG_DRAGON_ONOX
 	.db $32, $06, $ff
 
+	; HACK-BASE: Stub tilesets for expanded tilesets patch
+
+	; 0x63
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x64
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x65
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x66
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x67
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x68
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x69
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x6a
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x6b
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x6c
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x6d
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x6e
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x6f
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x70
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x71
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x72
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x73
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x74
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x75
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x76
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x77
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x78
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x79
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x7a
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x7b
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x7c
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x7d
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x7e
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
+	; 0x7f
+	.db $0f, $01
+	.db $00
+	.db $00
+	.db $00
+	.db $00, $00, $00
+
 
 tileset00Seasons:
 	; Spring
@@ -1325,61 +1530,3 @@ tileset1aSeasons:
 	.db GFXH_TILESET_NATZU_WASTELAND
 	.db PALH_TILESET_NATZU_WASTELAND
 	.db $1a, $02, $05
-
-templeRemainsSeasons:
-	; Spring
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CASTLE_SPRING
-	.db PALH_TILESET_TEMPLE_REMAINS_SPRING_A
-	.db $16, $04, $08
-
-	; Summer
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CASTLE_SUMMER
-	.db PALH_TILESET_TEMPLE_REMAINS_SUMMER_A
-	.db $16, $04, $08
-
-	; Autumn
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CASTLE_AUTUMN
-	.db PALH_TILESET_TEMPLE_REMAINS_AUTUMN_A
-	.db $16, $04, $08
-
-	; Winter
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CASTLE_WINTER
-	.db PALH_TILESET_TEMPLE_REMAINS_WINTER_A
-	.db $16, $04, $08
-
-moblinKeepSeasons:
-	; Spring
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_NATZU_PRAIRIE
-	.db PALH_TILESET_NATZU_PRAIRIE
-	.db $18, $03, $00
-
-	; Summer
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_NATZU_PRAIRIE
-	.db PALH_TILESET_NATZU_PRAIRIE
-	.db $18, $03, $00
-
-	; Autumn
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_NATZU_RIVER
-	.db PALH_TILESET_NATZU_RIVER
-	.db $19, $03, $0a
-
-	; Winter
-	.db $0f, $01
-	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_NATZU_WASTELAND
-	.db PALH_TILESET_NATZU_WASTELAND
-	.db $1a, $03, $05

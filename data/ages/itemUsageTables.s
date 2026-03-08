@@ -26,8 +26,8 @@ itemUsageParameterTable:
 	.db $03, <wGameKeysJustPressed  ; ITEM_CANE_OF_SOMARIA
 	.db $63, <wGameKeysJustPressed  ; ITEM_SWORD
 	.db $02, <wGameKeysJustPressed  ; ITEM_BOOMERANG
-	.db $00, <wGameKeysJustPressed  ; ITEM_ROD_OF_SEASONS
-	.db $00, <wGameKeysJustPressed  ; ITEM_MAGNET_GLOVES
+	.db $33, <wGameKeysJustPressed  ; ITEM_ROD_OF_SEASONS
+	.db $53, <wGameKeysJustPressed  ; ITEM_MAGNET_GLOVES
 	.db $00, <wGameKeysJustPressed  ; ITEM_SWITCH_HOOK_HELPER
 	.db $73, <wGameKeysJustPressed  ; ITEM_SWITCH_HOOK
 	.db $00, <wGameKeysJustPressed  ; ITEM_SWITCH_HOOK_CHAIN
@@ -38,7 +38,7 @@ itemUsageParameterTable:
 	.db $00, <wGameKeysJustPressed  ; ITEM_10
 	.db $05, <wGameKeysJustPressed  ; ITEM_HARP
 	.db $00, <wGameKeysJustPressed  ; ITEM_12
-	.db $00, <wGameKeysJustPressed  ; ITEM_SLINGSHOT
+	.db $43, <wGameKeysJustPressed  ; ITEM_SLINGSHOT
 	.db $00, <wGameKeysJustPressed  ; ITEM_14
 	.db $13, <wGameKeysJustPressed  ; ITEM_SHOVEL
 	.db $13, <wGameKeysPressed      ; ITEM_BRACELET
@@ -49,7 +49,7 @@ itemUsageParameterTable:
 	.db $00, <wGameKeysJustPressed  ; ITEM_1b
 	.db $00, <wGameKeysJustPressed  ; ITEM_1c
 	.db $00, <wGameKeysJustPressed  ; ITEM_MINECART_COLLISION
-	.db $00, <wGameKeysJustPressed  ; ITEM_FOOLS_ORE
+	.db $03, <wGameKeysJustPressed  ; ITEM_FOOLS_ORE
 	.db $00, <wGameKeysJustPressed  ; ITEM_1f
 
 

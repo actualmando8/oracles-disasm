@@ -11,6 +11,16 @@ uncmpGfxHeaderTable:
 		.dw uncmpGfxHeader{%.2x{COUNT}}
 	.endr
 
+	; CROSSITEMS: Extra gfx headers appended to the end of the table (starting at $40)
+	.dw uncmpGfxHeader_magicBoomerangInv
+	.dw uncmpGfxHeader_hyperSlingshotInv
+	.dw uncmpGfxHeader_magnetGloves
+	.dw uncmpGfxHeader_slingshot
+	.dw uncmpGfxHeader_l1Boomerang
+	.dw uncmpGfxHeader_l2Boomerang
+	.dw uncmpGfxHeader_rodOfSeasons
+	.dw uncmpGfxHeader_foolsOre
+
 
 
 uncmpGfxHeader00:
@@ -284,4 +294,39 @@ uncmpGfxHeader3e:
 
 uncmpGfxHeader3f:
 	m_GfxHeader gfx_animations_2, $8cc1, $04, $7c0
+	m_GfxHeaderEnd
+
+
+; CROSSITEMS: Magical boomerang overwriting L-1 boomerang for inventory gfx
+uncmpGfxHeader_magicBoomerangInv:
+	m_GfxHeader spr_boomerang, $8381, $02, $40
+	m_GfxHeaderEnd
+
+; Hyper slingshot overwriting L-1 slingshot for inventory gfx
+uncmpGfxHeader_hyperSlingshotInv:
+	m_GfxHeader spr_hyperslingshot_inventory, $8021
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_magnetGloves:
+	m_GfxHeader spr_magnet_gloves, $8521
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_slingshot:
+	m_GfxHeader spr_slingshot, $8521
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_l1Boomerang:
+	m_GfxHeader spr_boomerang, $84e1, $04
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_l2Boomerang:
+	m_GfxHeader spr_boomerang, $84e1, $04, $40
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_rodOfSeasons:
+	m_GfxHeader spr_rod_of_seasons, $8521
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_foolsOre:
+	m_GfxHeader spr_item_icons_2, $8521, $02, $140
 	m_GfxHeaderEnd

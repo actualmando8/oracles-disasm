@@ -10,14 +10,11 @@ snddeChannel6:
 
 
 snd97Start:
-snda1Start:
 sndadStart:
 sndb6Start:
 
 snd97Channel2:
 snd97Channel7:
-snda1Channel2:
-snda1Channel7:
 sndadChannel2:
 sndadChannel7:
 sndb6Channel2:
@@ -67,6 +64,8 @@ bank39ChannelFallback:
 .include "audio/common/mus/finalBoss.s"
 .include "audio/common/mus/essence.s"
 
+.include "audio/ages/sfx/switch2.s" ; CROSSITEMS: Added this
+
 .ifdef BUILD_VANILLA
 	.dsb 13 $ff
 .endif
@@ -74,7 +73,7 @@ bank39ChannelFallback:
 .ends
 
 
-.BANK $3a SLOT 1
+.BANK $73 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData2
@@ -203,7 +202,7 @@ sndd5Channel2:
 .ends
 
 
-.BANK $3b SLOT 1
+.BANK $74 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData3
@@ -260,7 +259,7 @@ bank3bChannelFallback:
 .ends
 
 
-.BANK $3c SLOT 1
+.BANK $75 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData4
@@ -298,7 +297,7 @@ bank3cChannelFallback:
 .ends
 
 
-.BANK $3d SLOT 1
+.BANK $76 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData5
@@ -343,7 +342,7 @@ mus24Channel4:
 .ends
 
 
-.BANK $3e SLOT 1
+.BANK $77 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData6

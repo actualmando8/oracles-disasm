@@ -145,8 +145,8 @@
 	TREASURE_57			db ; $57
 	TREASURE_BOMB_FLOWER_LOWER_HALF	db ; $58: Lower half of bomb flower (uses different palette)
 
-	; Invalid treasures
-	TREASURE_59			db ; $59
+    ; Invalid treasures
+	TREASURE_MERMAID_SUIT		db ; $59
 	TREASURE_5a			db ; $5a
 	TREASURE_5b			db ; $5b
 	TREASURE_5c			db ; $5c

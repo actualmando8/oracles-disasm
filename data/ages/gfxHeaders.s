@@ -389,37 +389,11 @@ m_GfxHeaderStart $3f, GFXH_GASHA_TREE_DISAPPEARED_DIRT
 	m_GfxHeader gfx_dirt, w7d800+$450
 	m_GfxHeaderEnd
 
+; HACK-BASE: These gfx headers removed for the tileset expansion patch
 m_GfxHeaderStart $40, GFXH_TILESET_OVERWORLD_PRESENT
-	m_GfxHeader gfx_tileset_overworld_standard, $8801
-	m_GfxHeader gfx_tileset_overworld_present, $8e01
-	m_GfxHeader gfx_tileset_lynna_city_1, $9301
-	m_GfxHeader gfx_tileset_lynna_city_2, $9501
-	m_GfxHeader gfx_tileset_lynna_city_3, $9701
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $41, GFXH_TILESET_OVERWORLD_PAST
-	m_GfxHeader gfx_tileset_overworld_standard, $8801
-	m_GfxHeader gfx_tileset_overworld_past, $8e01
-	m_GfxHeader gfx_tileset_lynna_city_1, $9301
-	m_GfxHeader gfx_tileset_lynna_city_2, $9501
-	m_GfxHeader gfx_tileset_lynna_city_3, $9701
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $42, GFXH_TILESET_UNDERWATER_PRESENT
-	m_GfxHeader gfx_tileset_overworld_standard, $8801
-	m_GfxHeader gfx_tileset_underwater_present, $8e01
-	m_GfxHeader gfx_tileset_underwater_common_1, $9301
-	m_GfxHeader gfx_tileset_underwater_common_2, $9501
-	m_GfxHeader gfx_tileset_underwater_common_3, $9701
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $43, GFXH_TILESET_UNDERWATER_PAST
-	m_GfxHeader gfx_tileset_overworld_standard, $8801
-	m_GfxHeader gfx_tileset_underwater_past, $8e01
-	m_GfxHeader gfx_tileset_underwater_common_1, $9301
-	m_GfxHeader gfx_tileset_underwater_common_2, $9501
-	m_GfxHeader gfx_tileset_underwater_common_3, $9701
-	m_GfxHeaderEnd
 
 m_GfxHeaderStart $44, GFXH_SEAWEED_CUT
 	m_GfxHeader spr_seaweed_cut, $8001
@@ -466,80 +440,21 @@ m_GfxHeaderStart $5d, GFXH_5d
 m_GfxHeaderStart $5e, GFXH_5e
 m_GfxHeaderStart $5f, GFXH_5f
 
+; HACK-BASE: These gfx headers removed for the tileset expansion patch
 m_GfxHeaderStart $60, GFXH_TILESET_MAKU_PATH
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_maku_path, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $61, GFXH_TILESET_SPIRITS_GRAVE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_spirits_grave, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $62, GFXH_TILESET_WING_DUNGEON
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_wing_dungeon, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $63, GFXH_TILESET_MOONLIT_GROTTO
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_moonlit_grotto, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $64, GFXH_TILESET_SKULL_DUNGEON
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_skull_dungeon, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $65, GFXH_TILESET_CROWN_DUNGEON
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_crown_dungeon, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $66, GFXH_TILESET_MERMAIDS_CAVE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_mermaids_cave, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $67, GFXH_TILESET_JABU_JABUS_BELLY
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_jabu_jabus_belly, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $68, GFXH_TILESET_ANCIENT_TOMB
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_ancient_tomb, $9401
-	m_GfxHeader gfx_tileset_minecart_track, $90c1
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $69, GFXH_TILESET_BLACK_TOWER_TOP
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_black_tower_top, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $6a, GFXH_TILESET_ROOM_OF_RITES
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_room_of_rites, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $6b, GFXH_6b
 m_GfxHeaderStart $6c, GFXH_6c
-
 m_GfxHeaderStart $6d, GFXH_TILESET_SIDESCROLL
-	m_GfxHeader gfx_tileset_sidescroll_1, $8801
-	m_GfxHeader gfx_tileset_sidescroll_2, $9001
-	m_GfxHeaderEnd
 
 m_GfxHeaderStart $6e, GFXH_TILESET_BLACK_TOWER
 	m_GfxHeader gfx_tileset_black_tower, $8801
@@ -549,15 +464,9 @@ m_GfxHeaderStart $6f, GFXH_COMMON_SPRITES_TO_WRAM
 	m_GfxHeader spr_common_sprites, w6DragonOnoxTileMap1
 	m_GfxHeaderEnd
 
+; HACK-BASE: These gfx headers removed for the tileset expansion patch
 m_GfxHeaderStart $70, GFXH_TILESET_MAKU_TREE
-	m_GfxHeader gfx_tileset_maku_tree_common, $8801
-	m_GfxHeader gfx_tileset_maku_tree_bottom, $8b01
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $71, GFXH_TILESET_MAKU_TREE_TOP
-	m_GfxHeader gfx_tileset_maku_tree_common, $8801
-	m_GfxHeader gfx_tileset_maku_tree_top, $8b01
-	m_GfxHeaderEnd
 
 m_GfxHeaderStart $72, GFXH_MERMAIDS_CAVE_WALL_RETRACTION
 	m_GfxHeader map_mermaids_cave_wall_retraction, w2TmpGfxBuffer
@@ -585,40 +494,12 @@ m_GfxHeaderStart $78, GFXH_78
 m_GfxHeaderStart $79, GFXH_79
 m_GfxHeaderStart $7a, GFXH_7a
 
+; HACK-BASE: These gfx headers removed for the tileset expansion patch
 m_GfxHeaderStart $7b, GFXH_TILESET_INDOORS
-	m_GfxHeader gfx_tileset_indoors_1, $8801
-	m_GfxHeader gfx_tileset_indoors_rafton, $9001
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $7c, GFXH_TILESET_CAVE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_cave_replacement_1, $8801
-	m_GfxHeader gfx_tileset_cave_replacement_2, $8b01
-	m_GfxHeader gfx_tileset_cave_1, $9001
-	m_GfxHeader gfx_tileset_cave_2, $9601
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $7d, GFXH_TILESET_GORON_CAVE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_cave_replacement_1, $8801
-	m_GfxHeader gfx_tileset_cave_replacement_2, $8b01
-	m_GfxHeader gfx_tileset_cave_1, $9001
-	m_GfxHeader gfx_tileset_goron_cave, $9601
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $7e, GFXH_TILESET_MOBLIN_FORTRESS
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_moblin_fortress, $9401
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $7f, GFXH_TILESET_ZORA_PALACE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_zora_palace, $9401
-	m_GfxHeader gfx_tileset_zora_palace_replacement_1, $8b01
-	m_GfxHeader gfx_tileset_zora_palace_replacement_2, $9181
-	m_GfxHeaderEnd
 
 m_GfxHeaderStart $80, GFXH_BLACK_TOWER_STAGE_3_LAYOUT
 	m_GfxHeader map_black_tower_stage_3_top, w4TileMap

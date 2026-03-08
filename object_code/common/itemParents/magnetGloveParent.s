@@ -1,7 +1,6 @@
 ; Variables:
 ;  var37: ?
 parentItemCode_magnetGloves:
-.ifdef ROM_SEASONS
 	ld a,(wLinkClimbingVine)
 	inc a
 	jr z,@deleteSelf
@@ -15,6 +14,12 @@ parentItemCode_magnetGloves:
 	ld a,(wLinkSwimmingState)
 	or a
 	jr nz,@deleteSelf
+
+.ifdef ROM_AGES
+	; CROSSITEMS: Don't allow using magnet gloves while underwater. (Animations look off.)
+	call isLinkUnderwater
+	jr nz,@deleteSelf
+.endif
 
 	call itemIncState
 	ld l,Item.var37
@@ -166,5 +171,3 @@ parentItemCode_magnetGloves:
 
 
 .include {"{GAME_DATA_DIR}/tile_properties/magnetTiles.s"}
-
-.endif ; ROM_SEASONS

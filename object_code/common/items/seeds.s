@@ -27,28 +27,24 @@ itemCode24:
 	ld bc,$ffe0
 	call objectSetSpeedZ
 
-.ifdef ROM_AGES
-	; Subid is nonzero if being used from seed shooter
-	ld l,Item.subid
-	ld a,(hl)
-	or a
-	call z,itemUpdateAngle
-
 	ld l,Item.var34
 	ld (hl),$03
-.else
-	call itemUpdateAngle
-.endif
 
+	; Determine whether the seed came from the satchel, slingshot, or seed shooter
 	ld l,Item.subid
-	ldd a,(hl)
-	or a
-.ifdef ROM_AGES
-	jr nz,@shooter
-.else
-	jr nz,@slingshot
-.endif
+	ld a,(hl)
+	cp $63
+	jr z,@shooter
 
+	ld b,a
+	call itemUpdateAngle
+	ld a,b
+	or a
+	ld l,Item.id
+	jr z,@satchel
+	jr @slingshot
+
+@satchel:
 	; Satchel
 	ldi a,(hl)
 	cp ITEM_GALE_SEED
@@ -64,15 +60,16 @@ itemCode24:
 	ret
 ++
 
-.ifdef ROM_AGES
-	ld hl,@satchelPositionOffsets
-	call applyOffsetTableHL
-.endif
-
+	call @applySatchelOrSlingshotPositionOffsets
 	ld a,SPEED_c0
 	jr @setSpeed
 
-.ifdef ROM_AGES
+
+@applySatchelOrSlingshotPositionOffsets:
+	ld hl,@satchelPositionOffsets
+	jp applyOffsetTableHL
+
+
 @shooter:
 	ld e,Item.angle
 	ld a,(de)
@@ -91,7 +88,8 @@ itemCode24:
 
 	; Since 'd'='h', this will copy its own position and apply the offset
 	call objectCopyPositionWithOffset
-.else
+	jr @slingshotOrShooter
+
 @slingshot:
 	ld hl,@slingshotAngleTable-1
 	rst_addAToHl
@@ -100,8 +98,9 @@ itemCode24:
 	add (hl)
 	and $1f
 	ld (de),a
-.endif
+	call @applySatchelOrSlingshotPositionOffsets
 
+@slingshotOrShooter:
 	ld hl,wIsSeedShooterInUse
 	inc (hl)
 	ld a,SPEED_300
@@ -109,10 +108,6 @@ itemCode24:
 @setSpeed:
 	ld e,Item.speed
 	ld (de),a
-.ifdef ROM_SEASONS
-	ld hl,@satchelPositionOffsets
-	call applyOffsetTableHL
-.endif
 
 	; If it's a mystery seed, get a random effect
 	ld e,Item.id
@@ -129,10 +124,8 @@ itemCode24:
 	ld (de),a
 	ret
 
-.ifdef ROM_SEASONS
 @slingshotAngleTable:
 	.db $00 $02 $fe
-.endif
 
 ; Y/X/Z position offsets relative to Link to make seeds appear at (for satchel)
 @satchelPositionOffsets:
@@ -141,7 +134,6 @@ itemCode24:
 	.db $05 $00 $fe ; DIR_DOWN
 	.db $01 $fb $fe ; DIR_LEFT
 
-.ifdef ROM_AGES
 ; Y/X offsets for shooter
 @shooterPositionOffsets:
 	.db $f2 $fc ; Up
@@ -152,7 +144,6 @@ itemCode24:
 	.db $0a $f8 ; Down-left
 	.db $05 $f3 ; Left
 	.db $f8 $f8 ; Up-left
-.endif
 
 ;;
 ; State 1: seed moving
@@ -181,22 +172,31 @@ seedItemState1:
 	or a
 	jr z,@satchelUpdate
 
-@slingshotUpdate:
-.ifdef ROM_AGES
-	call seedItemUpdateBouncing
-.else
+@nonSatchelUpdate:
+	ld e,Item.subid
+	ld a,(de)
+	cp $63
+	jr z,@shooter
 	call slingshotCheckCanPassSolidTile
-.endif
+	jr +
+@shooter:
+	call seedItemUpdateBouncing
++
 	jr nz,@seedCollidedWithWall
 
 @updatePosition:
-.ifdef ROM_AGES
-	call objectCheckWithinRoomBoundary
-.else
-	call objectCheckWithinScreenBoundary
-.endif
+	call @checkWithinBoundary
 	jp c,objectApplySpeed
 	jp seedItemDelete
+
+@checkWithinBoundary:
+	; Slingshot seeds disappear when they leave the screen; seed shooter seeds disappear when
+	; they leave the room.
+	ld e,Item.subid
+	ld a,(de)
+	cp $63
+	jp z,objectCheckWithinRoomBoundary
+	jp objectCheckWithinScreenBoundary
 
 @satchelUpdate:
 	; Set speed to 0 if landed in water?
@@ -699,7 +699,6 @@ galeSeedTryToWarpLink:
 	ld (hl),a
 	ret
 
-.ifdef ROM_AGES
 ;;
 ; Called for seeds used with seed shooter. Checks for tile collisions and triggers
 ; "bounces" when that happens.
@@ -876,6 +875,13 @@ seedItemCheckDiagonalCollision:
 ; @param	h,d	Object
 ; @param[out]	zflag	Set if there are still bounces left?
 func_50f4:
+	; CROSSITEMS: Only allow seeds to bounce off of the seed-bouncing-things if this came from
+	; the seed shooter
+	ld e,Item.subid
+	ld a,(de)
+	cp $63
+	ret nz
+
 	ld e,Item.angle
 	ld l,Item.knockbackAngle
 	ld a,(de)
@@ -918,7 +924,7 @@ data_5114:
 
 .include {"{GAME_DATA_DIR}/tile_properties/seedsDontBounce.s"}
 
-.else ;ROM_SEASONS
+
 ;;
 ; @param[out]	zflag	z if no collision
 slingshotCheckCanPassSolidTile:
@@ -929,4 +935,3 @@ slingshotCheckCanPassSolidTile:
 ++
 	xor a
 	ret
-.endif

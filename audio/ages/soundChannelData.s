@@ -68,6 +68,8 @@ sndbdChannel2:
 .include "audio/ages/mus/underwater.s"
 .include "audio/ages/mus/makuTree.s"
 
+.include "audio/seasons/sfx/magnetGloves.s" ; CROSSITEMS: Added this
+
 .ifdef BUILD_VANILLA
 	.dsb 162 $ff
 .endif
@@ -75,7 +77,7 @@ sndbdChannel2:
 .ends
 
 
-.BANK $3a SLOT 1
+.BANK $73 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData2
@@ -158,12 +160,6 @@ sndcfChannel2:
 .include "audio/common/sfx/ricky.s"
 .include "audio/common/sfx/circling.s"
 .include "audio/common/sfx/dig.s"
-
-snd7aStart:
-snd7aChannel2:
-	cmdff
-	cmdff
-
 .include "audio/ages/sfx/switch2.s"
 .include "audio/ages/sfx/openGate.s"
 .include "audio/ages/sfx/moveBlock2.s"
@@ -191,7 +187,7 @@ snd7aChannel2:
 .ends
 
 
-.BANK $3b SLOT 1
+.BANK $74 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData3
@@ -240,7 +236,7 @@ sndcaChannel7:
 .ends
 
 
-.BANK $3c SLOT 1
+.BANK $75 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData4
@@ -285,7 +281,7 @@ bank3cChannelFallback:
 .ends
 
 
-.BANK $3d SLOT 1
+.BANK $76 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData5
@@ -335,7 +331,7 @@ snd94Channel2:
 .ends
 
 
-.BANK $3e SLOT 1
+.BANK $77 SLOT 1
 .ORG 0
 
 m_section_superfree AudioData6

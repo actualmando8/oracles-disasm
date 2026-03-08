@@ -1,11 +1,18 @@
 ; See data/ages/uncmpGfxHeaders.s for documentation.
 
-.define NUM_UNCMP_GFX_HEADERS $38
+.define NUM_UNCMP_GFX_HEADERS $36
 
 uncmpGfxHeaderTable:
 	.repeat NUM_UNCMP_GFX_HEADERS index COUNT
 		.dw uncmpGfxHeader{%.2x{COUNT}}
 	.endr
+
+	; CROSSITEMS: Extra gfx headers appended to the end of the table (starting at $36)
+	.dw uncmpGfxHeader_magicBoomerangInv
+	.dw uncmpGfxHeader_hyperSlingshotInv
+	.dw uncmpGfxHeader_caneOfSomaria
+	.dw uncmpGfxHeader_switchHook
+	.dw uncmpGfxHeader_seedShooter
 
 
 uncmpGfxHeader00:
@@ -246,5 +253,25 @@ uncmpGfxHeader35:
 	m_GfxHeaderRam w7d800, $8300, $30
 	m_GfxHeaderEnd
 
-uncmpGfxHeader36:
-uncmpGfxHeader37:
+
+; CROSSITEMS: Magical boomerang overwriting L-1 boomerang for inventory gfx
+uncmpGfxHeader_magicBoomerangInv:
+	m_GfxHeader spr_boomerang, $8381, $02, $40
+	m_GfxHeaderEnd
+
+; Hyper slingshot overwriting L-1 slingshot for inventory gfx
+uncmpGfxHeader_hyperSlingshotInv:
+	m_GfxHeader spr_hyperslingshot_inventory, $8021
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_caneOfSomaria:
+	m_GfxHeader spr_cane_of_somaria, $8521
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_switchHook:
+	m_GfxHeader spr_switch_hook, $8521
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_seedShooter:
+	m_GfxHeader spr_seed_shooter, $8521
+	m_GfxHeaderEnd

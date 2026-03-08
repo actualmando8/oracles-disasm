@@ -1542,187 +1542,11 @@ readByteSequential:
 	ret
 
 ;;
+; HACK-BASE: This function has been deleted for the expanded tilesets patch.
+;
 ; @param	a	Tileset to load (tilesets include collision data and tile indices)
 loadTileset:
-	ld e,a
-	ld a,($ff00+R_SVBK)
-	ld c,a
-	ldh a,(<hRomBank)
-	ld b,a
-	push bc
-
-	ld a,:bank1Moveable.tilesetLayoutTable
-	setrombank
-	ld a,e
-	ld hl,bank1Moveable.tilesetLayoutTable
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
---
-	ldi a,(hl)
-	push hl
-	ld hl,bank1Moveable.tilesetLayoutDictionaryTable
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-	ldi a,(hl)
-	ldh (<hFF8F),a
-	ldi a,(hl)
-	ldh (<hFF91),a
-	ldi a,(hl)
-	ldh (<hFF90),a
-	pop hl
-
-	; Get source data bank
-	ldi a,(hl)
-	ldh (<hFF8E),a
-
-	; Load data pointer to stack for later use
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-	push de
-
-	; Load destination in de
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-
-	; Write data size into ff8c
-	ldi a,(hl)
-	and $7f
-	ldh (<hFF8D),a
-	ldd a,(hl)
-	ldh (<hFF8C),a
-
-	; Store header position into ff92
-	ld a,h
-	ldh (<hFF93),a
-	ld a,l
-	ldh (<hFF92),a
-
-	; Data pointer in hl
-	pop hl
-	call loadTilesetHlpr
-
-	ld a,:bank1Moveable.tilesetLayoutTable
-	setrombank
-
-	; Retrieve header position
-	ldh a,(<hFF93)
-	ld h,a
-	ldh a,(<hFF92)
-	ld l,a
-
-	; Check if repeat bit is set
-	ldi a,(hl)
-	inc hl
-	add a
-	jr c,--
-
-	pop bc
-	ld a,b
-	setrombank
-	ld a,c
-	ld ($ff00+R_SVBK),a
-	ret
-
-;;
-; @param	hl	pointer to compressed data
-; @param	[ff8e]	bank of compressed data
-loadTilesetHlpr:
-
-; Internal variables:
-; ff8a: size of chunk to read from dictionary
-; ff8b: "key" byte (sorry bad at explaining)
-
-	ld a,e
-	and $0f
-	ld ($ff00+R_VBK),a
-	ld ($ff00+R_SVBK),a
-	xor e
-	ld e,a
-----
-	ldh a,(<hFF8E)
-	setrombank
-	ldi a,(hl)
-	ldh (<hFF8B),a
-	ld b,$08
----
-	ldh a,(<hFF8E)
-	setrombank
-	ldh a,(<hFF8B)
-	rrca
-	ldh (<hFF8B),a
-	jr c,++
-
-	ldi a,(hl)
-	ld (de),a
-	inc de
-	call dec16_ff8c
-	ret z
-	dec b
-	jr nz,---
-	jr ----
-++
-	push bc
-	ldh a,(<hFF8F)
-	bit 7,a
-	jr nz,+
-
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
-	ldh (<hFF8A),a
-	and $0f
-	ld b,a
-	ldh a,(<hFF8A)
-	swap a
-	and $0f
-	add $03
-	ldh (<hFF8A),a
-	jr ++
-+
-	ldi a,(hl)
-	ldh (<hFF8A),a
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
-	ld b,a
-++
-	push hl
-	ld hl,hFF90
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-	add hl,bc
-	ldh a,(<hFF8A)
-	ld b,a
-	ldh a,(<hFF8F)
-	and $3f
-	setrombank
--
-	ldi a,(hl)
-	ld (de),a
-	inc de
-	call dec16_ff8c
-	jr z,+++
-	dec b
-	jr nz,-
-
-	pop hl
-	pop bc
-	dec b
-	jr nz,---
-	jr ----
-+++
-	pop hl
-	pop bc
-	ret
+	jp panic
 
 ;;
 dec16_ff8c:
@@ -1888,6 +1712,23 @@ _nextThread:
 	ld ($ff00+R_SVBK),a
 	jr _mainLoop_nextThread
 
+
+; DEBUG: Data for quickstart spawn location
+.ifdef QUICKSTART_ENABLE
+
+quickstartSpawn:
+	.db <wDeathRespawnBuffer.group,     QUICKSTART_GROUP
+	.db <wDeathRespawnBuffer.room,      QUICKSTART_ROOM
+.ifdef ROM_SEASONS
+	.db <wDeathRespawnBuffer.stateModifier, QUICKSTART_SEASON
+.endif
+	.db <wDeathRespawnBuffer.facingDir, DIR_DOWN
+	.db <wDeathRespawnBuffer.y,         QUICKSTART_Y
+	.db <wDeathRespawnBuffer.x,         QUICKSTART_X
+	.db $ff
+.endif
+
+
 ;;
 ; Called just after basic initialization
 startGame:
@@ -1902,6 +1743,29 @@ startGame:
 	inc e
 	dec b
 	jr nz,-
+
+	; DEBUG: Quickstart boots directly into the game at a specified location.
+.ifdef QUICKSTART_ENABLE
+	; hActiveFileSlot should default to 0
+	call loadFile
+
+	; Seems like this variable is only ever set to its required value in disableLcd, which is
+	; never called when quickstart is active, so we must do it here
+	ld a,$02
+	ldh (<hNextLcdInterruptBehaviour),a
+
+	; Override spawn position
+	ld hl,quickstartSpawn
+	ld d,>wc600Block
+@quickstartLoop:
+	ldi a,(hl)
+	cp $ff
+	jr z,_mainLoop
+	ld e,a
+	ldi a,(hl)
+	ld (de),a
+	jr @quickstartLoop
+.endif
 
 ;;
 _mainLoop:
@@ -2009,8 +1873,14 @@ _initializeThread:
 	ret
 
 _initialThreadStates:
+
+.ifdef QUICKSTART_ENABLE
+	m_ThreadState $02 $00 wThread0StackTop stubThreadStart
+	m_ThreadState $02 $00 wThread1StackTop mainThreadStart
+.else
 	m_ThreadState $02 $00 wThread0StackTop introThreadStart
 	m_ThreadState $02 $00 wThread1StackTop stubThreadStart
+.endif
 	m_ThreadState $02 $00 wThread2StackTop stubThreadStart
 	m_ThreadState $02 $00 wThread3StackTop paletteFadeThreadStart
 
@@ -3284,6 +3154,22 @@ _drawObjectTerrainEffects:
 	ld b,>wRoomLayout
 	ld a,(bc)
 
+.ifdef ROM_SEASONS
+	; CROSSITEMS: Cane of Somaria uses tile index $f9 indoors. It behaves like a grass tile, but
+	; it's never used indoors, so disable the grass animation on that tile.
+	; (Even though the somaria block is solid, the grass animation can be seen when item drops
+	; land on top of it, so this disables that.)
+	cp $f9
+	jr nz,+
+	ld b,a
+	ld a,(wActiveGroup)
+	or a
+	ld a,b
+	jr z,+
+	jr @end
++
+.endif
+
 .ifdef ROM_AGES
 	cp TILEINDEX_GRASS
 	jr z,@walkingInGrass
@@ -4017,8 +3903,11 @@ func_131f:
 ++
 	ld a,(wTilesetPalette)
 	ld (wLoadedTilesetPalette),a
-	ld a,(wTilesetUniqueGfx)
-	ld (wLoadedTilesetUniqueGfx),a
+
+	; HACK-BASE: This is done in the "loadTilesetGfx" function instead
+	;ld a,(wTilesetIndex)
+	;ld (wLoadedTilesetIndex),a
+
 	pop af
 	setrombank
 	ret
@@ -5639,11 +5528,22 @@ checkReloadStatusBarGraphics:
 ; @param	de	Destination
 ; @param	hl	Source
 copy20BytesFromBank:
+	ld c,$20
+
+;;
+; Copy 'c' bytes from bank b at hl to de. (CROSSITEMS: Added this function to help with magnet glove
+; polarity graphics.)
+;
+; @param	b	Bank
+; @param	c	Bytes to copy
+; @param	de	Destination
+; @param	hl	Source
+copyBytesFromBank:
 	ldh a,(<hRomBank)
 	push af
 	ld a,b
 	setrombank
-	ld b,$20
+	ld b,c
 	call copyMemory
 	pop af
 	setrombank
@@ -12034,7 +11934,7 @@ clearScreenVariables:
 	ld b,wScreenVariables.size
 	call clearMemory
 	ld a,$ff
-	ld (wLoadedTilesetUniqueGfx),a
+	ld (wLoadedTilesetIndex),a
 	ld (wLoadedTilesetLayout),a
 	ld (wLoadedTilesetAnimation),a
 	ret
@@ -12383,124 +12283,97 @@ forceLoadRoom:
 ;
 ; End result: w3TileMappingData is loaded with the tile indices and attributes for all
 ; tiles in the tileset.
+;
+; HACK-BASE: This function has been rewritten for the expanded tilesets patch.
 loadTilesetLayout:
-	ld a,(wTilesetLayout)
-	call loadTileset
-	ld a,:tileMappingTable
-	setrombank
-
 	ld a,:w3TileMappingData
-	ld ($ff00+R_SVBK),a
-	ld hl,w3TileMappingIndices
-	ld de,w3TileMappingData
-	ld b,$00
--
-	push bc
-	call @helper
-	pop bc
-	dec b
-	jr nz,-
+	ldh (<R_SVBK),a
 
-.ifdef ROM_SEASONS
+	; Get address of expanded tileset mappings + collisions
+	ld hl,expandedTilesetMappingsTable
+	ld a,:expandedTilesetMappingsTable
+	call lookupExpandedTilesetTable
+
+	; Copy tile mapping data
+	ld a,c
+	setrombank
+	ld de,w3TileMappingData
+	ld bc,$0800
+	call copyMemoryBc
+
+	; Copy collision data (stored immediately after mapping data)
+	ld de,w3TileCollisions
+	ld b,$00
+	call copyMemory
+
 	xor a
 	ld ($ff00+R_SVBK),a
 	ret
 
-.else ; ROM_AGES
-	jpab tilesets.setPastCliffPalettesToRed
-.endif
 
 ;;
-@helper:
-	; bc = tile mapping index
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
+; HACK-BASE: Helper function for looking up data in expandedTilesets.s based on current tileset and
+; season.
+;
+; @param	a	Bank of table
+; @param	hl	Address of table
+; @param[out]	c	Bank of data
+; @param[out]	hl	Address of data
+lookupExpandedTilesetTable:
+	setrombank
+	ld a,(wTilesetIndex)
+	and $7f
 	ld b,a
-
-	; Get address of pointers to tile indices / attributes
-	push hl
-	ld hl, tileMappingTable
-	add hl,bc
-	add hl,bc
-	add hl,bc
-
-	; Load tile indices
+	rst_addDoubleIndex
+	ld a,b
+	rst_addAToHl
 	ldi a,(hl)
-	ld c,a
-	ld a,(hl)
-	swap a
-	and $0f
-	ld b,a
-	push hl
-	ld hl,tileMappingIndexDataPointer
+	cp $ff
+	ld d,a
 	ldi a,(hl)
-	ld h,(hl)
+	ld c,(hl) ; Bank
+	ld h,d
 	ld l,a
-	add hl,bc
-	add hl,bc
-	add hl,bc
-	add hl,bc
-	ld b,$04
-	call copyMemory
+	ret nz
 
-	; Load tile attributes
-	pop hl
-	ldi a,(hl)
-	and $0f
+	; Seasonal tileset, do another table lookup
+	ld h,c
+	ld a,(wRoomStateModifier)
 	ld b,a
-	ld c,(hl)
-	ld hl,tileMappingAttributeDataPointer
+	rst_addDoubleIndex
+	ld a,b
+	rst_addAToHl
 	ldi a,(hl)
-	ld h,(hl)
+	ld d,a
+	ldi a,(hl)
+	ld c,(hl) ; Bank
+	ld h,d
 	ld l,a
-	add hl,bc
-	add hl,bc
-	add hl,bc
-	add hl,bc
-	ld b,$04
-	call copyMemory
-
-	pop hl
 	ret
-
 
 ;;
 ; Loads the address of unique header gfx (a&$7f) into wUniqueGfxHeaderAddress.
 ;
+; HACK-BASE: Function removed for expanded tilesets patch.
+;
 ; @param	a	Unique gfx header (see constants/common/uniqueGfxHeaders.s).
 ;			Bit 7 is ignored.
 loadUniqueGfxHeader:
-	and $7f
-	ld b,a
-	ldh a,(<hRomBank)
-	push af
-	ld a,:animationAndUniqueGfxData.uniqueGfxHeaderTable
-	setrombank
-	ld a,b
-	ld hl,animationAndUniqueGfxData.uniqueGfxHeaderTable
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld (wUniqueGfxHeaderAddress),a
-	ld a,(hl)
-	ld (wUniqueGfxHeaderAddress+1),a
-	pop af
-	setrombank
-	ret
+	jp panic
 
 ;;
 ; Load all graphics based on wTileset variables.
 ;
+; HACK-BASE: Modified this function for the expanded tilesets patch.
 loadTilesetGraphics:
 	ldh a,(<hRomBank)
 	push af
 
-	ld a,(wTilesetGfx)
-	call loadGfxHeader
 	ld a,(wTilesetPalette)
 	call loadPaletteHeader
 
-	call          loadTilesetUniqueGfx
+	call          loadTilesetGfx
+
 	callfrombank0 animationAndUniqueGfxData.initializeAnimations
 
 .ifdef ROM_AGES
@@ -12508,8 +12381,10 @@ loadTilesetGraphics:
 	callab        roomGfxChanges.checkLoadPastSignAndChestGfx
 .endif
 
-	ld a,(wTilesetUniqueGfx)
-	ld (wLoadedTilesetUniqueGfx),a
+	; HACK-BASE: This is done in the "loadTilesetGfx" function instead
+	;ld a,(wTilesetIndex)
+	;ld (wLoadedTilesetIndex),a
+
 	ld a,(wTilesetPalette)
 	ld (wLoadedTilesetPalette),a
 	ld a,(wTilesetAnimation)
@@ -12525,137 +12400,96 @@ loadTilesetGraphics:
 ; This should be called repeatedly (once per frame, to avoid overloading vblank) until all
 ; entries in the header are read.
 ;
+; HACK-BASE: This function has been removed for the expanded tilesets patch.
+;
 ; @param	wUniqueGfxHeaderAddress	Where to read the header from (will be updated)
 ; @param[out]	cflag			Set if there are more entries to load.
 updateTilesetUniqueGfx:
-	ld a,(wTilesetUniqueGfx)
-	or a
-	ret z
-
-	ld b,a
-	ld a,(wLoadedTilesetUniqueGfx)
-	cp b
-	ret z
-
-	ldh a,(<hRomBank)
-	push af
-
-	ld hl,wUniqueGfxHeaderAddress
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-	ld a,:animationAndUniqueGfxData.uniqueGfxHeadersStart
-	setrombank
-	call loadUniqueGfxHeaderEntry
-	ld c,a
-	ld a,l
-	ld (wUniqueGfxHeaderAddress),a
-	ld a,h
-	ld (wUniqueGfxHeaderAddress+1),a
-
-	pop af
-	setrombank
-	ld a,c
-	add a
-	ret
+	jp panic
 
 ;;
 ; Load just the first entry of a unique gfx header?
 ;
+; Unused?
+;
+; HACK-BASE: This function has been removed for the expanded tilesets patch.
+;
 ; @param	a	Unique gfx header index
 uniqueGfxFunc_380b:
+	jp panic
+
+
+;;
+; HACK-BASE: This function used exclusively for reloading tileset graphics during screen-scroll
+; transitions.
+;
+; It's important not to reload the tileset on every single screen transition, otherwise dungeon
+; toggle blocks in Ages will be reverted to their original state (graphically).
+;
+; On the other hand, this function can't be used when closing a menu, because even though the
+; tileset won't have changed, a full gfx reload is required.
+loadTilesetGfxIfChanged:
+	ld a,(wTilesetIndex)
+	and $7f
 	ld b,a
+	ld a,(wLoadedTilesetIndex)
+	cp b
+	ret z
+	; Fall through
+
+;;
+; HACK-BASE: The "loadTilesetUniqueGfx" function has been replaced with a function that reloads all
+; graphics, for the expanded tilesets patch.
+loadTilesetGfx:
 	ldh a,(<hRomBank)
 	push af
 
-	ld a,:animationAndUniqueGfxData.uniqueGfxHeadersStart
-	setrombank
-	ld a,b
-	ld hl,animationAndUniqueGfxData.uniqueGfxHeaderTable
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-	call loadUniqueGfxHeaderEntry
+	ld hl,expandedTilesetGfxTable
+	ld a,:expandedTilesetGfxTable
+	call lookupExpandedTilesetTable
+
+	; We do the DMA transfer in 3 goes. A single transfer can take $80 tiles, so 2 goes is
+	; possible. But using the full capacity in a single frame causes small graphical artifacts,
+	; so we do it in 3 instead.
+
+	push hl
+	ld de,$8801
+	ld b,$5f
+	call queueDmaTransfer
+
+	; Wait 1 frame if the LCD is on
+	call c,resumeThreadNextFrame
+
+	pop hl
+	ld a,h
+	add $06
+	ld h,a
+	push hl
+	ld d,$8e
+	call queueDmaTransfer
+
+	call c,resumeThreadNextFrame
+
+	pop hl
+	ld a,h
+	add $06
+	ld h,a
+	ld d,$94
+	ld b,$3f
+	call queueDmaTransfer
+
+	; If LCD is on, wait 1 frame before returning. Otherwise there are issues due to the fact
+	; that we're going to use tons of vblank time (ie. palettes don't get updated properly).
+	; It might not be a problem now that we're doing 3 separate transfers instead of 2, but
+	; better safe than sorry, I guess.
+	call c,resumeThreadNextFrame
+
+	ld a,(wTilesetIndex)
+	and $7f
+	ld (wLoadedTilesetIndex),a
 
 	pop af
 	setrombank
-	ret
-
-;;
-loadTilesetUniqueGfx:
-	ld a,:animationAndUniqueGfxData.uniqueGfxHeaderTable
-	setrombank
-	ld a,(wTilesetUniqueGfx)
-	and $7f
-	ret z
-
-	ld hl,animationAndUniqueGfxData.uniqueGfxHeaderTable
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
--
-	call loadUniqueGfxHeaderEntry
-	add a
-	jr c,-
-	ret
-
-;;
-; Loads a single gfx header entry at hl. This should be called multiple times until all
-; entries are read.
-;
-; If the first byte (bank+mode) is zero, it loads a palette instead.
-;
-; @param[out]	a	Last byte of the entry (bit 7 set if there's another entry)
-loadUniqueGfxHeaderEntry:
-	ldi a,(hl)
-	or a
-	jr z,@loadPaletteIndex
-
-	ld c,a
-	ldh (<hFF8C),a
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-	ld a,(hl)
-	and $7f
-	ldh (<hFF8D),a
-	push hl
-	push de
-	ld l,c
-	ld h,b
-	ld b,a
-	ldh a,(<hFF8C)
-	ld c,a
-	ld de, w7d800 | :w7d800
-	call decompressGraphics
-	pop de
-	ld hl,w7d800
-	ld c,:w7d800
-	ldh a,(<hFF8D)
-	ld b,a
-	call queueDmaTransfer
-	pop hl
-	ld a,$00
-	ld ($ff00+R_SVBK),a
-	ld a,:animationAndUniqueGfxData.uniqueGfxHeaderTable
-	setrombank
-	ldi a,(hl)
-	ret
-
-@loadPaletteIndex:
-	push hl
-	ld a,(hl)
-	and $7f
-	call loadPaletteHeader
-	pop hl
-	ldi a,(hl)
 	ret
 
 ;;
@@ -12678,7 +12512,9 @@ loadTilesetAndRoomLayout:
 	; Reload tileset if necessary
 	ld a,(wLoadedTilesetLayout)
 	ld b,a
-	ld a,(wTilesetLayout)
+	; HACK-BASE: "wTilesetLayout" variable is no longer used, so check
+	; "wTilesetIndex" instead.
+	ld a,(wTilesetIndex)
 	cp b
 	ld (wLoadedTilesetLayout),a
 	call nz,loadTilesetLayout
@@ -12733,13 +12569,16 @@ loadTilesetAndRoomLayout:
 ;;
 ; Load room layout into wRoomLayout using the relevant RAM addresses (wTilesetLayoutGroup,
 ; wLoadingRoom, etc)
+;
+; HACK-BASE: Large rooms are now loaded completely uncompressed. Made various tweaks to this
+; function to enable that.
 loadRoomLayout:
 	ld hl,wRoomLayout
 	ld b,(LARGE_ROOM_HEIGHT+1)*16
 	call clearMemory
 	ld a,:roomLayouts.roomLayoutGroupTable
 	setrombank
-	ld a,(wTilesetLayoutGroup)
+	call @getLayoutGroup
 	add a
 	add a
 	ld hl,roomLayouts.roomLayoutGroupTable
@@ -12759,11 +12598,74 @@ loadRoomLayout:
 	ld l,a
 	ldh a,(<hFF8C)
 	setrombank
+
+	; HACK-BASE: Subtract $4000 from "base" offset for pointers, to make arithmetic simpler
+	; later. This is part of a change needed to allow a single group of rooms to cumulatively
+	; occupy up to $10000 bytes, instead of up to $8000 only.
+	ld a,h
+	sub $40
+	ld h,a
 	push hl
+
 	ld a,b
 	rst_jumpTable
 	.dw @loadLargeRoomLayout
 	.dw @loadSmallRoomLayout
+
+
+; HACK-BASE: This function replaces the need for the wTilesetLayoutGroup variable.
+;
+; We do not allow tilesets to set the layout group themselves because it's incredibly confusing.
+; Instead, the layout group is determined based on wActiveGroup, which almost always works except
+; for a few cases where it needs to be overridden (temple remains filled with lava, etc).
+;
+; @param[out]	a	Layout group
+@getLayoutGroup:
+	ld a,(wLayoutGroupOverride)
+	cp $ff
+	ret nz
+
+.ifdef ROM_SEASONS
+	; Group 0: depends on season
+	ld a,(wActiveGroup)
+	ld b,a
+	or a
+	ld a,(wRoomStateModifier)
+	ret z
+
+	ld a,(wActiveGroup)
+
+.else ;ROM_AGES
+	; Ages only: if bit 0 of room flags is set, underwater version of the room gets loaded instead.
+	callab tilesets.getAdjustedRoomGroup
+	ld a,b
+.endif
+
+	ld hl,@layoutGroupTable
+	rst_addAToHl
+	ld a,(hl)
+	ret
+
+@layoutGroupTable:
+.ifdef ROM_AGES
+	.db $00
+	.db $02
+	.db $01
+	.db $03
+	.db $04
+	.db $05
+	.db $04
+	.db $05
+.else ;ROM_SEASONS
+	.db $ff
+	.db $04
+	.db $04
+	.db $04
+	.db $05
+	.db $06
+	.db $05
+	.db $06
+.endif
 
 ;;
 @loadLargeRoomLayoutHlpr:
@@ -12792,8 +12694,8 @@ loadRoomLayout:
 	ld h,a
 	ldh a,(<hFF8E)
 	ld l,a
-	ld bc,$1000
-	add hl,bc
+	;ld bc,$1000
+	;add hl,bc
 	ldh a,(<hFF8D)
 	setrombank
 
@@ -12807,53 +12709,8 @@ loadRoomLayout:
 	add hl,bc
 	ld bc,-$200
 	add hl,bc
-	call @loadLayoutData
-	ld de,wRoomLayout
-@next8:
-	ldi a,(hl)
-	ld b,$08
-@next:
-	rrca
-	ldh (<hFF8B),a
-	jr c,+
-	ldi a,(hl)
-	ld (de),a
-	inc e
-	ld a,e
-	cp LARGE_ROOM_HEIGHT*16
-	ret z
---
-	ldh a,(<hFF8B)
-	dec b
-	jr nz,@next
-	jr @next8
-+
-	push bc
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
-	ld b,a
-	push hl
-	call @loadLargeRoomLayoutHlpr
-	ld d,>wRoomLayout
-	ldh a,(<hFF8D) ; Relative offset bank number
-	setrombank
--
-	ldi a,(hl)
-	ld (de),a
-	inc e
-	ld a,e
-	cp LARGE_ROOM_HEIGHT*16
-	jr z,+
-	dec b
-	jr nz,-
-	pop hl
-	pop bc
-	jr --
-+
-	pop hl
-	pop bc
-	ret
+	ld c,>wRoomLayout
+	jp @loadLayoutData
 
 ;;
 @loadSmallRoomLayout:
@@ -12877,6 +12734,7 @@ loadRoomLayout:
 	; Add relative offset with base offset
 	pop hl
 	add hl,bc
+	ld c,>wRoomCollisions
 	call @loadLayoutData
 
 	; Upper bits of relative offset specify compression
@@ -13003,37 +12861,32 @@ loadRoomLayout:
 
 ;;
 ; Load the compressed layout data into wRoomCollisions (temporarily)
+;
+; HACK-BASE: This takes a new parameter "c" which specifies where to load the data (either to
+; "wRoomCollisions" or to "wRoomLayout" directly).
 @loadLayoutData:
 	push de
 	ldh a,(<hFF8C)
-.ifdef ROM_AGES
 	ld e,a
-.endif
 -
-	bit 7,h
-	jr z,+
+ 	; HACK-BASE: The pointer starts at $0000 instead of $4000.
 	ld a,h
-.ifdef ROM_AGES
+	cp $40
+	jr c,+
 	sub $40
-.else
-	xor $c0
-.endif
 	ld h,a
 
-.ifdef ROM_SEASONS
-	ldh a,(<hFF8C)
-	inc a
-	ldh (<hFF8C),a
-.else
 	inc e
 	jr -
 +
+	ld a,h
+	add $40
+	ld h,a
 	ld a,e
-.endif
-+
 	setrombank
 	ld b,LARGE_ROOM_HEIGHT*16
-	ld de,wRoomCollisions
+	ld d,c ; >wRoomCollisions or >wRoomLayout
+	ld e,$00
 -
 	call readByteSequential
 	ld (de),a
@@ -13041,7 +12894,8 @@ loadRoomLayout:
 	dec b
 	jr nz,-
 
-	ld hl,wRoomCollisions
+	ld h,c
+	ld l,$00
 	pop de
 	ret
 
@@ -13942,5 +13796,34 @@ func_3ee4:
 
 .endif
 
+
+.ifdef ROM_SEASONS
+;;
+; CROSSITEMS: For Seasons only, determine which tile index is the cane of somaria (varies based on
+; which group we're in).
+;
+; This is important for determining if the tile can be pushed and for making it disappear when
+; slashing it with the sword. The tile index should be something that is never used for anything
+; else.
+;
+; Tile index $f9 normally behaves like a grass tile, but since it's unused indoors, that
+; functionality is disabled.
+getSomariaBlockIndex:
+	ld a,(wActiveCollisions)
+	ld b,$3f ; Overworld
+	or a
+	ret z
+
+	dec a ; Subrosia
+	ld b,$ba
+	ret z
+
+	; Maku Tree (2), Indoors (3), Dungeon (4), Sidescrolling (5)
+	ld b,$f9
+	ret
+.endif
+
+
+.include "code/debug.s"
 
 .ENDS

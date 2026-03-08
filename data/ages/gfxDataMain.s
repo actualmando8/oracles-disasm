@@ -237,96 +237,16 @@
 	m_GfxData spr_grass_tuft ; $0b753b
 	m_GfxData gfx_sand ; $0b755d
 	m_GfxData gfx_dirt ; $0b7588
-	m_GfxData gfx_tileset_maku_tree_common ; $0b759d
-	m_GfxData gfx_tileset_maku_tree_bottom ; $0b779a
-	m_GfxData gfx_tileset_maku_tree_top ; $0b7df4
+
+	; HACK-BASE: Deleted tileset graphics for expanded tilesets patch (except these ones which
+	; are used for other things too)
 	m_GfxData gfx_tileset_overworld_standard ; $0b8283
 	m_GfxData gfx_tileset_overworld_present ; $0b8837
-	m_GfxData gfx_tileset_overworld_past ; $0b8cc7
-	m_GfxData gfx_tileset_lynna_city_1 ; $0b91b3
-	m_GfxData gfx_tileset_lynna_city_2 ; $0b9330
-	m_GfxData gfx_tileset_lynna_city_3 ; $0b94e2
-	m_GfxData gfx_tileset_yoll_graveyard_1 ; $0b95a7
-	m_GfxData gfx_tileset_yoll_graveyard_2 ; $0b967c
-	m_GfxData gfx_tileset_yoll_graveyard_3 ; $0b9879
-	m_GfxData gfx_tileset_black_tower_outside_1 ; $0b9965
-	m_GfxData gfx_tileset_black_tower_outside_2 ; $0b9a3f
-	m_GfxData gfx_tileset_black_tower_outside_3 ; $0b9b9a
-	m_GfxData gfx_tileset_forest_of_time_1 ; $0b9c5f
-	m_GfxData gfx_tileset_forest_of_time_2 ; $0b9de6
-	m_GfxData gfx_tileset_forest_of_time_3 ; $0b9f82
-	m_GfxData gfx_tileset_fairy_forest_1 ; $0b9fce
-	m_GfxData gfx_tileset_fairy_forest_2 ; $0ba19f
-	m_GfxData gfx_tileset_fairy_forest_3 ; $0ba37c
-	m_GfxData gfx_tileset_tokay_island_1 ; $0ba3f5
-	m_GfxData gfx_tileset_tokay_island_2 ; $0ba5c8
-	m_GfxData gfx_tileset_tokay_island_3 ; $0ba7c8
-	m_GfxData gfx_tileset_symmetry_city_ruined_1 ; $0ba8c6
-	m_GfxData gfx_tileset_symmetry_city_ruined_2 ; $0baaa2
-	m_GfxData gfx_tileset_symmetry_city_ruined_3 ; $0bac95
-	m_GfxData gfx_tileset_talus_peaks_1 ; $0bad77
-	m_GfxData gfx_tileset_talus_peaks_2 ; $0bad92
-	m_GfxData gfx_tileset_talus_peaks_3 ; $0baf82
-	m_GfxData gfx_tileset_talus_peaks_past_1 ; $0bb080
-	m_GfxData gfx_tileset_talus_peaks_past_2 ; $0bb087
-	m_GfxData gfx_tileset_talus_peaks_past_3 ; $0bb0cf
-	m_GfxData gfx_tileset_symmetry_city_restored_1 ; $0bb1cd
-	m_GfxData gfx_tileset_symmetry_city_restored_2 ; $0bb26f
-	m_GfxData gfx_tileset_symmetry_city_restored_3 ; $0bb43d
-	m_GfxData gfx_tileset_rolling_ridge_present_1 ; $0bb442
-	m_GfxData gfx_tileset_rolling_ridge_present_2 ; $0bb5cd
-	m_GfxData gfx_tileset_rolling_ridge_present_3 ; $0bb786
-	m_GfxData gfx_tileset_rolling_ridge_past_1 ; $0bb884
-	m_GfxData gfx_tileset_rolling_ridge_past_2 ; $0bba42
-	m_GfxData gfx_tileset_rolling_ridge_past_3 ; $0bbbf7
-	m_GfxData gfx_tileset_eyeglass_library_1 ; $0bbcf5
-	m_GfxData gfx_tileset_eyeglass_library_2 ; $0bbe97
-	m_GfxData gfx_tileset_eyeglass_library_3 ; $0bc029
-	m_GfxData gfx_tileset_sea_of_no_return_1 ; $0bc02e
-	m_GfxData gfx_tileset_sea_of_no_return_2 ; $0bc035
-	m_GfxData gfx_tileset_sea_of_no_return_3 ; $0bc0f7
-	m_GfxData gfx_tileset_underwater_present ; $0bc1ae
-	m_GfxData gfx_tileset_underwater_past ; $0bc666
-	m_GfxData gfx_tileset_underwater_common_1 ; $0bcb51
-	m_GfxData gfx_tileset_underwater_common_2 ; $0bcd33
-	m_GfxData gfx_tileset_underwater_common_3 ; $0bcf33
-	m_GfxData gfx_tileset_jabu_jabu_outside_1 ; $0bd033
-	m_GfxData gfx_tileset_jabu_jabu_outside_2 ; $0bd1cf
-	m_GfxData gfx_tileset_jabu_jabu_outside_3 ; $0bd351
-	m_GfxData gfx_tileset_nuun_highlands_1 ; $0bd438
-	m_GfxData gfx_tileset_nuun_highlands_2 ; $0bd56a
-	m_GfxData gfx_tileset_nuun_highlands_3 ; $0bd592
-	m_GfxData gfx_tileset_ambis_palace_1 ; $0bd597
-	m_GfxData gfx_tileset_ambis_palace_2 ; $0bd6a5
-	m_GfxData gfx_tileset_ambis_palace_3 ; $0bd829
 	m_GfxData gfx_tileset_black_tower ; $0bd8ee
 	m_GfxData gfx_tileset_dungeon_standard_1 ; $0bde39
 	m_GfxData gfx_tileset_dungeon_standard_2 ; $0be4b9
 	m_GfxData gfx_tileset_maku_path ; $0be7fe
-	m_GfxData gfx_tileset_spirits_grave ; $0beb71
-	m_GfxData gfx_tileset_wing_dungeon ; $0bed86
-	m_GfxData gfx_tileset_moonlit_grotto ; $0bef5d
-	m_GfxData gfx_tileset_skull_dungeon ; $0bf139
-	m_GfxData gfx_tileset_crown_dungeon ; $0bf350
-	m_GfxData gfx_tileset_mermaids_cave ; $0bf514
-	m_GfxData gfx_tileset_jabu_jabus_belly ; $0bf7c0
-	m_GfxData gfx_tileset_ancient_tomb ; $0bf9ad
-	m_GfxData gfx_tileset_minecart_track ; $0bfc9b
-	m_GfxData gfx_tileset_black_tower_top ; $0bfcc5
-	m_GfxData gfx_tileset_room_of_rites ; $0bff4b
-	m_GfxData gfx_tileset_sidescroll_1 ; $0c0321
-	m_GfxData gfx_tileset_sidescroll_2 ; $0c093a
-	m_GfxData gfx_tileset_indoors_1 ; $0c0ddf
-	m_GfxData gfx_tileset_indoors_rafton ; $0c1445
-	m_GfxData gfx_tileset_cave_replacement_1 ; $0c19b7
-	m_GfxData gfx_tileset_cave_replacement_2 ; $0c1a6b
-	m_GfxData gfx_tileset_cave_1 ; $0c1f05
-	m_GfxData gfx_tileset_cave_2 ; $0c241d
-	m_GfxData gfx_tileset_goron_cave ; $0c2611
-	m_GfxData gfx_tileset_moblin_fortress ; $0c2722
-	m_GfxData gfx_tileset_zora_palace ; $0c2961
-	m_GfxData gfx_tileset_zora_palace_replacement_1 ; $0c2d31
-	m_GfxData gfx_tileset_zora_palace_replacement_2 ; $0c2d71
+
 	m_GfxData gfx_dmg_text ; $0c2dec
 	m_GfxData gfx_dmg_gametitle ; $0c2ec8
 	m_GfxData map_dmg_message ; $0c312b

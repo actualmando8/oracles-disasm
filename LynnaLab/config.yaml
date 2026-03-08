@@ -11,4 +11,4 @@ EditingGame:
 # and each tileset simply has its own data for all of this. This uses more space in the rom.
 #
 # Don't modify this. The relevant branches (ie. hack-base) have it set if necessary.
-ExpandedTilesets: false
+ExpandedTilesets: true
