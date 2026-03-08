@@ -22,16 +22,19 @@ However there is still work to be done:
   this repository or with a fork. Documenting the version differences could be
   invaluable for glitch hunting, as Nintendo of Europe had a crack team of
   grizzled QA testers working on these games (that's how it seems anyway...)
-- RAM address shifting is not well-tested. There are still some references to
-  hardcoded RAM addresses scattered around.
 - Documentation and variable/function naming can always be improved; in
   particular, Seasons documentation is relatively lacking compared to Ages. Areas
   to focus on include:
   - Most stuff under object_code/seasons
   - Functions named "seasonsFunc_[...]" or just "func_[...]"
   - Things marked as TODO
-- If some genius could figure out how the original compression algorithms worked
-  we could get rid of the whole precompressed asset nonsense!
+- The original GFX compression algorithms have been reverse-engineered and
+  implemented in `tools/build/compressGfxVanilla.py`, producing byte-identical
+  output for 961/962 precompressed GFX files. The Makefile now uses this
+  compressor for vanilla builds instead of copying precompressed GFX assets.
+  The remaining precompressed assets (rooms, tileset layouts, text) still need
+  their compression algorithms matched for full elimination of the
+  `precompressed/` directory.
 
 
 ## Branches

@@ -260,6 +260,13 @@ $(BUILD_DIR)/gfx/$(basename $(notdir $(1))).cmp: $(BUILD_DIR)/gfx/$(basename $(n
 	@$$(PYTHON) tools/build/compressGfx.py $$< $$@
 endef
 
+# Rule for vanilla-matching compression of compressible files
+define define_cmp_gfx_vanilla_rules
+$(BUILD_DIR)/gfx/$(basename $(notdir $(1))).cmp: $(BUILD_DIR)/gfx/$(basename $(notdir $(1))).bin
+	@echo "Compressing (vanilla) $$<..."
+	@$$(PYTHON) tools/build/compressGfxVanilla.py $$< $$@
+endef
+
 # Define the gfx rules for the specific files which need them
 $(foreach filename,$(BIN_GFX_FILES),  $(eval $(call define_copy_gfx_rules,$(filename))))
 $(foreach filename,$(PNG_GFX_FILES),  $(eval $(call define_png_gfx_rules,$(filename))))
@@ -267,8 +274,8 @@ $(foreach filename,$(UNCMP_GFX_FILES),$(eval $(call define_uncmp_gfx_rules,$(fil
 
 ifeq ($(BUILD_VANILLA),true)
 
-# Copy precompressed gfx files to $(BUILD_DIR)/gfx
-$(foreach filename,$(PRECMP_GFX_FILES),$(eval $(call define_copy_gfx_rules,$(filename))))
+# Use vanilla-matching compressor to produce byte-identical output
+$(foreach filename,$(CMP_GFX_FILES),$(eval $(call define_cmp_gfx_vanilla_rules,$(filename))))
 
 else
 
